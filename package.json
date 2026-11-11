@@ -1,0 +1,1 @@
+{"name":"flowguard","private":true,"version":"0.1.0","description":"Outcome-focused reliability layer for business automations","scripts":{"test":"node core.test.js"}}

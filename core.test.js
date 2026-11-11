@@ -1,0 +1,14 @@
+const assert = require("node:assert/strict");
+const core = require("./core.js");
+const now = Date.now();
+const base = {active:true,criticality:"critical",expectedIntervalMinutes:60,graceMultiplier:1.5,lastSuccessAt:new Date(now-2*60*60*1000).toISOString(),lastRun:{status:"success",outputCount:12},normalZeroOutputRate:0.02,definition:{nodes:["trigger","crm"]}};
+assert.equal(core.checkCadence(base, now).type, "silent");
+assert.equal(core.evaluate(base, now).findings.length, 1);
+const zombie = {...base,lastSuccessAt:new Date(now-10*60*1000).toISOString(),lastRun:{status:"success",outputCount:0}};
+assert.equal(core.checkZombie(zombie).type, "zombie");
+const clean = {...base,lastSuccessAt:new Date(now-20*60*1000).toISOString(),lastRun:{status:"success",outputCount:10},baselineHash:core.baselineHash(base)};
+assert.equal(core.evaluate(clean, now).findings.length, 0);
+const drift = {...clean,definition:{nodes:["trigger","crm","slack"]}};
+assert.equal(core.checkDrift(drift).type, "drift");
+assert.equal(core.priority(base, [{severity:"critical"}]), "urgent");
+console.log("FlowGuard core tests: PASS (5 assertions)");

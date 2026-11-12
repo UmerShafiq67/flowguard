@@ -21,4 +21,8 @@ const built=buildTutorInput({message:"Explain this",mode:"Explain simply",attach
 assert.equal(built.input.at(-1).content[1].type,"input_file");assert.equal(built.input.at(-1).content[1].filename,"notes.pdf");assert.equal(built.input.length,3);
 const ollama=buildOllamaMessages({message:"What is algebra?",mode:"Explain simply",context:{subjects:[],exams:[],currentTask:null}});
 assert.equal(ollama.at(-1).role,"user");assert.match(ollama.at(-1).content,/What is algebra/);
+assert.throws(()=>buildOllamaMessages({message:"Read this PDF",attachment:{name:"notes.pdf",type:"application/pdf",data:"data:application/pdf;base64,"+pdf},context:{}}),/document-extraction layer/);
+const image=Buffer.from("fake-image").toString("base64");
+const ollamaImage=buildOllamaMessages({message:"What is this?",attachment:{name:"question.png",type:"image/png",data:"data:image/png;base64,"+image},context:{}});
+assert.deepEqual(ollamaImage.at(-1).images,[image]);
 console.log("StudySprint tests: PASS");

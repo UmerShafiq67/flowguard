@@ -5,8 +5,11 @@ const PORT=Number(process.env.PORT||8080),ROOT=__dirname,MAX_REQUEST_BYTES=12_00
 const AI_PROVIDER=String(process.env.AI_PROVIDER||"ollama").toLowerCase();
 const OLLAMA_BASE_URL=String(process.env.OLLAMA_BASE_URL||"http://localhost:11434").replace(/\/$/,"");
 const OLLAMA_MODEL=String(process.env.OLLAMA_MODEL||"gemma3:1b");
+const HF_BASE_URL=String(process.env.HF_BASE_URL||"https://router.huggingface.co/v1").replace(/\/$/,"");
+const HF_MODEL=String(process.env.HF_MODEL||"Qwen/Qwen2.5-7B-Instruct");
+const CORS_ORIGIN=String(process.env.CORS_ORIGIN||"*");
 const MIME={".html":"text/html; charset=utf-8",".js":"text/javascript; charset=utf-8",".css":"text/css; charset=utf-8",".json":"application/json; charset=utf-8",".svg":"image/svg+xml",".png":"image/png",".jpg":"image/jpeg",".jpeg":"image/jpeg",".webp":"image/webp",".ico":"image/x-icon"};
-function send(res,status,data,type="application/json"){res.writeHead(status,{"Content-Type":type,"Cache-Control":"no-store"});res.end(type.startsWith("application/json")?JSON.stringify(data):data)}
+function send(res,status,data,type="application/json"){res.writeHead(status,{"Content-Type":type,"Cache-Control":"no-store","Access-Control-Allow-Origin":CORS_ORIGIN,"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Methods":"GET,POST,OPTIONS"});res.end(type.startsWith("application/json")?JSON.stringify(data):data)}
 function readBody(req){return new Promise((resolve,reject)=>{let body="",size=0,failed=false;req.on("data",chunk=>{if(failed)return;size+=chunk.length;if(size>MAX_REQUEST_BYTES){failed=true;reject(Object.assign(new Error("Request too large. Keep attachments under 8 MB."),{status:413}));req.destroy();return}body+=chunk});req.on("end",()=>{if(!failed)resolve(body)});req.on("error",reject)})}
 function cleanText(value,max=4000){return String(value??"").trim().slice(0,max)}
 function validateAttachment(att){
@@ -54,14 +57,26 @@ async function ollama(body){
   if(!response.ok){throw Object.assign(new Error(cleanText(data?.error,500)||"Local AI could not answer right now."),{status:502})}
   const text=cleanText(data?.message?.content,12000);if(!text)throw Object.assign(new Error("Local AI returned an empty answer. Please try again."),{status:502});return {text,provider:"ollama",model:OLLAMA_MODEL};
 }
+async function huggingFace(body){
+  if(!process.env.HF_TOKEN)throw Object.assign(new Error("Hugging Face is not configured. Add HF_TOKEN on the server."),{status:503});
+  const {input,attachment}=buildTutorInput(body);
+  if(attachment?.type==="application/pdf")throw Object.assign(new Error("PDF tutoring needs document extraction before this attachment can be sent to hosted AI."),{status:415});
+  const messages=input.map(item=>({role:item.role,content:Array.isArray(item.content)?item.content.filter(x=>x.type==="input_text"||x.type==="input_image").map(x=>x.type==="input_image"?{type:"image_url",image_url:{url:x.image_url}}:{type:"text",text:x.text}):String(item.content||"")}));
+  let response;try{response=await fetch(HF_BASE_URL+"/chat/completions",{method:"POST",headers:{"Authorization":"Bearer "+process.env.HF_TOKEN,"Content-Type":"application/json"},body:JSON.stringify({model:HF_MODEL,messages,max_tokens:900,temperature:0.2})});}catch{throw Object.assign(new Error("Hosted AI could not be reached right now."),{status:503})}
+  let data;try{data=await response.json()}catch{throw Object.assign(new Error("Hosted AI returned an invalid response."),{status:502})}
+  if(!response.ok){const message=cleanText(data?.error?.message||data?.error,500);throw Object.assign(new Error(message||"Hosted AI could not answer right now."),{status:response.status===429?429:502})}
+  const text=cleanText(data?.choices?.[0]?.message?.content,12000);if(!text)throw Object.assign(new Error("Hosted AI returned an empty answer."),{status:502});return {text,provider:"huggingface",model:HF_MODEL};
+}
 async function tutor(body){
   if(AI_PROVIDER==="openai")return openAI(body);
+  if(AI_PROVIDER==="huggingface"||AI_PROVIDER==="hf")return huggingFace(body);
   return ollama(body);
 }
 function safeStaticPath(urlPath){const pathname=decodeURIComponent(urlPath),relative=pathname==="/"?"index.html":pathname.replace(/^\/+/, ""),file=path.resolve(ROOT,relative),root=path.resolve(ROOT)+path.sep;if(file!==path.resolve(ROOT)&&!file.startsWith(root))return null;return file}
 function createServer(){return http.createServer(async(req,res)=>{try{
   const url=new URL(req.url,"http://localhost");
-  if(req.method==="GET"&&url.pathname==="/health")return send(res,200,{ok:true,service:"StudySprint",aiProvider:AI_PROVIDER,aiConfigured:AI_PROVIDER==="ollama"||Boolean(process.env.OPENAI_API_KEY&&process.env.OPENAI_MODEL),ollamaModel:AI_PROVIDER==="ollama"?OLLAMA_MODEL:undefined});
+  if(req.method==="OPTIONS"){res.writeHead(204,{"Access-Control-Allow-Origin":CORS_ORIGIN,"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Methods":"GET,POST,OPTIONS"});return res.end()}
+  if(req.method==="GET"&&url.pathname==="/health")return send(res,200,{ok:true,service:"StudySprint",aiProvider:AI_PROVIDER,aiConfigured:AI_PROVIDER==="ollama"||AI_PROVIDER==="huggingface"||AI_PROVIDER==="hf"?Boolean(AI_PROVIDER==="ollama"||process.env.HF_TOKEN):Boolean(process.env.OPENAI_API_KEY&&process.env.OPENAI_MODEL),ollamaModel:AI_PROVIDER==="ollama"?OLLAMA_MODEL:undefined,hostedModel:(AI_PROVIDER==="huggingface"||AI_PROVIDER==="hf")?HF_MODEL:undefined});
   if(req.method==="POST"&&url.pathname==="/api/tutor"){let body;try{body=JSON.parse(await readBody(req))}catch{return send(res,400,{error:"Invalid JSON request."})}if(!body||typeof body!=="object")return send(res,400,{error:"Invalid request."});if(!cleanText(body.message,5000)&&!body.attachment)return send(res,400,{error:"Add a question or attach study material."});return send(res,200,await tutor(body))}
   if(req.method!=="GET"&&req.method!=="HEAD")return send(res,405,{error:"Method not allowed."});
   const file=safeStaticPath(url.pathname);if(!file)return send(res,403,{error:"Forbidden"});if(!fs.existsSync(file)||fs.statSync(file).isDirectory())return send(res,404,{error:"Not found"});

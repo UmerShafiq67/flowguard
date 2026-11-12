@@ -15,19 +15,26 @@ StudySprint is being built as one independent study workspace where a student ca
 - AI Tutor workspace
 - Text questions and image-based questions
 - Tutor modes for explanation, quizzes, practice and revision
-- Image and PDF attachments are sent through the server-side tutor endpoint when configured
+- Image and PDF attachments are accepted by the tutor endpoint; the default local Ollama setup currently handles text and image requests, while local PDF extraction is intentionally disabled until a document-extraction layer is added
 - Local persistence so a refresh does not erase the student's plan
 - Responsive browser experience
 
 ## Important honesty
 
-The browser UI can run without an AI account, but real AI responses require a server-side provider configuration. API secrets must never be placed in browser JavaScript.
+The browser UI can run without an AI account. By default, real AI responses use a local Ollama server, so no paid API account or API key is required.
 
-The tutor server expects:
+Default local AI configuration:
+- `AI_PROVIDER=ollama`
+- `OLLAMA_BASE_URL=http://localhost:11434`
+- `OLLAMA_MODEL=gemma3:1b`
+
+Start Ollama separately with `ollama serve`, then start StudySprint with `npm start`.
+
+OpenAI remains an optional provider. If `AI_PROVIDER=openai`, configure:
 - `OPENAI_API_KEY`
 - `OPENAI_MODEL`
 
-These are environment variables only.
+These are environment variables only and must never be placed in browser JavaScript.
 
 ## Development
 

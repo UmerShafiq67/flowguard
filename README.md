@@ -6,7 +6,7 @@ StudySprint is being built as one independent study workspace where a student ca
 
 ## Core experience
 
-- Unlimited custom subjects and topics
+- Unlimited custom subjects and topics with add/remove/rename/reorder controls
 - Exam dates and countdowns
 - Adaptive daily study plan
 - Focus sessions
@@ -14,7 +14,8 @@ StudySprint is being built as one independent study workspace where a student ca
 - Review and progress history
 - AI Tutor workspace
 - Text questions and image-based questions
-- Practice and revision workflows
+- Tutor modes for explanation, quizzes, practice and revision
+- Image and PDF attachments are sent through the server-side tutor endpoint when configured
 - Local persistence so a refresh does not erase the student's plan
 - Responsive browser experience
 
@@ -48,7 +49,7 @@ StudySprint should not be another generic chatbot, flashcard clone, or calendar.
 
 **exam → plan → learn → practice → mistakes → review → updated plan**
 
-A feature is not considered complete merely because a button exists. The feature must have a real working path and be tested.
+A feature is not considered complete merely because a button exists. The feature must have a real working path, validation, persistence, and a tested path.
 
 ## Security
 

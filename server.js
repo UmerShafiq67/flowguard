@@ -7,10 +7,14 @@ function send(res,status,data,type="application/json"){res.writeHead(status,{"Co
 function readBody(req){return new Promise((resolve,reject)=>{let b="";req.on("data",c=>{b+=c;if(b.length>12_000_000){req.destroy();reject(new Error("Request too large"))}});req.on("end",()=>resolve(b));req.on("error",reject)})}
 
 async function tutor(body){
-  if(!process.env.OPENAI_API_KEY||!process.env.OPENAI_MODEL) throw Object.assign(new Error("AI is not connected yet. The app is ready, but a server-side AI key still needs to be configured by the product owner."),{status:503});
-  const content=[{type:"input_text",text:body.message||""}];
-  if(body.image?.startsWith("data:image/")) content.push({type:"input_image",image_url:body.image});
-  const system="You are StudySprint Tutor. Teach students instead of doing the learning for them. Start with a short hint or question when appropriate, then explain step by step. Be accurate, age-appropriate, encouraging, and concise. If an image is provided, inspect it carefully. If you are unsure, say so. Never invent a source or claim certainty you do not have.";
+  if(!process.env.OPENAI_API_KEY||!process.env.OPENAI_MODEL) throw Object.assign(new Error("AI is not connected yet. The app is ready, but the server owner must configure the AI credentials."),{status:503});
+  const mode=String(body.mode||"Explain simply");
+  const context=body.context||{};
+  const system="You are StudySprint Tutor. Your job is to help a student learn, not simply do the work for them. Mode: "+mode+". Teach step by step, ask a short check question when useful, keep explanations age-appropriate, and be honest when uncertain. Use the student's current study context when relevant. Never invent sources.";
+  const content=[{type:"input_text",text:(body.message||"")+"\\n\\nStudy context: "+JSON.stringify({subjects:context.subjects||[],exams:context.exams||[],currentTask:context.currentTask||null})}];
+  const att=body.attachment;
+  if(att?.data?.startsWith("data:image/")) content.push({type:"input_image",image_url:att.data});
+  else if(att?.data?.startsWith("data:application/pdf;base64,")){const fileData=att.data;content.push({type:"input_file",filename:String(att.name||"study.pdf"),file_data:fileData});}
   const input=[{role:"system",content:system}];
   for(const m of (body.history||[]).slice(-8)) input.push({role:m.role==="assistant"?"assistant":"user",content:[{type:"input_text",text:String(m.text||"")}]});
   input.push({role:"user",content});

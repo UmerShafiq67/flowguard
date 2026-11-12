@@ -1,83 +1,57 @@
-# FlowGuard
+# StudySprint
 
-**Outcome-focused reliability for business automations.**
+**Your personal exam coach: know what to study, understand it, practice it, and remember it.**
 
-> Don't just tell me an automation failed. Tell me whether the business outcome is actually safe.
+StudySprint is being built as one independent study workspace where a student can add their own subjects, topics, exams, study time, and learning material.
 
-## What is built
+## Core experience
 
-This repository contains a working front-end product prototype plus a deterministic reliability engine.
+- Unlimited custom subjects and topics
+- Exam dates and countdowns
+- Adaptive daily study plan
+- Focus sessions
+- Weak-topic tracking
+- Review and progress history
+- AI Tutor workspace
+- Text questions and image-based questions
+- Practice and revision workflows
+- Local persistence so a refresh does not erase the student's plan
+- Responsive browser experience
 
-### Dashboard
-- fleet health and impact-weighted incident queue
-- workflow inventory and search
-- workflow investigation pages
-- incident investigation pages
-- outcome-contract concepts
-- responsive UI
-- safe local demo mode
+## Important honesty
 
-### Reliability engine
-The engine currently checks three failure classes:
+The browser UI can run without an AI account, but real AI responses require a server-side provider configuration. API secrets must never be placed in browser JavaScript.
 
-1. **Cadence silence** — a workflow missed its expected run window.
-2. **Zombie success** — a run reports success but produces unexpectedly zero output.
-3. **Definition drift** — a workflow definition differs from its approved baseline.
+The tutor server expects:
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL`
 
-Findings are converted into a reliability score and an impact-weighted priority.
+These are environment variables only.
 
-## Test-first rule
+## Development
 
-The core engine has a Node test suite:
+Run the deterministic study-core tests:
 
 ```bash
 npm test
 ```
 
-The same suite also runs automatically in GitHub Actions on pushes and pull requests.
+Run the web app/server:
 
-The build process is intentionally incremental: every reliability rule should be tested before it is connected to a real provider.
+```npm start```
 
-## Architecture direction
+Then open the forwarded port from your development environment.
 
-The product is designed as an external reliability layer rather than another automation builder:
+## Product principle
 
-**Provider adapter → normalized workflow model → deterministic checks → outcome contract → incident priority → alerts**
+StudySprint should not be another generic chatbot, flashcard clone, or calendar. Its job is to connect the whole learning loop:
 
-The first real provider integration should be read-only and server-side. Browser code must never receive provider API secrets.
+**exam → plan → learn → practice → mistakes → review → updated plan**
 
-## Product differentiation
+A feature is not considered complete merely because a button exists. The feature must have a real working path and be tested.
 
-Automation monitoring already exists. Current research shows products such as Midwatch and OutcomeGuard cover several n8n-specific monitoring problems including silent runs, zombie output and drift. FlowGuard therefore should not win by cloning another monitor.
-
-The strategic wedge is **outcome contracts**: define the business promise an automation is supposed to keep, then judge technical signals against that promise. That lets the product eventually span multiple automation providers instead of becoming another n8n-only dashboard.
-
-## Current limitations
-
-This repository is still a prototype. It does **not** yet:
-- connect to live provider accounts
-- store customer secrets
-- run scheduled cloud checks
-- send real alerts
-- authenticate users
-- process real business data
-- charge customers
-
-Those pieces come after the deterministic engine and UX are proven.
-
-## Security rules
+## Security
 
 - Never commit API keys, tokens, passwords, cookies, or database credentials.
-- Provider credentials belong on a server-side boundary.
-- Start with read-only provider permissions.
-- Do not store execution payloads unless a future feature has a clear, justified need.
-
-## Run locally
-
-Open `index.html` directly, or use VS Code Live Server.
-
-For the engine tests, install Node.js and run:
-
-```bash
-npm test
-```
+- Keep AI/provider credentials server-side.
+- Do not expose secrets through browser JavaScript.

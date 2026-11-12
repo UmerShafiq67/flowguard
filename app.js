@@ -1,8 +1,8 @@
-const demo={subjects:[{id:"math",name:"Mathematics",topics:[{id:"quad",name:"Quadratics",confidence:2,minutes:60},{id:"calc",name:"Calculus",confidence:3,minutes:75},{id:"stats",name:"Statistics",confidence:4,minutes:45}]},{id:"bio",name:"Biology",topics:[{id:"cells",name:"Cell biology",confidence:2,minutes:50},{id:"gen",name:"Genetics",confidence:3,minutes:60},{id:"eco",name:"Ecology",confidence:4,minutes:40}]},{id:"history",name:"History",topics:[{id:"ww",name:"World War I",confidence:3,minutes:45},{id:"rev",name:"Revolutions",confidence:2,minutes:55}]}],exams:[],availableMinutes:120,plan:[],focus:{sessions:0,minutes:0}};
+const STORAGE_KEY="studysprint_v2";
 const API_BASE=window.STUDYSPRINT_API_BASE||"";
-const state={view:"today",modal:false,data:load(),toast:""};
-function load(){try{const x=JSON.parse(localStorage.getItem("studysprint"));if(x?.subjects)return x}catch{}const d=structuredClone(demo),n=new Date();d.exams=[{id:"e1",subjectId:"math",name:"Math exam",date:add(n,4)},{id:"e2",subjectId:"bio",name:"Biology exam",date:add(n,7)},{id:"e3",subjectId:"history",name:"History exam",date:add(n,10)}];d.plan=StudySprintCore.makePlan(d.subjects,d.exams,d.availableMinutes,n);return d}
-function save(){localStorage.setItem("studysprint",JSON.stringify(state.data))}
+const emptyData=()=>({subjects:[],exams:[],availableMinutes:90,plan:[],focus:{sessions:0,minutes:0},mistakes:[],practice:{attempts:0,correct:0}});
+const state={view:"today",modal:false,data:load(),toast:"",currentTask:null,tutorMode:"Explain simply",practice:{question:"",answer:"",feedback:"",busy:false}};
+function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE_KEY));if(x&&Array.isArray(x.subjects))return {...emptyData(),...x}}catch{}return emptyData()}
 function add(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return localDate(x)}
 function today(){const n=new Date();return localDate(n)}
 function localDate(n){return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`}

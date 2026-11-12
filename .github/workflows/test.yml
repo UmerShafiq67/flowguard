@@ -11,3 +11,6 @@ jobs:
         with:
           node-version: 22
       - run: npm test
+      - run: node --check app.js
+      - run: node --check server.js
+      - run: node --check study-core.js

@@ -1,7 +1,7 @@
 const assert=require("node:assert/strict");
 const fs=require("node:fs");
 const vm=require("node:vm");
-const {buildTutorInput,validateAttachment}=require("./server");
+const {buildTutorInput,buildOllamaMessages,validateAttachment}=require("./server");
 const core=vm.runInNewContext(fs.readFileSync("study-core.js","utf8")+";StudySprintCore");
 const now=new Date("2026-11-12T12:00:00");
 assert.equal(core.daysUntil("2026-11-13",now),1);
@@ -19,4 +19,6 @@ assert.throws(()=>validateAttachment({data:"data:text/plain;base64,SGk="}),/acce
 const pdf=Buffer.from("%PDF-1.4 test").toString("base64");
 const built=buildTutorInput({message:"Explain this",mode:"Explain simply",attachment:{name:"notes.pdf",type:"application/pdf",data:"data:application/pdf;base64,"+pdf},history:[{role:"user",text:"previous"}],context:{subjects:[{name:"Math",topics:[{name:"Algebra",confidence:2}]}],exams:[],currentTask:null}});
 assert.equal(built.input.at(-1).content[1].type,"input_file");assert.equal(built.input.at(-1).content[1].filename,"notes.pdf");assert.equal(built.input.length,3);
+const ollama=buildOllamaMessages({message:"What is algebra?",mode:"Explain simply",context:{subjects:[],exams:[],currentTask:null}});
+assert.equal(ollama.at(-1).role,"user");assert.match(ollama.at(-1).content,/What is algebra/);
 console.log("StudySprint tests: PASS");

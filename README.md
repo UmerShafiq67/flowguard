@@ -30,11 +30,19 @@ Default local AI configuration:
 
 Start Ollama separately with `ollama serve`, then start StudySprint with `npm start`.
 
+Hosted Hugging Face routing is also supported for a public deployment. Set `AI_PROVIDER=huggingface`, `HF_TOKEN`, and optionally `HF_MODEL` on the server. The default hosted model is `Qwen/Qwen2.5-7B-Instruct`. Hugging Face documents a small free inference quota for signed-in free users, but quotas and provider availability can change; this is not a promise of unlimited free AI.
+
 OpenAI remains an optional provider. If `AI_PROVIDER=openai`, configure:
 - `OPENAI_API_KEY`
 - `OPENAI_MODEL`
 
 These are environment variables only and must never be placed in browser JavaScript.
+
+## Public deployment
+
+The repository now includes a GitHub Pages workflow for the browser app and a `render.yaml` blueprint for a small Node API. GitHub Pages can publish the static app automatically after Pages is enabled with GitHub Actions. The browser reads `config.js` for an optional API URL, so the public frontend can point at a separately hosted StudySprint API without putting AI credentials in the browser.
+
+For a public AI setup, use the Node API with `AI_PROVIDER=huggingface` and keep `HF_TOKEN` server-side. Free hosting can sleep when idle, and free hosted inference has usage limits, so this is a practical demo/early-user architecture rather than a guarantee of unlimited free production capacity.
 
 ## Development
 

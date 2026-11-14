@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "studysprint",
+  "main": "worker.js",
+  "compatibility_date": "2026-11-14",
+  "ai": {
+    "binding": "AI"
+  }
+}

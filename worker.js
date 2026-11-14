@@ -73,10 +73,19 @@ function makeMessages(body) {
   const mode = clean(body.mode || "Explain simply", 40) || "Explain simply";
   let message = clean(body.message, 5000);
 
-  if (body.attachment) {
-    return {
-      error: "Image/PDF uploads are temporarily disabled on the public free AI backend. Text tutoring and practice are fully supported."
-    };
+  const attachment = body.attachment && typeof body.attachment === "object" ? body.attachment : null;
+  if (attachment) {
+    const type = clean(attachment.type, 120).toLowerCase();
+    const name = clean(attachment.name, 180);
+    const data = String(attachment.data || "");
+    const isImage = type.startsWith("image/");
+    const isPdf = type === "application/pdf" || /\\.pdf$/i.test(name);
+    if (!data || (!isImage && !isPdf)) {
+      return { error: "StudySprint supports image and PDF attachments only." };
+    }
+    if (data.length > 10_500_000) {
+      return { error: "That file is too large. Please use an image or PDF under 8 MB." };
+    }
   }
 
   message = message || "Please help me study.";
@@ -90,7 +99,23 @@ function makeMessages(body) {
       content: text
     });
   }
-  messages.push({ role: "user", content: message });
+  if (attachment) {
+    const type = clean(attachment.type, 120).toLowerCase();
+    const name = clean(attachment.name, 180) || "study-material";
+    const data = String(attachment.data || "");
+    const content = [{ type: "text", text: message }];
+    if (type.startsWith("image/")) {
+      content.push({ type: "image_url", image_url: { url: data } });
+    } else {
+      content.push({
+        type: "file",
+        file: { filename: name, file_data: data }
+      });
+    }
+    messages.push({ role: "user", content });
+  } else {
+    messages.push({ role: "user", content: message });
+  }
   return { messages };
 }
 

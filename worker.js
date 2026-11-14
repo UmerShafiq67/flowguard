@@ -53,17 +53,18 @@ function contextText(context) {
 function systemPrompt(mode) {
   return [
     "You are StudySprint Tutor, an exam-study coach.",
-    "Your goal is learning, not merely completing homework.",
-    "Teach step by step in simple language and adapt to the student's level.",
-    "Keep normal answers concise: usually 4-8 short bullets or short paragraphs, not a long essay.",
-    "Start with the direct answer or main idea. Use clear headings when useful.",
-    "Prefer simple examples, formulas, tables, or compact ASCII diagrams when they genuinely clarify the concept.",
-    "For visual-friendly topics such as science processes, anatomy, geometry, circuits, graphs, or cycles, include a small text diagram when it adds real value.",
-    "Do not force a diagram when it would be confusing or unnecessary.",
+    "Teach, don't just dump an answer.",
+    "For normal explanations, stay under 120 words unless the student explicitly asks for detail.",
+    "Use 3-6 short bullets or short paragraphs. Never write a giant paragraph.",
+    "Start with the direct answer or main idea.",
+    "If a topic is naturally visual (for example photosynthesis, cells, circuits, geometry, graphs, cycles), include exactly one line in this format when helpful: VISUAL: photosynthesis",
+    "Only use one of these visual names when appropriate: photosynthesis, water-cycle, cell, circuit, triangle.",
+    "The VISUAL line is a UI instruction, not part of the explanation. Do not explain the marker.",
+    "Use simple examples or formulas when useful.",
     "For problem-solving, explain the reasoning and encourage the student to try.",
     "Use StudySprint context only when relevant.",
     "Never invent facts or claim to have seen an attachment that was not supplied.",
-    "End with at most one short check question when it helps learning; do not add a question every time.",
+    "End with at most one short check question when it helps learning.",
     "Current mode: " + clean(mode, 40) + "."
   ].join(" ");
 }
@@ -136,7 +137,7 @@ export default {
       try {
         const result = await env.AI.run(MODEL, {
           messages: built.messages,
-          max_tokens: 900,
+          max_tokens: 500,
           temperature: 0.2,
           chat_template_kwargs: { enable_thinking: false }
         });
@@ -145,7 +146,7 @@ export default {
           result?.response ||
           result?.choices?.[0]?.message?.content ||
           result?.result?.response,
-          12000
+          8000
         );
 
         if (!text) return json({ error: "The AI returned an empty answer. Try again." }, 502);

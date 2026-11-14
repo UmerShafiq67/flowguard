@@ -10,6 +10,10 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,6 +23,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Check JavaScript
+        run: |
+          node --check app.js
+          node --check study-core.js
+          node --check config.js
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload site

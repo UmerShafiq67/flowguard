@@ -27,6 +27,7 @@ jobs:
           node --check config.js
           node --check maxi-plus.js
           node --check worker.js
+          node --check enhancements.js
       - name: Check required files
         run: |
           test -f index.html
@@ -36,6 +37,9 @@ jobs:
           test -f maxi-plus.js
           test -f worker.js
           test -f config.js
+          test -f enhancements.js
+          test -f manifest.webmanifest
+          test -f sw.js
 
   deploy:
     needs: validate

@@ -28,7 +28,7 @@
   window.addEventListener("appinstalled",()=>{installPrompt=null;});
   window.installStudySprint=async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;}else toast("Use your browser's Add to Home Screen / Install option.")};
   const oldRender=window.render;
-  window.render=function(){if(typeof oldRender==="function")oldRender();if(state.view==="account")renderAccountBox();};
+  window.render=function(){if(state.view==="account"){const root=document.getElementById("app");if(root)root.innerHTML=window.shell(accountPage());renderAccountBox();return;}if(typeof oldRender==="function")oldRender();};
   const originalNav=window.nav;
   window.nav=function(v,t,i){return originalNav(v,t,i)};
   const originalShell=window.shell;

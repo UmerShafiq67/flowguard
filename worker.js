@@ -163,6 +163,46 @@ async function verifyPaddleSignature(request, rawBody, secret) {
   return expected === parts.h1;
 }
 
+async function getEntitlementRecord(deviceId, env) {
+  const id = clean(deviceId, 160);
+  if (!id || !env.STUDYSPRINT_ENTITLEMENTS) return null;
+  return env.STUDYSPRINT_ENTITLEMENTS.get("entitlement:" + id, "json");
+}
+
+async function enforceTutorAccess(body, env) {
+  const deviceId = clean(body?.deviceId, 160);
+  if (!deviceId || !env.STUDYSPRINT_ENTITLEMENTS) {
+    return { ok: true, serverEnforced: false, plus: false };
+  }
+  const entitlement = await getEntitlementRecord(deviceId, env);
+  const plus = entitlement?.active === true;
+  if (body?.attachment && !plus) {
+    return { ok: false, response: json({ error: "Study material uploads are a Plus feature." }, 403) };
+  }
+  if (plus) return { ok: true, serverEnforced: true, plus: true };
+
+  const key = "usage:" + deviceId + ":" + new Date().toISOString().slice(0, 10);
+  const usage = await env.STUDYSPRINT_ENTITLEMENTS.get(key, "json") || { ai: 0 };
+  const used = Number(usage.ai || 0);
+  const limit = 5;
+  if (used >= limit) {
+    return { ok: false, response: json({ error: "Daily free AI Tutor limit reached. Plus removes the limit." }, 429) };
+  }
+  usage.ai = used + 1;
+  usage.updatedAt = new Date().toISOString();
+  await env.STUDYSPRINT_ENTITLEMENTS.put(key, JSON.stringify(usage), { expirationTtl: 172800 });
+  return { ok: true, serverEnforced: true, plus: false };
+}
+
+async function billingStatus(env) {
+  return json({
+    provider: "paddle",
+    webhookConfigured: Boolean(env.PADDLE_WEBHOOK_SECRET || env.BILLING_WEBHOOK_SECRET),
+    entitlementStorageConfigured: Boolean(env.STUDYSPRINT_ENTITLEMENTS),
+    checkoutMode: env.PADDLE_ENVIRONMENT || "sandbox"
+  });
+}
+
 async function billingWebhook(request, env) {
   const secret = String(env.PADDLE_WEBHOOK_SECRET || env.BILLING_WEBHOOK_SECRET || "");
   if (!secret) return json({ error: "Billing webhook is not configured." }, 503);
@@ -173,17 +213,24 @@ async function billingWebhook(request, env) {
   let body;
   try { body = JSON.parse(rawBody); } catch { return json({ error: "Invalid JSON." }, 400); }
   const type = String(body?.event_type || body?.event || "");
+  const eventId = clean(body?.event_id || body?.notification_id, 120);
+  if (eventId && env.STUDYSPRINT_ENTITLEMENTS) {
+    const seenKey = "billing-event:" + eventId;
+    if (await env.STUDYSPRINT_ENTITLEMENTS.get(seenKey)) return json({ ok: true, duplicate: true });
+    await env.STUDYSPRINT_ENTITLEMENTS.put(seenKey, "1", { expirationTtl: 604800 });
+  }
   const data = body?.data || {};
   const custom = data?.custom_data || {};
   const deviceId = clean(custom.deviceId, 160);
   if (!deviceId) return json({ error: "Missing StudySprint device reference." }, 400);
   if (!env.STUDYSPRINT_ENTITLEMENTS) return json({ error: "Entitlement storage is not configured." }, 503);
 
-  const active = type === "subscription.created" || type === "subscription.activated" ||
-    (type === "transaction.completed" && data?.status === "completed");
-  const inactive = type === "subscription.canceled" || type === "subscription.canceled" ||
-    type === "subscription.past_due" || type === "subscription.paused" ||
-    type === "transaction.canceled";
+  const subscriptionStatus = String(data?.status || "");
+  const active = (type === "transaction.completed" && data?.status === "completed") ||
+    ((type === "subscription.created" || type === "subscription.activated" || type === "subscription.updated") &&
+      (subscriptionStatus === "active" || subscriptionStatus === "trialing"));
+  const inactive = (type === "subscription.canceled" || type === "subscription.past_due" ||
+    type === "subscription.paused" || type === "transaction.canceled");
 
   if (!active && !inactive) return json({ ok: true, ignored: true });
 
@@ -191,7 +238,7 @@ async function billingWebhook(request, env) {
     active: active && !inactive,
     plan: active && !inactive ? "plus" : "free",
     customerId: clean(data?.customer_id, 100) || null,
-    subscriptionId: clean(data?.id, 100) || null,
+    subscriptionId: clean(data?.subscription_id, 100) || clean(data?.id, 100) || null,
     expiresAt: clean(data?.next_billed_at, 40) || null,
     updatedAt: new Date().toISOString()
   };
@@ -220,6 +267,10 @@ export default {
       return entitlementResponse(url.searchParams.get("deviceId"), env);
     }
 
+    if (request.method === "GET" && url.pathname === "/api/billing/status") {
+      return billingStatus(env);
+    }
+
     if (request.method === "POST" && url.pathname === "/api/billing/webhook") {
       return billingWebhook(request, env);
     }
@@ -243,6 +294,9 @@ export default {
       if (!env.AI) {
         return json({ error: "StudySprint AI is not connected yet." }, 503);
       }
+
+      const access = await enforceTutorAccess(body, env);
+      if (!access.ok) return access.response;
 
       const built = makeMessages(body);
       if (built.error) return json({ error: built.error }, 415);

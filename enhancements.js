@@ -1,4 +1,18 @@
-/* StudySprint V3 — product polish + learning analytics + offline/PWA layer. */
+<style>
+.progress-grid{display:grid;grid-template-columns:1.35fr .8fr;gap:14px;margin-top:14px}
+.progress-topic{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.progress-topic b,.progress-topic small{display:block}.progress-topic small{font-size:10px;color:var(--muted);margin-top:3px}
+.health{font-size:10px;font-weight:800;padding:7px 9px;border-radius:999px;background:#f1f3f6;white-space:nowrap}
+.smart-metric{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.smart-metric b{font-size:22px}.smart-metric span{font-size:11px;color:var(--muted)}
+.data-card{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-top:14px}
+.data-card p{max-width:680px;color:var(--muted);line-height:1.55;margin:5px 0 0}.data-actions{display:flex;gap:8px;flex-wrap:wrap}
+.file-btn{position:relative;overflow:hidden}.file-btn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.install-hint{margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:10px;background:#f8fafc}.install-hint b,.install-hint span{display:block}.install-hint span{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.45}
+.offline-mode .saved{color:#9a6b18}
+@media(max-width:800px){.progress-grid{grid-template-columns:1fr}.data-card{display:block}.data-actions{margin-top:14px}}
+@media(max-width:700px){.side{display:none}.layout{display:block}.main{padding:18px 14px 86px}.top{position:sticky;top:0;z-index:20}.topright .saved{display:none}.topright .ghost:first-of-type{display:none}.top:after{content:"1 Today  ·  2 Practice  ·  3 Focus  ·  4 Review  ·  5 Tutor  ·  6 Progress";position:absolute;left:14px;bottom:-19px;font-size:8px;color:var(--muted);white-space:nowrap}}
+</style>/* StudySprint V3 — product polish + learning analytics + offline/PWA layer. */
 (function(){
   const ACTIVITY_KEY="studysprint_activity_v1", MAX_ACTIVITY=365;
   function activity(){try{const x=JSON.parse(localStorage.getItem(ACTIVITY_KEY)||"[]");return Array.isArray(x)?x:[]}catch{return[]}}

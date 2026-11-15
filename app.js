@@ -30,7 +30,7 @@ function todayPage(){
     '<div class="stats"><div><small>Progress</small><b>'+readiness+'%</b><span>plan progress</span></div><div><small>Today</small><b>'+tasks.reduce((a,x)=>a+x.minutes,0)+' min</b><span>'+tasks.filter(x=>x.done).length+' of '+tasks.length+' done</span></div><div><small>Subjects</small><b>'+state.data.subjects.length+'</b><span>in your plan</span></div><div><small>Topics</small><b>'+state.data.subjects.reduce((n,s)=>n+(s.topics||[]).length,0)+'</b><span>to work through</span></div></div>'+
     '<div class="cols"><div class="card"><div class="cardhead"><div><h2>Today</h2><p>Start at the top. That is all you need to decide.</p></div><span class="pill">'+date(today())+'</span></div>'+
     (tasks.length?tasks.map(task).join(""):'<div class="empty">Nothing is scheduled today. <button class="text" onclick="regen()">Refresh my plan</button></div>')+
-    '</div><div class="stack"><div class="card"><div class="cardhead"><h2>Coming next</h2><button class="text" onclick="view('plan')">See plan</button></div>'+
+    '</div><div class="stack"><div class="card"><div class="cardhead"><h2>Coming next</h2><button class="text" onclick="view(&quot;plan&quot;)">See plan</button></div>'+
     (next.map(x=>'<div class="mini"><i></i><div><b>'+esc(x.topic)+'</b><small>'+esc(x.subject)+' · '+date(x.date)+' · '+x.minutes+'m</small></div></div>').join("")||'<div class="empty">You are caught up.</div>')+
     '</div><div class="card dark"><div class="kicker">NEXT EXAM</div>'+
     (ex[0]?'<div class="exam"><div><b>'+esc(ex[0].name)+'</b><small>'+date(ex[0].date)+'</small></div><strong>'+ex[0].days+'d</strong></div>':'<div class="empty">No exam date yet.</div>')+

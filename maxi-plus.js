@@ -65,7 +65,7 @@
       (subjects.length?'<div class="subjectgrid">'+subjects.map(s=>{
         const topics=(s.topics||[]).filter(t=>t&&t.name);
         return '<div class="card"><div class="subject"><span>'+esc(s.name[0]||"S")+'</span><div><h2>'+esc(s.name)+'</h2><small>'+topics.length+' topic'+(topics.length===1?"":"s")+'</small></div></div>'+
-        topics.map(t=>'<div class="topic topic-rich"><div class="topic-main"><span>'+esc(t.name)+'</span><small>'+(["","Very weak","Weak","Okay","Good","Strong"][Number(t.confidence||3)]||"Okay")+'</small><i><em style="width:'+Math.max(20,Number(t.confidence||3)*20)+'%"></em></i></div><b class="c'+Number(t.confidence||3)+'">'+Number(t.confidence||3)+'/5</b><button class="topic-practice" onclick="startTopicPracticeById(\''+esc(s.id)+'\',\''+esc(t.id)+'\')">Practice</button></div>").join("")+
+        topics.map(t=>'<div class="topic topic-rich"><div class="topic-main"><span>'+esc(t.name)+'</span><small>'+(["","Very weak","Weak","Okay","Good","Strong"][Number(t.confidence||3)]||"Okay")+'</small><i><em style="width:'+Math.max(20,Number(t.confidence||3)*20)+'%"></em></i></div><b class="c'+Number(t.confidence||3)+'">'+Number(t.confidence||3)+'/5</b><button class="topic-practice" data-subject="'+esc(s.id)+'" data-topic="'+esc(t.id)+'" onclick="startTopicPracticeById(this.dataset.subject,this.dataset.topic)">Practice</button></div>').join("")+
         '</div>';
       }).join("")+'</div>':'<div class="card empty">No subjects yet. <button class="btn primary" onclick="openSetup()">Add your first subject</button></div>')+'</section>';
   };

@@ -230,19 +230,46 @@ function subjectEditor(s,si){
     </div>`;
 }
 
+function captureSetupDraft(){
+  if(!state.modal)return;
+  const mins=document.getElementById("mins");
+  if(mins)state.data.availableMinutes=Math.max(20,Math.min(600,Number(mins.value||state.data.availableMinutes||90)));
+  for(const s of state.data.subjects){
+    const nameEl=document.querySelector('[data-subject-name="'+s.id+'"]');
+    if(nameEl)s.name=nameEl.value;
+    for(const t of (s.topics||[])){
+      const key=s.id+"|"+t.id;
+      const nameEl=document.querySelector('[data-topic-name="'+key+'"]');
+      const confEl=document.querySelector('[data-conf="'+key+'"]');
+      if(nameEl)t.name=nameEl.value;
+      if(confEl)t.confidence=Number(confEl.value||t.confidence||3);
+    }
+    const e=state.data.exams.find(x=>x.subjectId===s.id);
+    if(e){
+      const nameEl=document.querySelector('[data-exam-name="'+e.id+'"]');
+      const dateEl=document.querySelector('[data-exam-date="'+e.id+'"]');
+      if(nameEl)e.name=nameEl.value;
+      if(dateEl)e.date=dateEl.value;
+    }
+  }
+}
+
 function addSubject(){
+  captureSetupDraft();
   const id="subject-"+Date.now();
-  state.data.subjects.push({id,name:"",topics:[{id:"topic-"+Date.now(),name:"",confidence:3,minutes:30}]});
-  state.data.exams.push({id:"exam-"+Date.now(),subjectId:id,name:"",date:add(new Date(),14)});
+  const topicId="topic-"+Date.now()+"-1";
+  const examId="exam-"+Date.now();
+  state.data.subjects.push({id,name:"",topics:[{id:topicId,name:"",confidence:3,minutes:30}]});
+  state.data.exams.push({id:examId,subjectId:id,name:"",date:add(new Date(),14)});
   save();render();
 }
 
 function openSetup(){state.modal=true;render()}function closeSetup(){state.modal=false;render()}
-function removeSubject(id){if(state.data.subjects.length<=1){toast("Keep at least one subject.");return}state.data.subjects=state.data.subjects.filter(s=>s.id!==id);state.data.exams=state.data.exams.filter(e=>e.subjectId!==id);save();render()}
-function addTopic(sid){const s=state.data.subjects.find(x=>x.id===sid);if(s)s.topics.push({id:"topic-"+Date.now(),name:"",confidence:3,minutes:30});save();render()}
-function removeTopic(sid,tid){const s=state.data.subjects.find(x=>x.id===sid);if(!s)return;if(s.topics.length<=1){toast("Keep at least one topic.");return}s.topics=s.topics.filter(t=>t.id!==tid);save();render()}
-function moveSubject(i,delta){const j=i+delta;if(j<0||j>=state.data.subjects.length)return;[state.data.subjects[i],state.data.subjects[j]]=[state.data.subjects[j],state.data.subjects[i]];save();render()}
-function moveTopic(sid,i,delta){const s=state.data.subjects.find(x=>x.id===sid),j=i+delta;if(!s||j<0||j>=s.topics.length)return;[s.topics[i],s.topics[j]]=[s.topics[j],s.topics[i]];save();render()}
+function removeSubject(id){captureSetupDraft();if(state.data.subjects.length<=1){toast("Keep at least one subject.");return}state.data.subjects=state.data.subjects.filter(s=>s.id!==id);state.data.exams=state.data.exams.filter(e=>e.subjectId!==id);save();render()}
+function addTopic(sid){captureSetupDraft();const s=state.data.subjects.find(x=>x.id===sid);if(s)s.topics.push({id:"topic-"+Date.now(),name:"",confidence:3,minutes:30});save();render()}
+function removeTopic(sid,tid){captureSetupDraft();const s=state.data.subjects.find(x=>x.id===sid);if(!s)return;if(s.topics.length<=1){toast("Keep at least one topic.");return}s.topics=s.topics.filter(t=>t.id!==tid);save();render()}
+function moveSubject(i,delta){captureSetupDraft();const j=i+delta;if(j<0||j>=state.data.subjects.length)return;[state.data.subjects[i],state.data.subjects[j]]=[state.data.subjects[j],state.data.subjects[i]];save();render()}
+function moveTopic(sid,i,delta){captureSetupDraft();const s=state.data.subjects.find(x=>x.id===sid),j=i+delta;if(!s||j<0||j>=s.topics.length)return;[s.topics[i],s.topics[j]]=[s.topics[j],s.topics[i]];save();render()}
 function resetDemo(){localStorage.removeItem("studysprint");state.data=load();save();render()}
 function saveSetup(){
   state.data.availableMinutes=Math.max(20,Math.min(600,Number(document.getElementById("mins")?.value||90)));

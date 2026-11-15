@@ -26,7 +26,7 @@ function practiceResult(text){
   return "";
 }
 function nav(v,t,i){return `<button class="nav ${state.view===v?"active":""}" onclick="view('${v}')"><span>${i}</span>${t}</button>`}
-function shell(c){return `<header class="top"><button class="brand" onclick="view('today')"><span class="logo">S</span>StudySprint</button><div class="topright"><span class="saved">● Saved locally</span><button class="ghost" onclick="openSetup()">Set up my plan</button></div></header><div class="layout"><aside class="side">${nav("today","Today","⌂")}${nav("plan","My plan","◷")}${nav("subjects","Subjects","▦")}${nav("focus","Focus","◉")}${nav("practice","Practice","✎")}${nav("review","Review","✓")}${nav("tutor","AI Tutor","✦")}<div class="sidefoot"><b>One simple rule</b><span>StudySprint decides the next useful action. You learn, practise, review, then move on.</span></div></aside><main class="main">${c}</main></div><div class="toast ${state.toast?"show":""}">${esc(state.toast)}</div>${state.modal?setup():""}`}
+function shell(c){return `<header class="top"><button class="brand" onclick="view('today')"><span class="logo">S</span>StudySprint</button><div class="topright"><span class="saved">● Saved locally</span><button class="ghost" onclick="openSetup()">Set up my plan</button></div></header><div class="layout"><aside class="side">${nav("today","Today","⌂")}${nav("plan","My plan","◷")}${nav("subjects","Subjects","▦")}${nav("focus","Focus","◉")}${nav("practice","Practice","✎")}${nav("review","Review","✓")}${nav("tutor","AI Tutor","✦")}<div class="sidefoot"><b>One simple rule</b><span>StudySprint is built around learning evidence. You learn, practise, review, and your next step adapts.</span></div></aside><main class="main">${c}</main></div><div class="toast ${state.toast?"show":""}">${esc(state.toast)}</div>${state.modal?setup():""}`}
 function head(k,t,p,a=""){return `<div class="head"><div><div class="kicker">${k}</div><h1>${t}</h1><p>${p}</p></div>${a}</div>`}
 function onboardingPage(){
   return '<section class="welcome">'+
@@ -34,6 +34,23 @@ function onboardingPage(){
     '<div class="card welcomeaction"><div class="setup-simple-icon">✓</div><h2>Set up your study in about a minute</h2><p><b>1.</b> Add a subject &nbsp; <b>2.</b> Add its topics &nbsp; <b>3.</b> Choose your daily time</p><button class="btn primary" onclick="openSetup()">Set up my plan</button></div>'+
     '<div class="simple-examples"><span>Example:</span><b>Mathematics → Quadratics</b><b>Biology → Cell biology</b></div>'+
     '</section>';
+}
+function learningSignal(){
+  const topics=state.data.subjects.flatMap(s=>(s.topics||[]).map(t=>({...t,subject:s.name})));
+  const attempts=Number(state.data.practice.attempts||0),correct=Number(state.data.practice.correct||0);
+  const accuracy=attempts?Math.round(correct/attempts*100):0;
+  const weak=topics.filter(t=>Number(t.confidence||3)<=2).sort((a,b)=>Number(a.confidence||3)-Number(b.confidence||3))[0];
+  const strong=topics.filter(t=>Number(t.confidence||3)>=4).length;
+  return {topics,attempts,correct,accuracy,weak,strong};
+}
+function taskReason(x){
+  const topic=state.data.subjects.flatMap(s=>s.topics||[]).find(t=>t&&t.name===x.topic);
+  const confidence=Number(topic?.confidence||x.confidence||3);
+  const days=Math.max(1,StudySprintCore.daysUntil(x.examDate));
+  if(confidence<=2)return "This topic is marked weak, so StudySprint is bringing it forward for extra practice.";
+  if(days<=3)return "Your exam is close, so this topic gets priority even if your confidence looks okay.";
+  if(confidence===3)return "This topic is still developing. A short learn → recall → practice loop should strengthen it.";
+  return "This keeps a stronger topic active so you do not lose it after learning it once.";
 }
 function todayPage(){
   const ready=state.data.subjects.length&&state.data.plan.length;
@@ -47,7 +64,7 @@ function todayPage(){
   const progress=todayMinutes?Math.min(100,Math.round(completedMinutes/todayMinutes*100)):0;
   const remaining=Math.max(0,todayMinutes-completedMinutes);
   return '<section>'+
-    head("TODAY","Here is your next step.","No guessing. Start the first task and StudySprint will guide you from learning to practice.",'<button class="btn primary" onclick="startNext()">Start next</button>')+
+    head("TODAY","Your adaptive study coach.","StudySprint does more than schedule time: it uses your practice results and topic confidence to decide what deserves attention next.",'<button class="btn primary" onclick="startNext()">Start next</button>')+
     '<div class="stats"><div><small>Today</small><b>'+progress+'%</b><span>today progress</span></div><div><small>Time</small><b>'+completedMinutes+' / '+todayMinutes+' min</b><span>'+remaining+' min remaining</span></div><div><small>Subjects</small><b>'+state.data.subjects.length+'</b><span>in your plan</span></div><div><small>Topics</small><b>'+state.data.subjects.reduce((n,s)=>n+(s.topics||[]).length,0)+'</b><span>to work through</span></div></div>'+
     '<div class="cols"><div class="card"><div class="cardhead"><div><h2>Today</h2><p>Start at the top. That is all you need to decide.</p></div><span class="pill">'+date(today())+'</span></div>'+
     (tasks.length?tasks.map(task).join(""):'<div class="empty">Nothing is scheduled today. <button class="text" onclick="regen()">Refresh my plan</button></div>')+

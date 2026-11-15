@@ -1,7 +1,7 @@
 const STORAGE_KEY="studysprint_v2";
 const API_BASE=window.STUDYSPRINT_API_BASE||"";
 const emptyData=()=>({subjects:[],exams:[],availableMinutes:90,plan:[],focus:{sessions:0,minutes:0},mistakes:[],practice:{attempts:0,correct:0}});
-const state={view:"today",modal:false,data:load(),toast:"",currentTask:null,tutorMode:"Explain simply",practice:{question:"",answer:"",feedback:"",result:"",correctAnswer:"",busy:false}};
+const state={view:"today",modal:false,data:load(),toast:"",currentTask:null,tutorMode:"Explain simply",practice:{question:"",answer:"",feedback:"",result:"",correctAnswer:"",type:"SHORT",options:[],busy:false,history:[]}};
 function load(){const base=emptyData();try{const x=JSON.parse(localStorage.getItem(STORAGE_KEY));if(!x||!Array.isArray(x.subjects))return base;const data={...base,...x};data.subjects=data.subjects.map((s,i)=>({...s,id:s.id||"subject-"+i,name:String(s.name||"Subject "+(i+1)),topics:Array.isArray(s.topics)?s.topics.map((t,j)=>({...t,id:t.id||"topic-"+i+"-"+j,name:String(t.name||"Topic "+(j+1)),confidence:Math.max(1,Math.min(5,Number(t.confidence||3))),minutes:Math.max(15,Math.min(180,Number(t.minutes||30)))})):[]}));data.exams=Array.isArray(data.exams)?data.exams.filter(e=>e&&e.subjectId):[];data.plan=Array.isArray(data.plan)?data.plan.filter(x=>x&&x.subject&&x.topic&&x.date).map(x=>({...x,subject:String(x.subject),topic:String(x.topic),date:String(x.date),minutes:Math.max(15,Math.min(180,Number(x.minutes||30))),priority:Number(x.priority||50),done:Boolean(x.done)})):[];data.mistakes=Array.isArray(data.mistakes)?data.mistakes.filter(x=>x&&x.topic&&x.subject):[];data.focus={sessions:0,minutes:0,...(data.focus||{})};data.practice={attempts:0,correct:0,...(data.practice||{})};data.availableMinutes=Math.max(20,Math.min(600,Number(data.availableMinutes||90)));return data}catch{return base}}
 function add(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return localDate(x)}
 function today(){const n=new Date();return localDate(n)}
@@ -11,11 +11,10 @@ function esc(s){return String(s).replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state.data))}
 function formatPracticeQuestion(text){
   const raw=String(text||"").trim();
-  const safe=esc(raw);
-  return safe
-    .replace(/\\*\\*(.+?)\\*\\*/g,"<strong>$1</strong>")
+  return esc(raw)
+    .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
     .replace(/__(.+?)__/g,"<u>$1</u>")
-    .replace(/\\n/g,"<br>");
+    .replace(/\n/g,"<br>");
 }
 function practiceFeedback(text){
   const raw=String(text||"").replace(/^RESULT:\s*(CORRECT|NEEDS WORK)\s*/i,"").trim();
@@ -106,16 +105,23 @@ function tutorPrompt(x){state.tutorMode=x;render();const i=document.getElementBy
 async function askTutor(){const i=document.getElementById("tutorInput"),chat=document.getElementById("chat"),file=document.getElementById("tutorFile")?.files?.[0];if(!i||!chat||(!i.value.trim()&&!file))return;if(file&&file.size>8_000_000){toast("Please attach a file smaller than 8 MB.");return}const q=i.value.trim()||"Please explain this attached study material.";chat.insertAdjacentHTML("beforeend",`<div class="bubble user">${esc(q)}${file?`<small>Attached: ${esc(file.name)}</small>`:""}</div>`);i.value="";const previous=Array.from(chat.querySelectorAll(".bubble")).slice(-9,-1).map(b=>({role:b.classList.contains("user")?"user":"assistant",text:b.innerText}));let attachment=null;if(file){attachment=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve({name:file.name,type:file.type,data:r.result});r.onerror=reject;r.readAsDataURL(file)})}const currentTask=state.currentTask?{subject:state.currentTask.subject,topic:state.currentTask.topic,examDate:state.currentTask.examDate,minutes:state.currentTask.minutes}:null;try{const res=await fetch(API_BASE+"/api/tutor",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:q,mode:state.tutorMode||"Explain simply",attachment,history:previous,context:{subjects:state.data.subjects.map(s=>({name:s.name,topics:s.topics.map(t=>({name:t.name,confidence:t.confidence}))})),exams:state.data.exams,currentTask}})});const data=await res.json();if(!res.ok)throw new Error(data.error||"Tutor unavailable");const visual=tutorVisual(data.text,q);const cleanText=data.text.replace(/^VISUAL:\s*[a-z-]+\s*$/gim,"").trim();chat.insertAdjacentHTML("beforeend",`<div class="bubble ai"><b>StudySprint Tutor</b><span>${formatTutorText(cleanText)}</span>${visual}</div>`);const f=document.getElementById("tutorFile");if(f)f.value="";document.getElementById("fileName").textContent=""}catch(e){chat.insertAdjacentHTML("beforeend",`<div class="bubble ai"><b>Couldn't answer yet</b><span>${esc(e.message)}</span></div>`)} }
 function practicePage(){
  const x=state.currentTask;
- if(!x)return '<section>'+head("PRACTICE","Pick a topic to practise.","Start a session from Today or My Plan, then Practice will generate a fresh question for that exact topic.")+'<div class="card"><div class="empty">Choose a study session first.</div><button class="btn primary wide" onclick="startPractice()">Practise my next topic</button></div></section>';
- const p=state.practice;
- const result=p.result==="correct"?'<div class="practice-result correct"><b>✓ Correct</b><span>Great work. Your answer is right.</span></div>':p.result==="wrong"?'<div class="practice-result wrong"><b>✕ Needs work</b><span>Not quite yet. Use the explanation below, then try another question.</span></div>':"";
- return '<section>'+head("PRACTICE","Prove you know "+esc(x.topic)+".","Fresh questions every time, with clear feedback after every attempt.",'<button class="btn secondary" onclick="view(\'session\')">Back to session</button>')+
- '<div class="practicegrid"><div class="card practicecard"><div class="kicker">QUESTION</div><div class="practiceq">'+
- (p.busy?'<span class="muted">Creating a fresh question…</span>':p.question?formatPracticeQuestion(p.question):'<span class="muted">No question yet.</span>')+
- '</div><textarea id="practiceAnswer" placeholder="Show your thinking or write your answer..." '+(p.busy?'disabled':'')+'>'+esc(p.answer||"")+'</textarea>'+
- '<div class="practiceactions"><button class="btn primary" onclick="generatePractice()" '+(p.busy?'disabled':'')+'>Next question</button><button class="btn secondary" onclick="checkPractice()" '+(p.busy||!p.question?'disabled':'')+'>Check my answer</button></div>'+
- result+(p.feedback?'<div class="feedback"><b>Why</b><span>'+practiceFeedback(p.feedback)+'</span></div>':"")+
- '</div><div class="card"><h2>Practice loop</h2><div class="rule"><b>1. Try first</b><span>Answer before checking.</span></div><div class="rule"><b>2. Get feedback</b><span>See exactly why your answer is right or needs work.</span></div><div class="rule"><b>3. Learn</b><span>Mistakes are saved for later review.</span></div><div class="rule"><b>4. Keep going</b><span>Every new question is generated fresh.</span></div></div></div></section>'
+ if(!x)return '<section>'+head("PRACTICE","Pick a topic to practise.","Choose a study session and StudySprint will create questions for that exact topic.")+'<div class="card"><div class="empty">Choose a study session first.</div><button class="btn primary wide" onclick="startPractice()">Start practice</button></div></section>';
+ const p=state.practice, opts=p.options||[];
+ const result=p.result==="correct"?'<div class="practice-result correct"><b>✓ Correct</b><span>Nice work — your answer is correct.</span></div>':p.result==="wrong"?'<div class="practice-result wrong"><b>✕ Not quite</b><span>Use the explanation below, then try the next question.</span></div>':"";
+ const answerBox=p.type==="MCQ"
+   ?'<div class="mcq-options">'+opts.map((o,i)=>'<button class="mcq-option '+(p.answer===o?'selected':'')+'" onclick="choosePracticeOption('+i+')" '+(p.busy?'disabled':'')+'>'+esc(o)+'</button>').join("")+'</div>'
+   :'<textarea id="practiceAnswer" placeholder="Write your answer..." '+(p.busy?'disabled':'')+'>'+esc(p.answer||"")+'</textarea>';
+ return '<section>'+head("PRACTICE","Master "+esc(x.topic)+".","One fresh question at a time. You answer first; StudySprint checks it after.",'<button class="btn secondary" onclick="view(\'session\')">Back to session</button>')+
+ '<div class="practicegrid"><div class="card practicecard"><div class="practice-meta"><span class="pill">'+(p.type==="MCQ"?"MULTIPLE CHOICE":"SHORT ANSWER")+'</span></div><div class="practiceq">'+
+ (p.busy?'<span class="muted">Creating a fresh question…</span>':p.question?formatPracticeQuestion(p.question):'<span class="muted">Ready when you are.</span>')+
+ '</div>'+answerBox+
+ '<div class="practiceactions"><button class="btn primary" onclick="checkPractice()" '+(p.busy||!p.question||!p.answer?'disabled':'')+'>Check answer</button><button class="btn secondary" onclick="generatePractice()" '+(p.busy?'disabled':'')+'>Next question</button></div>'+
+ result+(p.feedback?'<div class="feedback"><b>Explanation</b><div>'+practiceFeedback(p.feedback)+'</div></div>':"")+
+ '</div><div class="card"><h2>Practice loop</h2><div class="rule"><b>Answer</b><span>Choose an option or write your answer.</span></div><div class="rule"><b>Check</b><span>Get a clear result and explanation.</span></div><div class="rule"><b>Learn</b><span>Understand why the answer is right.</span></div><div class="rule"><b>Next</b><span>Get a completely new question.</span></div></div></div></section>'
+}
+function choosePracticeOption(i){
+ const o=state.practice.options?.[i];if(!o)return;
+ state.practice.answer=o;render();
 }
 function reviewPage(){const done=state.data.plan.filter(x=>x.done),weak=state.data.subjects.flatMap(s=>s.topics).filter(t=>t.confidence<=2),mistakes=state.data.mistakes||[];return '<section>'+head("REVIEW","Turn mistakes into the next plan.","StudySprint keeps the things you struggled with visible so they can come back later.")+'<div class="review"><div class="card"><b class="big">'+done.length+'</b><h2>sessions completed</h2><p>Learning actions you actually finished.</p></div><div class="card"><b class="big">'+weak.length+'</b><h2>weak topics</h2><p>'+(weak.map(t=>esc(t.name)).join(", ")||"None right now.")+'</p></div><div class="card"><b class="big">'+mistakes.length+'</b><h2>mistakes saved</h2><p>Questions worth revisiting.</p></div></div><div class="card advice"><h2>What should come back?</h2>'+(mistakes.slice(-8).reverse().map(m=>'<div class="mistake"><b>'+esc(m.topic)+'</b><span>'+esc(m.question)+'</span><small>'+date(m.date)+'</small></div>').join("")||'<div class="empty">No saved mistakes yet. Your first practice attempt will appear here.</div>')+'</div><div class="card advice"><h2>How StudySprint uses review</h2><p>After a completed topic, the plan can bring it back later instead of assuming one session means mastery.</p></div></section>'}
 function setup(){
@@ -223,39 +229,45 @@ function startPractice(){let x=state.currentTask;if(!x){x=state.data.plan.find(a
 async function generatePractice(){
  const x=state.currentTask;if(!x)return;
  const previous=state.practice.history||[];
- state.practice={question:"",answer:"",feedback:"",result:"",correctAnswer:"",busy:true,history:previous};render();
+ state.practice={question:"",answer:"",feedback:"",result:"",correctAnswer:"",type:"SHORT",options:[],busy:true,history:previous};render();
  try{
+  const seed=Date.now()+"-"+Math.random().toString(36).slice(2,9);
   const res=await fetch(API_BASE+"/api/tutor",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-   message:"Create ONE fresh practice question for the topic '"+x.topic+"' in "+x.subject+". Do not repeat any previous question. Previous questions are: "+JSON.stringify(previous.slice(-12))+". Prefer a multiple-choice question when it suits the topic; otherwise use a short-answer question. Return exactly these lines: TYPE: MCQ or TYPE: SHORT; QUESTION: the complete question; OPTIONS: only for MCQ, with A) B) C) D); ANSWER: the correct option or short answer. IMPORTANT formatting: if the question says 'bolded word', mark exactly the target word with **double asterisks**. If it says 'underlined word', mark exactly the target word with __double underscores__. Never say bolded/underlined unless the target is visibly marked. Keep the question clear and school-appropriate.",
-   mode:"Practice question",context:{subjects:state.data.subjects,exams:state.data.exams,currentTask:x}
+   message:"Generate ONE genuinely new school practice question for '"+x.topic+"' in '"+x.subject+"'. Unique seed: "+seed+". Do not reuse any previous question, sentence, example, numbers, names, or wording from the previous-question list. Prefer MCQ with exactly 4 plausible options for this topic. The student must answer; NEVER reveal the answer in the question or options. Return ONLY this format:\nTYPE: MCQ\nQUESTION: one clear question\nOPTIONS:\nA) option\nB) option\nC) option\nD) option\nANSWER: A\nIf MCQ is unsuitable, use TYPE: SHORT and omit OPTIONS. IMPORTANT: if the question says 'bolded word', mark exactly the target with **double asterisks**. If it says 'underlined word', mark exactly the target with __double underscores__. The visible formatting must match the wording. Previous questions to avoid: "+JSON.stringify(previous.slice(-20)),
+   mode:"Practice",context:{subjects:state.data.subjects,exams:state.data.exams,currentTask:x}
   })});
   const data=await res.json();if(!res.ok)throw new Error(data.error||"Practice generator unavailable.");
-  const raw=String(data.text||"").trim();
-  const qm=raw.match(/QUESTION:\s*([\\s\\S]*?)(?=\\nOPTIONS:|\\nANSWER:|$)/i);
-  const om=raw.match(/OPTIONS:\s*([\\s\\S]*?)(?=\\nANSWER:|$)/i);
-  const am=raw.match(/ANSWER:\s*([\\s\\S]*)$/i);
-  const question=(qm?qm[1]:raw).trim();
-  const options=om?om[1].trim():"";
-  const answer=am?am[1].trim():"";
-  const display=options?question+"\\n\\n"+options:question;
-  state.practice={question:display,answer:"",feedback:"",result:"",correctAnswer:answer,busy:false,history:[...previous,question].slice(-12)};
+  const raw=String(data.text||"").replace(/\r/g,"").trim();
+  const type=(raw.match(/TYPE:\s*(MCQ|SHORT)/i)||[])[1]?.toUpperCase()||"SHORT";
+  const qm=raw.match(/QUESTION:\s*([\s\S]*?)(?=\nOPTIONS:|\nANSWER:|$)/i);
+  const om=raw.match(/OPTIONS:\s*([\s\S]*?)(?=\nANSWER:|$)/i);
+  const am=raw.match(/ANSWER:\s*([^\n]+)/i);
+  const question=(qm?.[1]||raw).trim();
+  const options=(om?.[1]||"").split("\n").map(s=>s.trim()).filter(Boolean).filter(s=>/^[A-D][.)]\s+/i.test(s)).map(s=>s.replace(/^[A-D][.)]\s+/i,"").trim()).slice(0,4);
+  const answerRaw=(am?.[1]||"").trim();
+  let correctAnswer=answerRaw;
+  if(type==="MCQ"){
+    const letter=(answerRaw.match(/^([A-D])/i)||[])[1]?.toUpperCase();
+    if(letter)correctAnswer=options["ABCD".indexOf(letter)]||answerRaw;
+  }
+  const displayQuestion=question.replace(/\n+$/,"").trim();
+  state.practice={question:displayQuestion,answer:"",feedback:"",result:"",correctAnswer,type,options,busy:false,history:[...previous,displayQuestion].slice(-20)};
   state.data.practice.attempts++;save();render();
  }catch(e){state.practice={...state.practice,busy:false,feedback:e.message};render()}
 }
 async function checkPractice(){
- const x=state.currentTask,a=document.getElementById("practiceAnswer")?.value.trim();if(!x||!state.practice.question||!a){toast("Write an answer first.");return}
+ const x=state.currentTask,a=state.practice.answer?.trim();if(!x||!state.practice.question||!a){toast("Choose an answer first.");return}
  state.practice.answer=a;state.practice.busy=true;render();
  try{
   const res=await fetch(API_BASE+"/api/tutor",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-   message:"Evaluate this student answer professionally. Start with exactly one label: RESULT: CORRECT or RESULT: NEEDS WORK. Then give a short but complete explanation in 2-4 short paragraphs or bullets: what was right, why the answer is correct or what was missing, and the correct answer/approach. Do not repeat the student's whole answer. Be encouraging and clear. Question: "+state.practice.question+"\\nExpected answer: "+state.practice.correctAnswer+"\\nStudent answer: "+a,
+   message:"Evaluate the student's answer. Start exactly with RESULT: CORRECT or RESULT: NEEDS WORK. Then write 2-4 short, professional paragraphs or bullets: 1) what was correct, 2) why it is correct or what was missing, 3) the correct answer/approach if needed. Do not be repetitive and do not write a giant paragraph. Question: "+state.practice.question+"\nExpected answer: "+state.practice.correctAnswer+"\nStudent answer: "+a,
    mode:"Practice feedback",context:{subjects:state.data.subjects,exams:state.data.exams,currentTask:x}
   })});
   const data=await res.json();if(!res.ok)throw new Error(data.error||"Feedback unavailable.");
-  const text=data.text||"";const result=practiceResult(text);
+  const text=data.text||"",result=practiceResult(text);
   if(result==="correct")state.data.practice.correct++;
   else if(result==="wrong"){
-   const mistake={id:"mistake-"+Date.now(),topic:x.topic,subject:x.subject,question:state.practice.question,answer:a,feedback:text,date:today()};
-   state.data.mistakes.push(mistake);
+   state.data.mistakes.push({id:"mistake-"+Date.now(),topic:x.topic,subject:x.subject,question:state.practice.question,answer:a,feedback:text,date:today()});
    const reviewDate=add(today(),1),reviewId=x.id+"-mistake-review-"+today();
    if(!state.data.plan.some(p=>p.id===reviewId)){state.data.plan.push({...x,id:reviewId,date:reviewDate,minutes:Math.min(20,Math.max(15,Math.round(x.minutes/3))),priority:Math.min(100,x.priority+10),done:false,kind:"mistake-review"});state.data.plan.sort((u,v)=>u.date.localeCompare(v.date)||v.priority-u.priority)}
   }

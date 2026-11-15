@@ -117,3 +117,9 @@
 .plan-compare strong{font-size:18px}
 @media(max-width:1000px){.premium-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:650px){.premium-hero{display:block}.premium-badge{margin-top:20px}.premium-grid,.plan-compare{grid-template-columns:1fr}}
+
+
+.plus-lock{margin-top:14px;padding:20px;border:1px dashed #c7cfdf;background:#f8faff}
+.plus-lock h2{margin:5px 0 7px;font-size:19px}
+.plus-lock p{margin:0 0 13px;color:var(--muted);line-height:1.55}
+.premium-status{margin:0 0 14px}

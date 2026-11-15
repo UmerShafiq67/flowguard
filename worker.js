@@ -98,7 +98,10 @@ function makeMessages(body) {
   }
 
   message = message || "Please help me study.";
-  message += "\n\nStudySprint context:\n" + contextText(body.context || {});
+  message += "
+
+StudySprint context:
+" + contextText(body.context || {});
 
   const messages = [{ role: "system", content: systemPrompt(mode) }];
   for (const item of (Array.isArray(body.history) ? body.history : []).slice(-8)) {
@@ -128,6 +131,46 @@ function makeMessages(body) {
   return { messages };
 }
 
+
+function entitlementResponse(deviceId, env) {
+  const id = clean(deviceId, 160);
+  if (!id) return json({ error: "Missing deviceId." }, 400);
+  if (!env.STUDYSPRINT_ENTITLEMENTS) {
+    return json({ plan: "free", entitlement: "none", configured: false });
+  }
+  return env.STUDYSPRINT_ENTITLEMENTS.get("entitlement:" + id, "json")
+    .then(record => json({
+      plan: record?.active === true ? "plus" : "free",
+      entitlement: record?.active === true ? "verified" : "none",
+      configured: true,
+      expiresAt: record?.expiresAt || null
+    }));
+}
+
+async function billingWebhook(request, env) {
+  const secret = String(env.BILLING_WEBHOOK_SECRET || "");
+  if (!secret) return json({ error: "Billing webhook is not configured." }, 503);
+  if ((request.headers.get("X-StudySprint-Billing-Secret") || "") !== secret) {
+    return json({ error: "Unauthorized." }, 401);
+  }
+  let body;
+  try { body = await request.json(); } catch { return json({ error: "Invalid JSON." }, 400); }
+  const deviceId = clean(body?.deviceId, 160);
+  if (!deviceId) return json({ error: "Missing deviceId." }, 400);
+  if (!env.STUDYSPRINT_ENTITLEMENTS) return json({ error: "Entitlement storage is not configured." }, 503);
+  const active = body?.event === "subscription_active" || body?.event === "purchase_completed";
+  const cancelled = body?.event === "subscription_cancelled" || body?.event === "refund";
+  if (!active && !cancelled) return json({ error: "Unsupported billing event." }, 400);
+  await env.STUDYSPRINT_ENTITLEMENTS.put("entitlement:" + deviceId, JSON.stringify({
+    active,
+    customerId: clean(body?.customerId, 200),
+    plan: active ? "plus" : "free",
+    expiresAt: clean(body?.expiresAt, 40) || null,
+    updatedAt: new Date().toISOString()
+  }));
+  return json({ ok: true, plan: active ? "plus" : "free" });
+}
+
 export default {
   async fetch(request, env) {
     if (request.method === "OPTIONS") {
@@ -145,7 +188,15 @@ export default {
       });
     }
 
-    if (request.method === "GET" && url.pathname === "/api/entitlement") {\n      return entitlementResponse(url.searchParams.get("deviceId"), env);\n    }\n\n    if (request.method === "POST" && url.pathname === "/api/billing/webhook") {\n      return billingWebhook(request, env);\n    }\n\n    if (request.method === "POST" && url.pathname === "/api/tutor") {
+    if (request.method === "GET" && url.pathname === "/api/entitlement") {
+      return entitlementResponse(url.searchParams.get("deviceId"), env);
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/billing/webhook") {
+      return billingWebhook(request, env);
+    }
+
+    if (request.method === "POST" && url.pathname === "/api/tutor") {
       let body;
       try {
         body = await request.json();

@@ -96,3 +96,40 @@
   };
   setTimeout(()=>render(),0);
 })();
+
+/* STUDYSPRINT MONETIZATION FOUNDATION — clear value, no fake checkout, no lock-in. */
+(function(){
+  const PREMIUM_FEATURES=[
+    ["Adaptive Exam Prep","A deeper priority engine that continuously reorders work from weakness, urgency, practice evidence and retention."],
+    ["Source-based Practice","Turn your own notes and study material into targeted practice instead of generic questions."],
+    ["Advanced Review","Long-term retention checks, mistake resurfacing and stronger spaced-review decisions."],
+    ["Deep Readiness","More detailed evidence about what is secure, shaky and still unproven before an exam."],
+    ["High AI allowance","More AI Tutor and practice generation for students who use StudySprint heavily."]
+  ];
+  function premiumPage(){
+    return '<section>'+head("STUDYSPRINT PLUS","A stronger study system, when you need more.","Free StudySprint already gives you the core learning loop. Plus is designed for students who want deeper adaptation and heavier study support.",'<button class="btn secondary" onclick="view(\'today\')">Back to Today</button>')+
+      '<div class="premium-hero card"><div><div class="kicker">PLUS</div><h2>Do not pay for a timer. Pay for better decisions.</h2><p>StudySprint Plus is built around one promise: spend your limited study time on the work most likely to improve your learning.</p><div class="premium-actions"><button class="btn primary" onclick="toast(\'Plus is not charging yet. Your current version stays free.\')">Join the Plus waitlist</button><button class="btn secondary" onclick="view(\'practice\')">Use free Practice</button></div></div><div class="premium-badge"><b>PLUS</b><span>planned</span></div></div>'+
+      '<div class="premium-grid">'+PREMIUM_FEATURES.map((f,i)=>'<div class="card premium-feature"><div class="premium-number">0'+(i+1)+'</div><h3>'+esc(f[0])+'</h3><p>'+esc(f[1])+'</p><span class="premium-state">PLUS</span></div>').join('')+'</div>'+
+      '<div class="card premium-compare"><div class="cardhead"><div><div class="kicker">SIMPLE PLANS</div><h2>Start free. Upgrade only when the extra value matters.</h2><p>No fake scarcity, no forced subscription, and no payment is being taken in this version.</p></div></div><div class="plan-compare"><div><b>Free</b><span>Core planner, Practice, AI Tutor, Focus, Review and local backup.</span><strong>$0</strong></div><div class="plan-plus"><b>Plus</b><span>Everything free, plus deeper adaptation, source-based practice, advanced review and higher AI allowance.</span><strong>Pricing later</strong></div></div></div>'+
+      '<div class="callout"><b>Why this exists.</b><span>StudySprint will only charge for features that create real extra value. The payment system is intentionally not connected yet, so there is nothing to buy by accident.</span></div></section>';
+  }
+  window.premiumPage=premiumPage;
+  window.openPremium=function(){state.view="premium";render()};
+  window.joinPremiumWaitlist=function(){toast("Plus is not charging yet. We can add a real waitlist when you are ready.")};
+  const oldNav=nav;
+  window.nav=function(v,t,i){
+    if(v==="premium")return '<button class="nav '+(state.view===v?"active":"")+'" onclick="openPremium()"><span>◆</span>Plus</button>';
+    return oldNav(v,t,i);
+  };
+  const oldShell2=window.shell;
+  window.shell=function(c){
+    const base=oldShell2(c);
+    return base.replace('<button class="ghost" onclick="openSetup()">Set up my plan</button>','<button class="ghost" onclick="openPremium()">Plus</button><button class="ghost" onclick="openSetup()">Set up my plan</button>');
+  };
+  const oldRender=window.render;
+  window.render=function(){
+    if(state.view==="premium"){const root=document.getElementById("app");if(!root)return;try{root.innerHTML=window.shell(premiumPage())}catch(e){console.error(e);state.view="today";oldRender()}return}
+    oldRender();
+  };
+  setTimeout(()=>render(),0);
+})();

@@ -69,3 +69,13 @@
 .tutor-quiz-card .feedback{margin-top:12px}
 
 .focus-context{display:grid;gap:5px;margin-bottom:14px}.focus-context b{font-size:17px}.focus-context small{font-size:10px;color:var(--muted)}
+
+
+.adaptive-card{margin-top:16px}
+.adaptive-main{display:flex;flex-direction:column;gap:6px;padding:14px 0 12px}
+.adaptive-main b{font-size:18px}
+.adaptive-main span{color:var(--muted);line-height:1.55}
+.adaptive-rule{display:flex;justify-content:space-between;gap:18px;padding:10px 0;border-top:1px solid var(--line);font-size:12px}
+.adaptive-rule span{color:var(--muted)}
+.adaptive-rule b{font-weight:700}
+@media(max-width:800px){.adaptive-rule{font-size:11px}}

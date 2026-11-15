@@ -147,28 +147,56 @@ function entitlementResponse(deviceId, env) {
     }));
 }
 
+async function verifyPaddleSignature(request, rawBody, secret) {
+  const header = request.headers.get("Paddle-Signature") || "";
+  const parts = Object.fromEntries(header.split(";").map(x => {
+    const i = x.indexOf("=");
+    return i > 0 ? [x.slice(0, i), x.slice(i + 1)] : ["", ""];
+  }).filter(x => x[0]));
+  if (!parts.ts || !parts.h1 || !secret) return false;
+  const ts = Number(parts.ts);
+  if (!Number.isFinite(ts) || Math.abs(Date.now() / 1000 - ts) > 300) return false;
+  const payload = parts.ts + ":" + rawBody;
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload));
+  const expected = Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, "0")).join("");
+  return expected === parts.h1;
+}
+
 async function billingWebhook(request, env) {
-  const secret = String(env.BILLING_WEBHOOK_SECRET || "");
+  const secret = String(env.PADDLE_WEBHOOK_SECRET || env.BILLING_WEBHOOK_SECRET || "");
   if (!secret) return json({ error: "Billing webhook is not configured." }, 503);
-  if ((request.headers.get("X-StudySprint-Billing-Secret") || "") !== secret) {
-    return json({ error: "Unauthorized." }, 401);
+  const rawBody = await request.text();
+  if (!(await verifyPaddleSignature(request, rawBody, secret))) {
+    return json({ error: "Invalid webhook signature." }, 401);
   }
   let body;
-  try { body = await request.json(); } catch { return json({ error: "Invalid JSON." }, 400); }
-  const deviceId = clean(body?.deviceId, 160);
-  if (!deviceId) return json({ error: "Missing deviceId." }, 400);
+  try { body = JSON.parse(rawBody); } catch { return json({ error: "Invalid JSON." }, 400); }
+  const type = String(body?.event_type || body?.event || "");
+  const data = body?.data || {};
+  const custom = data?.custom_data || {};
+  const deviceId = clean(custom.deviceId, 160);
+  if (!deviceId) return json({ error: "Missing StudySprint device reference." }, 400);
   if (!env.STUDYSPRINT_ENTITLEMENTS) return json({ error: "Entitlement storage is not configured." }, 503);
-  const active = body?.event === "subscription_active" || body?.event === "purchase_completed";
-  const cancelled = body?.event === "subscription_cancelled" || body?.event === "refund";
-  if (!active && !cancelled) return json({ error: "Unsupported billing event." }, 400);
-  await env.STUDYSPRINT_ENTITLEMENTS.put("entitlement:" + deviceId, JSON.stringify({
-    active,
-    customerId: clean(body?.customerId, 200),
-    plan: active ? "plus" : "free",
-    expiresAt: clean(body?.expiresAt, 40) || null,
+
+  const active = type === "subscription.created" || type === "subscription.activated" ||
+    (type === "transaction.completed" && data?.status === "completed");
+  const inactive = type === "subscription.canceled" || type === "subscription.canceled" ||
+    type === "subscription.past_due" || type === "subscription.paused" ||
+    type === "transaction.canceled";
+
+  if (!active && !inactive) return json({ ok: true, ignored: true });
+
+  const record = {
+    active: active && !inactive,
+    plan: active && !inactive ? "plus" : "free",
+    customerId: clean(data?.customer_id, 100) || null,
+    subscriptionId: clean(data?.id, 100) || null,
+    expiresAt: clean(data?.next_billed_at, 40) || null,
     updatedAt: new Date().toISOString()
-  }));
-  return json({ ok: true, plan: active ? "plus" : "free" });
+  };
+  await env.STUDYSPRINT_ENTITLEMENTS.put("entitlement:" + deviceId, JSON.stringify(record));
+  return json({ ok: true, plan: record.plan });
 }
 
 export default {

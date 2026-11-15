@@ -234,3 +234,78 @@
   ensureAccount();
   save();
 })();
+
+
+/* PADDLE CHECKOUT + VERIFIED ENTITLEMENT BRIDGE
+   Checkout is configuration-driven: no secret API key is stored in the browser.
+   A live client token and price ID are required before real charges can occur. */
+(function(){
+  const BILL=window.STUDYSPRINT_BILLING||{};
+  function deviceId(){
+    let id=localStorage.getItem("studysprint_device_id");
+    if(!id){id="ss_"+crypto.randomUUID();localStorage.setItem("studysprint_device_id",id)}
+    return id;
+  }
+  window.studySprintDeviceId=deviceId;
+
+  async function syncEntitlement(){
+    try{
+      const r=await fetch((window.STUDYSPRINT_API_BASE||"")+"/api/entitlement?deviceId="+encodeURIComponent(deviceId()),{cache:"no-store"});
+      const x=await r.json();
+      if(x&&x.entitlement==="verified"&&x.plan==="plus"){
+        state.data.account=state.data.account||{};
+        state.data.account.plan="plus";
+        state.data.account.entitlement="verified";
+        state.data.account.expiresAt=x.expiresAt||null;
+        save();
+      }else if(x&&x.configured===true){
+        state.data.account=state.data.account||{};
+        state.data.account.plan="free";
+        state.data.account.entitlement="none";
+        save();
+      }
+    }catch(e){console.warn("Plus entitlement sync unavailable",e)}
+  }
+  window.studySprintSyncEntitlement=syncEntitlement;
+
+  function billingConfigured(){
+    return BILL.provider==="paddle"&&BILL.clientToken&&BILL.plusPriceId&&window.Paddle;
+  }
+
+  window.startPlusCheckout=function(){
+    if(!billingConfigured()){
+      openPremium();
+      toast("Plus checkout is being prepared. Billing configuration is not connected yet.");
+      return;
+    }
+    try{
+      if(!window.__studySprintPaddleReady){
+        Paddle.Initialize({
+          token:BILL.clientToken,
+          eventCallback:function(event){
+            if(event?.name==="checkout.completed"||event?.name==="checkout.closed"){
+              setTimeout(syncEntitlement,1500);
+            }
+          }
+        });
+        window.__studySprintPaddleReady=true;
+      }
+      Paddle.Checkout.open({
+        items:[{priceId:BILL.plusPriceId,quantity:1}],
+        customData:{deviceId:deviceId(),product:"studysprint_plus"},
+        settings:{displayMode:"overlay",theme:"light",variant:"one-page"}
+      });
+    }catch(e){
+      console.error(e);
+      toast("Plus checkout could not open. Please try again.");
+    }
+  };
+
+  window.startPlusCheckoutReady=function(){
+    if(billingConfigured())return startPlusCheckout();
+    openPremium();
+    toast("Add the Paddle client token and Plus price ID to enable checkout.");
+  };
+
+  syncEntitlement();
+})();

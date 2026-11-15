@@ -1,0 +1,8 @@
+{
+  "appId": "com.studysprint.app",
+  "appName": "StudySprint",
+  "webDir": ".",
+  "server": {
+    "androidScheme": "https"
+  }
+}

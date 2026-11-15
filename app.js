@@ -11,7 +11,7 @@ function today(){const n=new Date();return localDate(n)}
 function localDate(n){return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,"0")}-${String(n.getDate()).padStart(2,"0")}`}
 function date(s){return new Date(s+"T00:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"})}
 function esc(s){return String(s).replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]))}
-function save(){state.data.meta=state.data.meta||{};state.data.meta.lastModified=new Date().toISOString();const payload=JSON.stringify({...state.data,version:DATA_VERSION});try{localStorage.setItem(BACKUP_KEY,payload);localStorage.setItem(STORAGE_KEY,payload)}catch(e){console.error("StudySprint save failed",e)}}
+function save(){state.data.meta=state.data.meta||{};state.data.meta.lastModified=new Date().toISOString();const payload=JSON.stringify({...state.data,version:DATA_VERSION});try{localStorage.setItem(BACKUP_KEY,payload);localStorage.setItem(STORAGE_KEY,payload);window.studySprintQueueSync?.()}catch(e){console.error("StudySprint save failed",e)}}
 function formatPracticeQuestion(text){
   const raw=String(text||"").trim();
   return esc(raw)

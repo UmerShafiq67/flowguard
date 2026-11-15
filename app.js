@@ -266,42 +266,42 @@ async function generatePractice(){
  const previous=state.practice.history||[];
  state.practice={question:"",answer:"",feedback:"",result:"",correctAnswer:"",type:"SHORT",options:[],busy:true,history:previous};render();
  try{
-  const seed=Date.now()+"-"+Math.random().toString(36).slice(2,9);
-  const res=await fetch(API_BASE+"/api/tutor",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-   message:"Generate ONE genuinely new school practice question for '"+x.topic+"' in '"+x.subject+"'. Unique seed: "+seed+". Do not reuse any previous question, sentence, example, numbers, names, or wording from the previous-question list. Prefer MCQ with exactly 4 plausible options for this topic. The student must answer; NEVER reveal the answer in the question or options. Return ONLY this format:\nTYPE: MCQ\nQUESTION: one clear question\nOPTIONS:\nA) option\nB) option\nC) option\nD) option\nANSWER: A\nIf MCQ is unsuitable, use TYPE: SHORT and omit OPTIONS. IMPORTANT: if the question says 'bolded word', mark exactly the target with **double asterisks**. If it says 'underlined word', mark exactly the target with __double underscores__. The visible formatting must match the wording. Previous questions to avoid: "+JSON.stringify(previous.slice(-20)),
-   mode:"Practice",context:{subjects:state.data.subjects,exams:state.data.exams,currentTask:x}
-  })});
+  const seed=Date.now()+"-"+Math.random().toString(36).slice(2,10);
+  const prompt="Generate ONE genuinely fresh school practice question for the exact topic '"+x.topic+"' in '"+x.subject+"'. This is an answer-first student exercise. The student must supply the answer; NEVER reveal the answer in the question or options. Prefer MCQ with exactly 4 plausible, distinct options when suitable. Make the wording, example, values, names and scenario meaningfully different from every previous question. Unique seed: "+seed+". Return ONLY:\nTYPE: MCQ\nQUESTION: ...\nOPTIONS:\nA) ...\nB) ...\nC) ...\nD) ...\nANSWER: A\nFor a short-answer question use TYPE: SHORT and omit OPTIONS. If the prompt refers to a bolded word, mark exactly the target with **double asterisks**. If it refers to an underlined word, mark exactly the target with __double underscores__. Never reveal the answer anywhere except the final ANSWER line. Previous questions to avoid: "+JSON.stringify(previous.slice(-20));
+  const res=await fetch(API_BASE+"/api/tutor",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:prompt,mode:"Practice",context:{subjects:state.data.subjects,exams:state.data.exams,currentTask:x}})});
   const data=await res.json();if(!res.ok)throw new Error(data.error||"Practice generator unavailable.");
-  const raw=String(data.text||"").replace(/\r/g,"").trim();
-  const type=(raw.match(/TYPE:\s*(MCQ|SHORT)/i)||[])[1]?.toUpperCase()||"SHORT";
-  const qm=raw.match(/QUESTION:\s*([\s\S]*?)(?=\nOPTIONS:|\nANSWER:|$)/i);
-  const om=raw.match(/OPTIONS:\s*([\s\S]*?)(?=\nANSWER:|$)/i);
-  const am=raw.match(/ANSWER:\s*([^\n]+)/i);
-  const question=(qm?.[1]||raw).trim();
-  const options=(om?.[1]||"").split("\n").map(s=>s.trim()).filter(Boolean).filter(s=>/^[A-D][.)]\s+/i.test(s)).map(s=>s.replace(/^[A-D][.)]\s+/i,"").trim()).slice(0,4);
-  const answerRaw=(am?.[1]||"").trim();
-  let correctAnswer=answerRaw;
-  if(type==="MCQ"){
-    const letter=(answerRaw.match(/^([A-D])/i)||[])[1]?.toUpperCase();
-    if(letter)correctAnswer=options["ABCD".indexOf(letter)]||answerRaw;
-  }
-  const displayQuestion=question.replace(/\n+$/,"").trim();
-  state.practice={question:displayQuestion,answer:"",feedback:"",result:"",correctAnswer,type,options,busy:false,history:[...previous,displayQuestion].slice(-20)};
-  state.data.practice.attempts++;save();render();
+  const raw=String(data.text||"").replace(/\r/g,"").replace(/^\`\`\`[a-z]*\s*/i,"").replace(/\`\`\`$/,"").trim();
+  const type=(raw.match(/TYPE\s*:\s*(MCQ|SHORT)/i)||[])[1]?.toUpperCase()||"SHORT";
+  const qm=raw.match(/QUESTION\s*:\s*([\s\S]*?)(?=\n\s*OPTIONS\s*:|\n\s*ANSWER\s*:|$)/i);
+  const om=raw.match(/OPTIONS\s*:\s*([\s\S]*?)(?=\n\s*ANSWER\s*:|$)/i);
+  const am=raw.match(/ANSWER\s*:\s*([^\n]+)/i);
+  const question=(qm?.[1]||"").trim();
+  const options=(om?.[1]||"").split("\n").map(s=>s.trim()).filter(Boolean).filter(s=>/^[A-D][.)]\s+/i.test(s)).map(s=>s.replace(/^[A-D][.)]\s+/i,"").trim()).filter(Boolean).slice(0,4);
+  const answerRaw=(am?.[1]||"").trim(),letter=(answerRaw.match(/^([A-D])(?:[.)]|\s|$)/i)||[])[1]?.toUpperCase();
+  const correctAnswer=type==="MCQ"&&letter?options["ABCD".indexOf(letter)]||"":answerRaw;
+  if(!question)throw new Error("The tutor returned no question. Try Next question.");
+  if(type==="MCQ"&&(options.length!==4||!correctAnswer))throw new Error("The tutor returned an invalid multiple-choice question. Try Next question.");
+  state.practice={question,answer:"",feedback:"",result:"",correctAnswer,type,options,busy:false,history:[...previous,question].slice(-20)};
+  save();render();
  }catch(e){state.practice={...state.practice,busy:false,feedback:e.message};render()}
 }
 async function checkPractice(){
  const x=state.currentTask,a=state.practice.answer?.trim();if(!x||!state.practice.question||!a){toast("Choose an answer first.");return}
- state.practice.answer=a;state.practice.busy=true;render();
+ state.practice={...state.practice,answer:a,busy:true};render();
  try{
   const res=await fetch(API_BASE+"/api/tutor",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-   message:"Evaluate the student's answer. Start exactly with RESULT: CORRECT or RESULT: NEEDS WORK. Then write 2-4 short, professional paragraphs or bullets: 1) what was correct, 2) why it is correct or what was missing, 3) the correct answer/approach if needed. Do not be repetitive and do not write a giant paragraph. Question: "+state.practice.question+"\nExpected answer: "+state.practice.correctAnswer+"\nStudent answer: "+a,
+   message:"Evaluate the student's answer. Start exactly with RESULT: CORRECT or RESULT: NEEDS WORK. Then give a small professional explanation in 2-4 short paragraphs or bullets: say what was correct, why it is correct, or why it is wrong and what the correct reasoning is. Do not be repetitive. Question: "+state.practice.question+"\nExpected answer: "+state.practice.correctAnswer+"\nStudent answer: "+a,
    mode:"Practice feedback",context:{subjects:state.data.subjects,exams:state.data.exams,currentTask:x}
   })});
   const data=await res.json();if(!res.ok)throw new Error(data.error||"Feedback unavailable.");
   const text=data.text||"",result=practiceResult(text);
-  if(result==="correct")state.data.practice.correct++;
-  else if(result==="wrong"){
+  const topic=state.data.subjects.flatMap(s=>s.topics||[]).find(t=>t&&t.name===x.topic);
+  state.data.practice.attempts++;
+  if(result==="correct"){
+   state.data.practice.correct++;
+   if(topic)topic.confidence=Math.min(5,Number(topic.confidence||3)+1);
+  }else if(result==="wrong"){
+   if(topic)topic.confidence=Math.max(1,Number(topic.confidence||3)-1);
    state.data.mistakes.push({id:"mistake-"+Date.now(),topic:x.topic,subject:x.subject,question:state.practice.question,answer:a,feedback:text,date:today()});
    const reviewDate=add(today(),1),reviewId=x.id+"-mistake-review-"+today();
    if(!state.data.plan.some(p=>p.id===reviewId)){state.data.plan.push({...x,id:reviewId,date:reviewDate,minutes:Math.min(20,Math.max(15,Math.round(x.minutes/3))),priority:Math.min(100,x.priority+10),done:false,kind:"mistake-review"});state.data.plan.sort((u,v)=>u.date.localeCompare(v.date)||v.priority-u.priority)}

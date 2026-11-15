@@ -105,11 +105,32 @@ function setup(){
 
 function subjectEditor(s,si){
   const e=state.data.exams.find(x=>x.subjectId===s.id)||{id:"exam-"+s.id,subjectId:s.id,name:"",date:add(new Date(),14)};
-  const topicInputs=(s.topics||[]).map((t,ti)=>'<div class="quick-topic"><input data-topic-name="'+s.id+"|"+t.id+'" value="'+esc(t.name||"")+'" placeholder="Topic '+(ti+1)+' (e.g. Quadratics)"><select data-conf="'+s.id+"|"+t.id+'"><option value="1" '+(t.confidence===1?"selected":"")+'>Very weak</option><option value="2" '+(t.confidence===2?"selected":"")+'>Weak</option><option value="3" '+(t.confidence===3?"selected":"")+'>Okay</option><option value="4" '+(t.confidence===4?"selected":"")+'>Good</option><option value="5" '+(t.confidence===5?"selected":"")+'>Strong</option></select><button class="icon danger" onclick="removeTopic(''+s.id+'',''+t.id+'')" title="Remove topic">×</button></div>').join("");
-  return '<div class="editor quick-editor"><div class="editorhead"><input data-subject-name="'+s.id+'" value="'+esc(s.name||"")+'" placeholder="Subject name (e.g. Mathematics)"><button class="danger text" onclick="removeSubject(''+s.id+'')">Remove</button></div>'+
-    '<label>Topics</label><div class="quick-topics">'+topicInputs+'</div><button class="text add-topic" onclick="addTopic(''+s.id+'')">+ Add topic</button>'+
-    '<div class="exam-simple"><div><label>Test date <span class="muted">(optional)</span></label><input data-exam-date="'+e.id+'" type="date" value="'+e.date+'"></div><div><label>Test name <span class="muted">(optional)</span></label><input data-exam-name="'+e.id+'" value="'+esc(e.name||"")+'" placeholder="e.g. Biology exam"></div></div>'+
-    '</div>';
+  const topicInputs=(s.topics||[]).map((t,ti)=>`
+    <div class="quick-topic">
+      <input data-topic-name="${s.id}|${t.id}" value="${esc(t.name||"")}" placeholder="Topic ${ti+1} (e.g. Quadratics)">
+      <select data-conf="${s.id}|${t.id}">
+        <option value="1" ${t.confidence===1?"selected":""}>Very weak</option>
+        <option value="2" ${t.confidence===2?"selected":""}>Weak</option>
+        <option value="3" ${t.confidence===3?"selected":""}>Okay</option>
+        <option value="4" ${t.confidence===4?"selected":""}>Good</option>
+        <option value="5" ${t.confidence===5?"selected":""}>Strong</option>
+      </select>
+      <button class="icon danger" onclick="removeTopic('${s.id}','${t.id}')" title="Remove topic">×</button>
+    </div>`).join("");
+  return `
+    <div class="editor quick-editor">
+      <div class="editorhead">
+        <input data-subject-name="${s.id}" value="${esc(s.name||"")}" placeholder="Subject name (e.g. Mathematics)">
+        <button class="danger text" onclick="removeSubject('${s.id}')">Remove</button>
+      </div>
+      <label>Topics</label>
+      <div class="quick-topics">${topicInputs}</div>
+      <button class="text add-topic" onclick="addTopic('${s.id}')">+ Add topic</button>
+      <div class="exam-simple">
+        <div><label>Test date <span class="muted">(optional)</span></label><input data-exam-date="${e.id}" type="date" value="${e.date}"></div>
+        <div><label>Test name <span class="muted">(optional)</span></label><input data-exam-name="${e.id}" value="${esc(e.name||"")}" placeholder="e.g. Biology exam"></div>
+      </div>
+    </div>`;
 }
 
 function addSubject(){

@@ -6,7 +6,7 @@
   function topicByName(name){return allTopics().find(t=>t.name===name)}
   function dueReviews(){
     const now=today();
-    return state.data.plan.filter(x=>x&&!x.done&&x.date<=now&&x.kind==="review").sort((a,b)=>adaptiveScore(b)-adaptiveScore(a));
+    return state.data.plan.filter(x=>x&&!x.done&&x.date<=now&&(x.kind==="review"||x.kind==="mistake-review")).sort((a,b)=>adaptiveScore(b)-adaptiveScore(a));
   }
   function readinessPlus(){
     const topics=allTopics(), attempts=Number(state.data.practice.attempts||0), correct=Number(state.data.practice.correct||0);
@@ -65,9 +65,16 @@
       (subjects.length?'<div class="subjectgrid">'+subjects.map(s=>{
         const topics=(s.topics||[]).filter(t=>t&&t.name);
         return '<div class="card"><div class="subject"><span>'+esc(s.name[0]||"S")+'</span><div><h2>'+esc(s.name)+'</h2><small>'+topics.length+' topic'+(topics.length===1?"":"s")+'</small></div></div>'+
-        topics.map(t=>'<div class="topic topic-rich"><div class="topic-main"><span>'+esc(t.name)+'</span><small>'+(["","Very weak","Weak","Okay","Good","Strong"][Number(t.confidence||3)]||"Okay")+'</small><i><em style="width:'+Math.max(20,Number(t.confidence||3)*20)+'%"></em></i></div><b class="c'+Number(t.confidence||3)+'">'+Number(t.confidence||3)+'/5</b><button class="topic-practice" onclick="startTopicPractice(\''+esc(s.name).replace(/'/g,"\\'")+\',\''+esc(t.name).replace(/'/g,"\\'")+"')">Practice</button></div>").join("")+
+        topics.map(t=>'<div class="topic topic-rich"><div class="topic-main"><span>'+esc(t.name)+'</span><small>'+(["","Very weak","Weak","Okay","Good","Strong"][Number(t.confidence||3)]||"Okay")+'</small><i><em style="width:'+Math.max(20,Number(t.confidence||3)*20)+'%"></em></i></div><b class="c'+Number(t.confidence||3)+'">'+Number(t.confidence||3)+'/5</b><button class="topic-practice" onclick="startTopicPracticeById(\''+esc(s.id)+'\',\''+esc(t.id)+'\')"">Practice</button></div>").join("")+
         '</div>';
       }).join("")+'</div>':'<div class="card empty">No subjects yet. <button class="btn primary" onclick="openSetup()">Add your first subject</button></div>')+'</section>';
+  };
+  window.startTopicPracticeById=function(subjectId,topicId){
+    const s=state.data.subjects.find(x=>x.id===subjectId); const t=s?.topics?.find(x=>x.id===topicId);
+    if(!s||!t){toast("Topic not found.");return}
+    const exam=state.data.exams.find(e=>e.subjectId===s.id);
+    state.currentTask={id:"topic-"+Date.now(),subject:s.name,topic:t.name,examDate:exam?.date||today(),minutes:Math.min(30,Math.max(15,Number(t.minutes)||30)),priority:adaptiveScore({topic:t.name,confidence:t.confidence,minutes:t.minutes,examDate:exam?.date||today()})};
+    resetPracticeState();state.view="practice";render();setTimeout(()=>generatePractice(),40);
   };
   window.startTopicPractice=function(subject,topic){
     const s=state.data.subjects.find(x=>x.name===subject); const t=s?.topics?.find(x=>x.name===topic);

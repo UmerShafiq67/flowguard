@@ -133,3 +133,104 @@
   };
   setTimeout(()=>render(),0);
 })();
+
+
+/* PREMIUM ACCESS + FREE TIER GUARDRAILS
+   Product rule: free stays useful; Plus unlocks the heavy features.
+   The entitlement is deliberately verified-state based. No client-side
+   "unlock" control is exposed, so a future checkout can set the verified
+   entitlement from the server without changing the product UI. */
+(function(){
+  const FREE_LIMITS={ai:5,practice:8,quiz:3};
+  function ensureAccount(){
+    state.data.account=state.data.account&&typeof state.data.account==="object"?state.data.account:{};
+    state.data.account.plan=state.data.account.plan==="plus"?"plus":"free";
+    state.data.account.entitlement=state.data.account.entitlement==="verified"?"verified":"none";
+    state.data.account.usage=state.data.account.usage&&typeof state.data.account.usage==="object"?state.data.account.usage:{};
+    const d=today();
+    if(state.data.account.usage.date!==d)state.data.account.usage={date:d,ai:0,practice:0,quiz:0};
+    return state.data.account;
+  }
+  function isPlus(){
+    const a=ensureAccount();
+    return a.plan==="plus"&&a.entitlement==="verified";
+  }
+  function usageKey(kind){return kind==="practice"?"practice":kind==="quiz"?"quiz":"ai"}
+  function allowed(kind){
+    if(isPlus())return true;
+    const a=ensureAccount(),k=usageKey(kind),used=Number(a.usage[k]||0),limit=FREE_LIMITS[k];
+    if(used>=limit){
+      openPremium();
+      toast("You have reached today's free "+(k==="ai"?"AI Tutor":k==="practice"?"Practice":"Quiz")+" limit. Plus removes this limit.");
+      return false;
+    }
+    a.usage[k]=used+1;
+    save();
+    return true;
+  }
+  function lockedFeature(name,detail){
+    openPremium();
+    toast(name+" is a Plus feature.");
+    return false;
+  }
+  window.studySprintIsPlus=isPlus;
+  window.studySprintFreeLimits=FREE_LIMITS;
+  window.studySprintGate=allowed;
+  window.studySprintLock=lockedFeature;
+
+  const oldGeneratePractice=window.generatePractice;
+  window.generatePractice=async function(){
+    if(!allowed("practice"))return;
+    return oldGeneratePractice();
+  };
+
+  const oldGenerateTutorQuiz=window.generateTutorQuiz;
+  if(oldGenerateTutorQuiz)window.generateTutorQuiz=async function(){
+    if(!allowed("quiz"))return;
+    return oldGenerateTutorQuiz();
+  };
+
+  const oldAskTutor=window.askTutor;
+  if(oldAskTutor)window.askTutor=async function(){
+    const file=document.getElementById("tutorFile")?.files?.[0];
+    if(file&&!isPlus())return lockedFeature("Study material uploads","Upload your own notes, PDFs and images with Plus.");
+    if(!allowed("ai"))return;
+    return oldAskTutor();
+  };
+
+  const oldTutorPage=window.tutorPage;
+  window.tutorPage=function(){
+    const html=oldTutorPage();
+    if(isPlus())return html;
+    const lock='<div class="card plus-lock"><div class="kicker">PLUS</div><h2>Bring your own study material</h2><p>Free Tutor stays available for questions. Plus adds image/PDF study-material analysis and a higher daily AI allowance.</p><button class="btn primary" onclick="openPremium()">See Plus</button></div>';
+    return html.replace('</section>',lock+'</section>');
+  };
+
+  const oldReviewPage=window.reviewPage;
+  window.reviewPage=function(){
+    const html=oldReviewPage();
+    if(isPlus())return html;
+    const lock='<div class="card plus-lock"><div class="kicker">PLUS</div><h2>Deep readiness</h2><p>Free Review shows your weak topics and mistakes. Plus adds deeper retention health, exam-readiness evidence and advanced review decisions.</p><button class="btn primary" onclick="openPremium()">Unlock Plus</button></div>';
+    return html.replace('</section>',lock+'</section>');
+  };
+
+  const oldPremiumPage=window.premiumPage;
+  window.premiumPage=function(){
+    const base=oldPremiumPage();
+    const status=isPlus()
+      ? '<div class="callout premium-status"><b>Plus active.</b><span>Your verified Plus entitlement is active. Premium features are available.</span></div>'
+      : '<div class="callout premium-status"><b>Free plan active.</b><span>You still have the complete core study loop. Plus is reserved for heavier AI use, your own study material and deeper learning analysis.</span></div>';
+    return base.replace('<div class="premium-hero card">',status+'<div class="premium-hero card">');
+  };
+
+  /* Keep the Plus entry visible without changing the core navigation markup. */
+  const oldShell3=window.shell;
+  window.shell=function(c){
+    const base=oldShell3(c);
+    const label=isPlus()?"Plus active":"Plus";
+    return base.replace('<button class="ghost" onclick="openPremium()">Plus</button>','<button class="ghost" onclick="openPremium()">'+label+'</button>');
+  };
+
+  ensureAccount();
+  save();
+})();

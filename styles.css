@@ -59,3 +59,11 @@
 .practice-side .wide{margin-top:12px}
 @media(max-width:800px){.practice-subject-grid,.reviewgrid{grid-template-columns:1fr}}
 @media(max-width:520px){.mistake{display:block}.mistake>span{display:block;margin-top:7px}.practice-topic-label{display:none}}
+
+
+/* AI Tutor quiz rework */
+.tutor-quiz-card{margin:12px 0 14px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.tutor-quiz-question{font-size:17px;line-height:1.6;font-weight:650;margin:8px 0 14px}
+.tutor-quiz-answer{width:100%;min-height:110px;border:1px solid var(--line);border-radius:10px;padding:11px;resize:vertical;font:inherit}
+.tutor-quiz-card .practiceactions{margin-top:12px}
+.tutor-quiz-card .feedback{margin-top:12px}

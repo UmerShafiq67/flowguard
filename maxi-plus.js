@@ -108,10 +108,10 @@
   ];
   function premiumPage(){
     return '<section>'+head("STUDYSPRINT PLUS","A stronger study system, when you need more.","Free StudySprint already gives you the core learning loop. Plus is designed for students who want deeper adaptation and heavier study support.",'<button class="btn secondary" onclick="view(\'today\')">Back to Today</button>')+
-      '<div class="premium-hero card"><div><div class="kicker">PLUS</div><h2>Do not pay for a timer. Pay for better decisions.</h2><p>StudySprint Plus is built around one promise: spend your limited study time on the work most likely to improve your learning.</p><div class="premium-actions"><button class="btn primary" onclick="toast(\'Plus is not charging yet. Your current version stays free.\')">Join the Plus waitlist</button><button class="btn secondary" onclick="view(\'practice\')">Use free Practice</button></div></div><div class="premium-badge"><b>PLUS</b><span>planned</span></div></div>'+
+      '<div class="premium-hero card"><div><div class="kicker">PLUS</div><h2>Pay only for the heavy features.</h2><p>Free StudySprint keeps the core learning loop. Plus unlocks heavier AI use, your own study material, deeper review and stronger readiness evidence.</p><div class="premium-actions"><button class="btn primary" onclick="startPlusCheckout()">Get Plus</button><button class="btn secondary" onclick="view(\'practice\')">Use free Practice</button></div></div><div class="premium-badge"><b>PLUS</b><span>verified access</span></div></div>'+
       '<div class="premium-grid">'+PREMIUM_FEATURES.map((f,i)=>'<div class="card premium-feature"><div class="premium-number">0'+(i+1)+'</div><h3>'+esc(f[0])+'</h3><p>'+esc(f[1])+'</p><span class="premium-state">PLUS</span></div>').join('')+'</div>'+
-      '<div class="card premium-compare"><div class="cardhead"><div><div class="kicker">SIMPLE PLANS</div><h2>Start free. Upgrade only when the extra value matters.</h2><p>No fake scarcity, no forced subscription, and no payment is being taken in this version.</p></div></div><div class="plan-compare"><div><b>Free</b><span>Core planner, Practice, AI Tutor, Focus, Review and local backup.</span><strong>$0</strong></div><div class="plan-plus"><b>Plus</b><span>Everything free, plus deeper adaptation, source-based practice, advanced review and higher AI allowance.</span><strong>Pricing later</strong></div></div></div>'+
-      '<div class="callout"><b>Why this exists.</b><span>StudySprint will only charge for features that create real extra value. The payment system is intentionally not connected yet, so there is nothing to buy by accident.</span></div></section>';
+      '<div class="card premium-compare"><div class="cardhead"><div><div class="kicker">SIMPLE PLANS</div><h2>Free core. Paid depth.</h2><p>Free stays useful. Plus is only for the features that materially increase study capacity and analysis.</p></div></div><div class="plan-compare"><div><b>Free</b><span>Planner, core AI Tutor, limited Practice and Quiz generation, Focus, basic Review and local backup.</span><strong>$0</strong></div><div class="plan-plus"><b>Plus</b><span>Everything in Free, plus higher AI allowance, unlimited practice generation, source uploads, advanced review and deep readiness.</span><strong>Live price in checkout</strong></div></div></div>'+
+      '<div class="callout"><b>Billing status.</b><span id="billingStatus">Checking checkout configuration…</span></div></section>';
   }
   window.premiumPage=premiumPage;
   window.openPremium=function(){state.view="premium";render()};
@@ -271,6 +271,13 @@
   function billingConfigured(){
     return BILL.provider==="paddle"&&BILL.clientToken&&BILL.plusPriceId&&window.Paddle;
   }
+  window.studySprintBillingStatus=function(){
+    const el=document.getElementById("billingStatus");
+    if(!el)return;
+    el.textContent=billingConfigured()
+      ?"Checkout is configured. Payment is verified by the server before Plus access is granted."
+      :"Checkout is safely disabled until the store's public client token and Plus price are connected. No payment can be taken from this build.";
+  };
 
   window.startPlusCheckout=function(){
     if(!billingConfigured()){
@@ -304,8 +311,9 @@
   window.startPlusCheckoutReady=function(){
     if(billingConfigured())return startPlusCheckout();
     openPremium();
-    toast("Add the Paddle client token and Plus price ID to enable checkout.");
+    toast("Checkout is not configured yet, so no payment can be taken.");
   };
 
   syncEntitlement();
+  setTimeout(()=>window.studySprintBillingStatus&&window.studySprintBillingStatus(),40);
 })();

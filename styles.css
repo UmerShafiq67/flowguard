@@ -30,3 +30,10 @@
 .simple-examples{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-top:12px;color:var(--muted);font-size:11px}
 .simple-examples b{background:white;border:1px solid var(--line);padding:8px 10px;border-radius:999px;color:var(--text)}
 @media(max-width:600px){.quick-topic{grid-template-columns:1fr auto}.quick-topic select{grid-column:1}.exam-simple{grid-template-columns:1fr}.setup-guide{grid-template-columns:auto 1fr}}
+
+.practice-result{display:flex;align-items:center;gap:10px;border-radius:12px;padding:12px 14px;margin-top:12px;border:1px solid var(--line)}
+.practice-result b{font-size:13px}.practice-result span{font-size:12px;color:var(--muted)}
+.practice-result.correct{background:#edf9f1}.practice-result.wrong{background:#fff1f1}
+.feedback{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fafbfc}
+.feedback>span{display:block;margin-top:8px}.feedback p{margin:0 0 8px}.feedback p:last-child{margin-bottom:0}
+.practiceq{white-space:normal}.practiceq strong{font-weight:800}.practiceq u{text-decoration-thickness:2px;text-underline-offset:3px}

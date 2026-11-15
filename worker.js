@@ -98,10 +98,7 @@ function makeMessages(body) {
   }
 
   message = message || "Please help me study.";
-  message += "
-
-StudySprint context:
-" + contextText(body.context || {});
+  message += "\n\nStudySprint context:\n" + contextText(body.context || {});
 
   const messages = [{ role: "system", content: systemPrompt(mode) }];
   for (const item of (Array.isArray(body.history) ? body.history : []).slice(-8)) {

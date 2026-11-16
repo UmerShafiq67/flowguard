@@ -205,3 +205,13 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background-ima
 .today-value{display:flex;align-items:center;justify-content:space-between;gap:18px}
 .today-value .btn{margin-top:0;flex:0 0 auto}
 @media(max-width:850px){.conversion-points{grid-template-columns:1fr}.today-value{align-items:flex-start;flex-direction:column}.today-value .btn{width:100%}}
+
+/* Clearer study flow */
+.sessionactions small{display:block;font-size:9px;font-weight:600;opacity:.65;margin-top:3px}
+.progressgrid{display:grid;grid-template-columns:1.35fr .8fr;gap:14px;margin-top:14px}
+.progress-topic{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:12px 0;border-top:1px solid var(--line)}
+.progress-topic b,.progress-topic small{display:block}.progress-topic small{font-size:10px;color:var(--muted);margin-top:3px}
+.progress-topic strong{grid-row:1 / span 2;align-self:center;font-size:14px}
+.progress-topic i{display:block;height:6px;background:#edf0f4;border-radius:999px;overflow:hidden}
+.progress-topic i em{display:block;height:100%;background:var(--blue);border-radius:999px}
+@media(max-width:950px){.progressgrid{grid-template-columns:1fr}}

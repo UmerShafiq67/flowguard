@@ -64,10 +64,11 @@
   };
 
   function accountPage(){
-    return '<section>'+head("ACCOUNT","Your StudySprint account.","Sign in to sync your study data across devices. Your local data remains available offline.")+
-      '<div class="account-grid"><div class="card">'+
-      (configured()?'<div id="account-box"><div class="account-loading">Checking your session…</div></div>':'<div class="account-setup"><span class="pill">ACCOUNT SYNC READY</span><h2>Connect a secure account provider</h2><p>Google sign-in and email/password are supported through Supabase. Only the public browser key belongs in the app.</p><div class="callout"><b>Provider setup required.</b><span>The code is ready, but the provider URL and public browser key are not connected in config.js yet.</span></div></div>')+
-      '</div><div class="card"><h2>How your data works</h2><div class="rule"><b>Local-first</b><span>StudySprint keeps working offline and preserves your existing device data.</span></div><div class="rule"><b>Cloud sync</b><span>After sign-in, your plan, practice evidence, mistakes and progress can sync across devices.</span></div><div class="rule"><b>Conflict-safe</b><span>The sync layer compares modification timestamps and avoids blindly replacing newer data.</span></div><div class="rule"><b>Account security</b><span>Database access is restricted to the signed-in account with provider-side row security.</span></div></div></div></section>';
+    return '<section>'+head("ACCOUNT","Your StudySprint account.","One place for sign-in, cloud backup, and keeping your study data safe across devices.")+
+      '<div class="account-hero card"><div><span class="pill">LOCAL-FIRST + CLOUD SYNC</span><h2>Keep your progress with you.</h2><p>Your study plan stays on this device. Sign in when you want a secure cloud copy that can follow you to another device.</p></div><div class="account-hero-mark">S</div></div>'+
+      '<div class="account-grid"><div class="card"><div class="account-section-head"><div><span class="metric-label">ACCOUNT ACCESS</span><h2>Sign in securely</h2><p>Email/password is ready now. Google can be enabled once the provider is configured.</p></div></div>'+
+      (configured()?'<div id="account-box"><div class="account-loading">Checking your session…</div></div>':'<div class="account-setup"><span class="pill">SETUP NEEDED</span><h2>Connect the account provider</h2><p>The app is ready, but the public Supabase connection is not configured.</p><div class="callout"><b>Provider setup required.</b><span>Add the public browser configuration before using cloud accounts.</span></div></div>')+
+      '</div><div class="card"><span class="metric-label">WHAT HAPPENS</span><h2>Simple and safe</h2><div class="rule"><b>1. Study locally</b><span>Everything keeps working even without an account.</span></div><div class="rule"><b>2. Sign in</b><span>Your account gives StudySprint a place to sync your study data.</span></div><div class="rule"><b>3. Sync</b><span>Your plan, practice evidence, mistakes and progress can move between devices.</span></div><div class="rule"><b>4. Stay in control</b><span>Cloud rows are restricted to the signed-in user by database security rules.</span></div></div></div></section>';
   }
 
   async function renderAccountBox(){
@@ -76,15 +77,17 @@
     const {data}=await c.auth.getSession(),s=data?.session;
     if(s){
       const email=esc(s.user?.email||"Signed in");
-      box.innerHTML='<div class="account-user"><div class="account-avatar">'+esc((email[0]||"S").toUpperCase())+'</div><div><span class="pill">SIGNED IN</span><h2>'+email+'</h2><p>Your account session is active on this device.</p></div></div><div class="account-actions"><button class="btn primary" onclick="accountSyncNow()">Sync now</button><button class="btn ghost" onclick="accountSignOut()">Sign out</button></div><div class="account-actions"><button class="text" onclick="accountResetPassword()">Send password reset email</button><button class="text" onclick="accountDeleteData()">Delete cloud data</button></div><div id="account-sync-note" class="account-note"></div>';
+      box.innerHTML='<div class="account-user"><div class="account-avatar">'+esc((email[0]||"S").toUpperCase())+'</div><div><span class="pill">SIGNED IN</span><h2>'+email+'</h2><p>Your account session is active on this device.</p></div></div><div class="account-actions"><button type="button" class="btn primary" onclick="accountSyncNow()">Sync now</button><button type="button" class="btn ghost" onclick="accountSignOut()">Sign out</button></div><div class="account-actions account-secondary-actions"><button type="button" class="text" onclick="accountResetPassword()">Send password reset email</button><button type="button" class="text" onclick="accountDeleteData()">Delete cloud data</button></div><div id="account-sync-note" class="account-note"></div>';
     }else{
-      box.innerHTML='<div class="account-form"><span class="pill">SECURE SIGN IN</span><h2>Sign in or create your account</h2><label>Email<input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="accountPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters"></label><div class="account-actions"><button class="btn primary" onclick="accountEmailSignIn()">Sign in</button><button class="btn secondary" onclick="accountEmailSignUp()">Create account</button></div><div class="account-divider"><span>or</span></div><button class="btn secondary wide" onclick="accountGoogleSignIn()">Continue with Google</button><div id="account-error" class="account-error"></div></div>';
+      box.innerHTML='<div class="account-form"><span class="pill">EMAIL + PASSWORD</span><h2>Sign in or create an account</h2><p class="account-intro">Use an email you can access. If email confirmation is enabled, you will need to confirm it before your first sign-in.</p><label>Email<input id="accountEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com"></label><label>Password<input id="accountPassword" type="password" autocomplete="current-password" placeholder="At least 8 characters"></label><div class="account-actions"><button type="button" class="btn primary" onclick="accountEmailSignIn()">Sign in</button><button type="button" class="btn secondary" onclick="accountEmailSignUp()">Create account</button></div><div class="account-divider"><span>or</span></div><button type="button" class="btn secondary wide" onclick="accountGoogleSignIn()">Continue with Google</button><div class="account-provider-note"><b>Google setup</b><span>This button works after Google is enabled in Supabase and its OAuth credentials are added there. No Google secret belongs in StudySprint code.</span></div><div id="account-error" class="account-error" role="alert" aria-live="polite"></div></div>';
     }
   }
 
-  function accountError(msg){const e=document.getElementById("account-error");if(e)e.textContent=msg;else toast(msg)}
+  function accountError(msg){const e=document.getElementById("account-error");if(e){e.textContent=msg;e.classList.add("show")}else toast(msg)}
+  function authUrlError(){const hash=window.location.hash||"";if(!hash)return null;const p=new URLSearchParams(hash.replace(/^#/,""));const code=p.get("error_code"),desc=p.get("error_description");return code||desc?(desc||code).replace(/\+/g," "):null}
   async function accountEmailSignIn(){
     const c=getClient(),email=document.getElementById("accountEmail")?.value.trim(),password=document.getElementById("accountPassword")?.value||"";
+    if(!c)return accountError("Account service is not available. Please refresh the page and try again.");
     if(!email||!password)return accountError("Enter your email and password.");
     const btn=document.querySelector("#account-box .account-actions .btn.primary");
     if(btn){btn.disabled=true;btn.textContent="Signing in…";}
@@ -97,6 +100,7 @@
   }
   async function accountEmailSignUp(){
     const c=getClient(),email=document.getElementById("accountEmail")?.value.trim(),password=document.getElementById("accountPassword")?.value||"";
+    if(!c)return accountError("Account service is not available. Please refresh the page and try again.");
     if(!email||password.length<8)return accountError("Enter an email and a password with at least 8 characters.");
     const btn=document.querySelector("#account-box .account-actions .btn.secondary");
     if(btn){btn.disabled=true;btn.textContent="Creating…";}
@@ -113,6 +117,7 @@
   }
   async function accountGoogleSignIn(){
     const c=getClient();
+    if(!c)return accountError("Account service is not available. Please refresh the page and try again.");
     try{
       const {error}=await c.auth.signInWithOAuth({provider:"google",options:{redirectTo:cfg.redirectTo}});
       if(error)accountError(error.message);
@@ -160,6 +165,8 @@
   };
 
   if(configured()){
+    const callbackError=authUrlError();
+    if(callbackError) setTimeout(()=>{if(state.view==="account")accountError(callbackError)},250);
     const c=getClient();
     c.auth.onAuthStateChange((event,session)=>{
       if(session)setTimeout(()=>pullAndMerge().then(()=>{if(state.view==="account")renderAccountBox()}).catch(e=>console.warn("Account sync failed",e)),0);

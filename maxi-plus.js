@@ -318,3 +318,30 @@
   syncEntitlement();
   setTimeout(()=>window.studySprintBillingStatus&&window.studySprintBillingStatus(),40);
 })();
+
+
+/* CONVERSION EXPERIENCE — make the product explain its value before asking for an upgrade. */
+(function(){
+  const oldOnboarding=window.onboardingPage;
+  window.onboardingPage=function(){
+    const base=oldOnboarding();
+    const value='<div class="card conversion-card"><div class="kicker">WHY STUDYSPRINT</div><h2>Start with the system. Upgrade when you want more depth.</h2><p>StudySprint is designed so a student can feel the learning engine before paying. Free gives you the core loop; Plus is for students who want heavier AI use, their own study material and deeper readiness signals.</p><div class="conversion-points"><div><b>01</b><strong>Find your next move</strong><span>Your plan turns subjects, confidence, time and deadlines into a clear next action.</span></div><div><b>02</b><strong>Prove your knowledge</strong><span>Practice creates evidence instead of assuming that reading means mastery.</span></div><div><b>03</b><strong>Go deeper with Plus</strong><span>When you need more AI, your own material and stronger analysis, Plus extends the same system.</span></div></div><button class="btn primary" onclick="openPremium()">See what Plus adds →</button></div>';
+    return base.replace('</section>',value+'</section>');
+  };
+
+  const oldShell4=window.shell;
+  window.shell=function(c){
+    let base=oldShell4(c);
+    const sidebarNeed='<div class="nav-extra">'+nav("progress","Progress","◌")+nav("tutor","AI Tutor","✦")+'</div>';
+    base=base.replace(nav("account","Account","◎"),sidebarNeed+nav("account","Account","◎"));
+    return base;
+  };
+
+  const oldToday2=window.todayPage;
+  window.todayPage=function(){
+    const html=oldToday2();
+    if(!state.data.subjects.length||!state.data.plan.length)return html;
+    const banner='<div class="card conversion-card today-value"><div><div class="kicker">WHY PLUS?</div><h2>Get more from the same learning engine.</h2><p>Free already gives you the core adaptive loop. Plus is for students who want more AI capacity, their own study material and deeper readiness analysis.</p></div><button class="btn primary" onclick="openPremium()">Compare Free vs Plus →</button></div>';
+    return html.replace('</section>',banner+'</section>');
+  };
+})();

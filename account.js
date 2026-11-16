@@ -78,7 +78,7 @@
       const email=esc(s.user?.email||"Signed in");
       box.innerHTML='<div class="account-user"><div class="account-avatar">'+esc((email[0]||"S").toUpperCase())+'</div><div><span class="pill">SIGNED IN</span><h2>'+email+'</h2><p>Your account session is active on this device.</p></div></div><div class="account-actions"><button class="btn primary" onclick="accountSyncNow()">Sync now</button><button class="btn ghost" onclick="accountSignOut()">Sign out</button></div><div class="account-actions"><button class="text" onclick="accountResetPassword()">Send password reset email</button><button class="text" onclick="accountDeleteData()">Delete cloud data</button></div><div id="account-sync-note" class="account-note"></div>';
     }else{
-      box.innerHTML='<div class="account-form"><span class="pill">SECURE SIGN IN</span><h2>Sign in or create your account</h2><label>Email<input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="accountPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"></label><div class="account-actions"><button class="btn primary" onclick="accountEmailSignIn()">Sign in</button><button class="btn secondary" onclick="accountEmailSignUp()">Create account</button></div><div class="account-divider"><span>or</span></div><button class="btn secondary wide" onclick="accountGoogleSignIn()">Continue with Google</button><div id="account-error" class="account-error"></div></div>';
+      box.innerHTML='<div class="account-form"><span class="pill">SECURE SIGN IN</span><h2>Sign in or create your account</h2><label>Email<input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="accountPassword" type="password" autocomplete="current-password" placeholder="At least 8 characters" autocomplete="new-password"></label><div class="account-actions"><button class="btn primary" onclick="accountEmailSignIn()">Sign in</button><button class="btn secondary" onclick="accountEmailSignUp()">Create account</button></div><div class="account-divider"><span>or</span></div><button class="btn secondary wide" onclick="accountGoogleSignIn()">Continue with Google</button><div id="account-error" class="account-error"></div></div>';
     }
   }
 
@@ -86,19 +86,37 @@
   async function accountEmailSignIn(){
     const c=getClient(),email=document.getElementById("accountEmail")?.value.trim(),password=document.getElementById("accountPassword")?.value||"";
     if(!email||!password)return accountError("Enter your email and password.");
-    const {error}=await c.auth.signInWithPassword({email,password});if(error)return accountError(error.message);
-    await pullAndMerge();toast("Signed in and synced.");render();
+    const btn=document.querySelector("#account-box .account-actions .btn.primary");
+    if(btn){btn.disabled=true;btn.textContent="Signing in…";}
+    try{
+      const {error}=await c.auth.signInWithPassword({email,password});
+      if(error)return accountError(error.message);
+      await pullAndMerge();toast("Signed in and synced.");render();
+    }catch(error){console.error("StudySprint sign-in failed",error);accountError(error?.message||"Sign-in failed. Please try again.");}
+    finally{if(btn){btn.disabled=false;btn.textContent="Sign in";}}
   }
   async function accountEmailSignUp(){
     const c=getClient(),email=document.getElementById("accountEmail")?.value.trim(),password=document.getElementById("accountPassword")?.value||"";
     if(!email||password.length<8)return accountError("Enter an email and a password with at least 8 characters.");
-    const {error}=await c.auth.signUp({email,password,options:{emailRedirectTo:cfg.redirectTo}});
-    if(error)return accountError(error.message);
-    accountError("Account created. Check your email to confirm the account.");
+    const btn=document.querySelector("#account-box .account-actions .btn.secondary");
+    if(btn){btn.disabled=true;btn.textContent="Creating…";}
+    try{
+      const {data,error}=await c.auth.signUp({email,password,options:{emailRedirectTo:cfg.redirectTo}});
+      if(error)return accountError(error.message);
+      if(data?.session){
+        await pullAndMerge();toast("Account created and signed in.");render();
+      }else{
+        accountError("Account created. Check your email to confirm it, then come back and sign in.");
+      }
+    }catch(error){console.error("StudySprint sign-up failed",error);accountError(error?.message||"Account creation failed. Please try again.");}
+    finally{if(btn){btn.disabled=false;btn.textContent="Create account";}}
   }
   async function accountGoogleSignIn(){
-    const c=getClient(),{error}=await c.auth.signInWithOAuth({provider:"google",options:{redirectTo:cfg.redirectTo}});
-    if(error)accountError(error.message);
+    const c=getClient();
+    try{
+      const {error}=await c.auth.signInWithOAuth({provider:"google",options:{redirectTo:cfg.redirectTo}});
+      if(error)accountError(error.message);
+    }catch(error){console.error("StudySprint Google sign-in failed",error);accountError(error?.message||"Google sign-in is not enabled yet.");}
   }
   async function accountSignOut(){const c=getClient();if(!c)return;await c.auth.signOut();toast("Signed out.");render();}
   async function accountSyncNow(){

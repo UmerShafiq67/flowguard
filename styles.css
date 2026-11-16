@@ -177,3 +177,5 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background-ima
 .account-hero{background:linear-gradient(135deg,#ffffffd9,#f0f2ffdd)}
 @media(max-width:850px){.welcome-hero{padding:38px 30px}.welcome-orbit{display:none}.welcome-hero h1{font-size:46px}.welcome-steps,.welcome-proof{grid-template-columns:1fr}}
 @media(max-width:600px){.welcome-hero{padding:30px 22px;border-radius:22px;min-height:auto}.welcome-hero h1{font-size:39px}.welcome-hero p{font-size:12px}.welcome-actions{align-items:flex-start;flex-direction:column}.hero-note{font-size:9px}.welcome-steps{margin-top:10px}.main{padding-top:22px}}
+
+.account-forgot{display:block;margin:9px 0 0 auto;font-size:10px}.account-form .account-forgot:hover{text-decoration:underline}

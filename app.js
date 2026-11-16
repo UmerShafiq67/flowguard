@@ -209,8 +209,8 @@ function setup(){
     state.data.exams=[{id:"exam-"+Date.now(),subjectId:state.data.subjects[0].id,name:"",date:add(new Date(),14)}];
   }
   return '<div class="modal-backdrop" onclick="if(event.target===this)closeSetup()"><div class="modal setup-modal">'+
-    '<div class="modalhead"><div><div class="kicker">QUICK SETUP</div><h2>What are you studying?</h2><p>Just add subjects and topics. We will handle the planning.</p></div><button class="close" onclick="closeSetup()">×</button></div>'+
-    '<div class="setup-guide"><b>1. Subject</b><span>e.g. Mathematics</span><b>2. Topics</b><span>e.g. Quadratics, Linear equations</span><b>3. Daily time</b><span>e.g. 60 minutes</span></div>'+
+    '<div class="modalhead"><div><div class="kicker">BUILD YOUR PLAN</div><h2>Set up StudySprint in 3 steps.</h2><p>Tell us what you need to learn. Your practice results can improve the plan later.</p></div><button class="close" onclick="closeSetup()">×</button></div>'+
+    '<div class="setup-guide"><div><b>01 · Subjects</b><span>What are you preparing for?</span></div><div><b>02 · Confidence</b><span>Mark what feels weak or strong.</span></div><div><b>03 · Time + dates</b><span>Set daily time and optional test dates.</span></div></div>'+
     '<label>Daily study time<input id="mins" type="number" min="20" max="600" value="'+state.data.availableMinutes+'"></label>'+
     '<div class="setup-list">'+state.data.subjects.map(subjectEditor).join("")+'</div>'+
     '<div class="setup-actions"><button class="btn secondary" onclick="addSubject()">+ Add another subject</button></div>'+

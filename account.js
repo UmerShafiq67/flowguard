@@ -79,7 +79,7 @@
       const email=esc(s.user?.email||"Signed in");
       box.innerHTML='<div class="account-user"><div class="account-avatar">'+esc((email[0]||"S").toUpperCase())+'</div><div><span class="pill">SIGNED IN</span><h2>'+email+'</h2><p>Your account session is active on this device.</p></div></div><div class="account-actions"><button type="button" class="btn primary" onclick="accountSyncNow()">Sync now</button><button type="button" class="btn ghost" onclick="accountSignOut()">Sign out</button></div><div class="account-actions account-secondary-actions"><button type="button" class="text" onclick="accountResetPassword()">Send password reset email</button><button type="button" class="text" onclick="accountDeleteData()">Delete cloud data</button></div><div id="account-sync-note" class="account-note"></div>';
     }else{
-      box.innerHTML='<div class="account-form"><span class="pill">EMAIL + PASSWORD</span><h2>Sign in or create an account</h2><p class="account-intro">Use an email you can access. If email confirmation is enabled, you will need to confirm it before your first sign-in.</p><label>Email<input id="accountEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com"></label><label>Password<div class="password-field"><input id="accountPassword" type="password" autocomplete="current-password" placeholder="At least 8 characters" aria-describedby="password-help"><button type="button" class="password-toggle" onclick="accountTogglePassword()" aria-label="Show password" aria-pressed="false"><span class="password-eye" aria-hidden="true">◉</span></button></div><span id="password-help" class="field-help">Use at least 8 characters. Tap the eye to show or hide it.</span></label><div class="account-actions"><button type="button" class="btn primary" onclick="accountEmailSignIn()">Sign in</button><button type="button" class="btn secondary" onclick="accountEmailSignUp()">Create account</button></div><div class="account-divider"><span>or</span></div><button type="button" class="btn secondary wide" onclick="accountGoogleSignIn()">Continue with Google</button><div class="account-provider-note"><b>Google setup</b><span>This button works after Google is enabled in Supabase and its OAuth credentials are added there. No Google secret belongs in StudySprint code.</span></div><div id="account-error" class="account-error" role="alert" aria-live="polite"></div></div>';
+      box.innerHTML='<div class="account-form"><span class="pill">EMAIL + PASSWORD</span><h2>Sign in or create an account</h2><p class="account-intro">Use an email you can access. If email confirmation is enabled, you will need to confirm it before your first sign-in.</p><label>Email<input id="accountEmail" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com"></label><label>Password<div class="password-field"><input id="accountPassword" type="password" autocomplete="current-password" placeholder="At least 8 characters" aria-describedby="password-help"><button type="button" class="password-toggle" onclick="accountTogglePassword()" aria-label="Show password" aria-pressed="false"><span class="password-eye" aria-hidden="true">◉</span></button></div><span id="password-help" class="field-help">Use at least 8 characters. Tap the eye to show or hide it.</span></label><div class="account-actions"><button type="button" class="btn primary" onclick="accountEmailSignIn()">Sign in</button><button type="button" class="btn secondary" onclick="accountEmailSignUp()">Create account</button></div><button type="button" class="text account-forgot" onclick="accountForgotPassword()">Forgot password?</button><div class="account-divider"><span>or</span></div><button type="button" class="btn secondary wide" onclick="accountGoogleSignIn()">Continue with Google</button><div class="account-provider-note"><b>Google setup</b><span>This button works after Google is enabled in Supabase and its OAuth credentials are added there. No Google secret belongs in StudySprint code.</span></div><div id="account-error" class="account-error" role="alert" aria-live="polite"></div></div>';
     }
   }
 
@@ -116,6 +116,16 @@
     finally{if(btn){btn.disabled=false;btn.textContent="Create account";}}
   }
   function accountTogglePassword(){const input=document.getElementById("accountPassword"),btn=document.querySelector(".password-toggle");if(!input||!btn)return;const showing=input.type==="password";input.type=showing?"text":"password";btn.setAttribute("aria-label",showing?"Hide password":"Show password");btn.setAttribute("aria-pressed",String(showing));const eye=btn.querySelector(".password-eye");if(eye)eye.textContent=showing?"○":"◉";input.focus();}
+  async function accountForgotPassword(){
+    const c=getClient(),email=document.getElementById("accountEmail")?.value.trim();
+    if(!c)return accountError("Account service is not available. Please refresh the page and try again.");
+    if(!email)return accountError("Enter your email first, then choose Forgot password.");
+    try{
+      const {error}=await c.auth.resetPasswordForEmail(email,{redirectTo:cfg.redirectTo});
+      if(error)return accountError(error.message);
+      accountError("Password reset email sent. Check your inbox and follow the link.");
+    }catch(error){console.error("StudySprint password reset failed",error);accountError(error?.message||"Password reset could not be sent. Please try again.");}
+  }
   async function accountGoogleSignIn(){
     const c=getClient();
     if(!c)return accountError("Account service is not available. Please refresh the page and try again.");
@@ -145,6 +155,8 @@
   window.accountEmailSignIn=accountEmailSignIn;
   window.accountEmailSignUp=accountEmailSignUp;
   window.accountGoogleSignIn=accountGoogleSignIn;
+  window.accountForgotPassword=accountForgotPassword;
+  window.accountTogglePassword=accountTogglePassword;
   window.accountSignOut=accountSignOut;
   window.accountSyncNow=accountSyncNow;
   window.accountResetPassword=accountResetPassword;

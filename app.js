@@ -29,13 +29,21 @@ function practiceResult(text){
   return "";
 }
 function nav(v,t,i){return `<button class="nav ${state.view===v?"active":""}" onclick="view('${v}')"><span>${i}</span>${t}</button>`}
-function shell(c){return `<header class="top"><button class="brand" onclick="view('today')"><span class="logo">S</span>StudySprint</button><div class="topright"><span class="saved">● Saved locally · backup protected</span><button class="ghost" onclick="openSetup()">Set up my plan</button></div></header><div class="layout"><aside class="side">${nav("today","Today","⌂")}${nav("plan","My plan","◷")}${nav("subjects","Subjects","▦")}${nav("focus","Focus","◉")}${nav("practice","Practice","✎")}${nav("review","Review","✓")}${nav("tutor","AI Tutor","✦")}${nav("account","Account","◎")}<div class="sidefoot"><b>One simple rule</b><span>StudySprint is built around learning evidence. You learn, practise, review, and your next step adapts.</span></div></aside><main class="main">${c}</main></div><div class="toast ${state.toast?"show":""}">${esc(state.toast)}</div>${state.modal?setup():""}`}
+function shell(c){return `<header class="top"><button class="brand" onclick="view('today')"><span class="logo">S</span>StudySprint</button><div class="topright"><span class="saved">● Saved locally · backup protected</span><button class="ghost" onclick="openSetup()">Set up my plan</button></div></header><div class="layout"><aside class="side">${nav("today","Today","⌂")}${nav("plan","My plan","◷")}${nav("subjects","Subjects","▦")}${nav("focus","Focus","◉")}${nav("practice","Practice","✎")}${nav("review","Review","✓")}${nav("tutor","AI Tutor","✦")}${nav("account","Account","◎")}<div class="sidefoot"><b>One simple rule</b><span>StudySprint is built around learning evidence. You learn, practise, review, and your next step adapts.</span></div></aside><main class="main view-${state.view}">${c}</main></div><div class="toast ${state.toast?"show":""}">${esc(state.toast)}</div>${state.modal?setup():""}`}
 function head(k,t,p,a=""){return `<div class="head"><div><div class="kicker">${k}</div><h1>${t}</h1><p>${p}</p></div>${a}</div>`}
 function onboardingPage(){
   return '<section class="welcome">'+
-    head("START HERE","Your study plan, without the headache.","Tell StudySprint what you are studying and how much time you have. That is enough to get started.")+
-    '<div class="card welcomeaction"><div class="setup-simple-icon">✓</div><h2>Set up your study in about a minute</h2><p><b>1.</b> Add a subject &nbsp; <b>2.</b> Add its topics &nbsp; <b>3.</b> Choose your daily time</p><button class="btn primary" onclick="openSetup()">Set up my plan</button></div>'+
-    '<div class="simple-examples"><span>Example:</span><b>Mathematics → Quadratics</b><b>Biology → Cell biology</b></div>'+
+    '<div class="welcome-hero">'+
+      '<div class="welcome-copy">'+
+        '<span class="hero-badge"><i></i> ADAPTIVE STUDY ENGINE</span>'+
+        '<h1>Study smarter.<br><em>Know what to do next.</em></h1>'+
+        '<p>StudySprint turns your subjects, deadlines, confidence, and practice results into one living study plan — so you spend less time planning and more time actually learning.</p>'+
+        '<div class="welcome-actions"><button class="btn primary" onclick="openSetup()">Build my study plan <span>→</span></button><span class="hero-note">Free to start · local-first · works offline</span></div>'+
+      '</div>'+
+      '<div class="welcome-orbit" aria-hidden="true"><div class="orbit-ring r1"></div><div class="orbit-ring r2"></div><div class="orbit-core"><span>S</span><small>LEARN</small></div><div class="orbit-dot d1"></div><div class="orbit-dot d2"></div><div class="orbit-dot d3"></div></div>'+
+    '</div>'+
+    '<div class="welcome-steps"><div><span>01</span><b>Tell it what matters</b><small>Subjects, topics, confidence and exam dates.</small></div><div><span>02</span><b>Prove what you know</b><small>Practice questions create real learning evidence.</small></div><div><span>03</span><b>Let the plan adapt</b><small>Weak and urgent topics rise when they need you.</small></div></div>'+
+    '<div class="welcome-proof"><div><span class="proof-icon">↗</span><div><b>Adaptive, not static</b><small>Your next session changes as your evidence changes.</small></div></div><div><span class="proof-icon">✓</span><div><b>Built around retrieval</b><small>Practice and review matter more than simply running a timer.</small></div></div><div><span class="proof-icon">⌁</span><div><b>Your data stays yours</b><small>Local-first storage, exportable backups, optional cloud sync.</small></div></div></div>'+
     '</section>';
 }
 function learningSignal(){

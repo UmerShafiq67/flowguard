@@ -146,3 +146,7 @@
 .account-error.show{padding:9px 10px;background:#fff3f1;border:1px solid #ffd8d1;border-radius:9px}
 .account-secondary-actions{margin-top:11px}.account-secondary-actions .text{font-size:10px}
 @media(max-width:650px){.account-hero{display:block}.account-hero-mark{margin-top:18px}.account-hero h2{font-size:22px}}
+/* Account form polish */
+.password-field{position:relative;display:flex;align-items:center}.password-field input{padding-right:48px!important}.password-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:0;border-radius:9px;background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;font:inherit}.password-toggle:hover{background:#f0f2f6;color:var(--text)}.password-toggle:focus-visible{outline:2px solid #9aa9ff;outline-offset:1px}.password-eye{font-size:15px;line-height:1}.field-help{font-size:9px!important;color:var(--muted)!important;font-weight:500!important;line-height:1.4;margin-top:-2px}
+.account-form{position:relative}.account-form h2{letter-spacing:-.02em}.account-form .btn{min-height:42px}.account-form .btn:disabled{opacity:.62;cursor:not-allowed}.account-form input::placeholder{color:#a0a7b4}.account-provider-note{box-shadow:0 5px 16px #17203308}
+.account-grid>.card{box-shadow:0 8px 28px #17203308}.account-hero{box-shadow:0 10px 30px #17203308}

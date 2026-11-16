@@ -13,7 +13,7 @@ window.STUDYSPRINT_BILLING = {
 // The anon/publishable key is designed for browser use; never put a service-role key here.
 window.STUDYSPRINT_AUTH = {
   provider: "supabase",
-  url: "https://svnmmruxpviddfaiuqri.supabase.co/rest/v1/",
+  url: "https://svnmmruxpviddfaiuqri.supabase.co",
   anonKey: "sb_publishable_r1SncPoN_BRr0Ofb8Ge4Cw_LaT43NJ8",
   redirectTo: window.location.origin + window.location.pathname
 };

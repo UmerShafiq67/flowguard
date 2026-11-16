@@ -63,10 +63,17 @@
 
 /* AI Tutor quiz rework */
 .tutor-quiz-card{margin:12px 0 14px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff}
-.tutor-quiz-question{font-size:17px;line-height:1.6;font-weight:650;margin:8px 0 14px}
+.tutor-quiz-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tutor-quiz-step{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+.tutor-quiz-question{font-size:17px;line-height:1.6;font-weight:650;margin:10px 0 14px}
 .tutor-quiz-answer{width:100%;min-height:110px;border:1px solid var(--line);border-radius:10px;padding:11px;resize:vertical;font:inherit}
 .tutor-quiz-card .practiceactions{margin-top:12px}
 .tutor-quiz-card .feedback{margin-top:12px}
+.tutor-ask{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.tutor-ask-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:8px}
+.tutor-ask-head b{font-size:12px}
+.tutor-ask-head span{font-size:10px;color:var(--muted);line-height:1.45;text-align:right}
+@media(max-width:600px){.tutor-ask-head{display:block}.tutor-ask-head span{display:block;text-align:left;margin-top:3px}}
 
 .focus-context{display:grid;gap:5px;margin-bottom:14px}.focus-context b{font-size:17px}.focus-context small{font-size:10px;color:var(--muted)}
 

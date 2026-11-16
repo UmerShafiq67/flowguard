@@ -13,6 +13,7 @@ jobs:
       - name: Check JavaScript
         run: |
           node --check app.js
+          node --check account.js
           node --check study-core.js
           node --check config.js
           node --check maxi-plus.js

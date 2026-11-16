@@ -78,7 +78,7 @@
       const email=esc(s.user?.email||"Signed in");
       box.innerHTML='<div class="account-user"><div class="account-avatar">'+esc((email[0]||"S").toUpperCase())+'</div><div><span class="pill">SIGNED IN</span><h2>'+email+'</h2><p>Your account session is active on this device.</p></div></div><div class="account-actions"><button class="btn primary" onclick="accountSyncNow()">Sync now</button><button class="btn ghost" onclick="accountSignOut()">Sign out</button></div><div class="account-actions"><button class="text" onclick="accountResetPassword()">Send password reset email</button><button class="text" onclick="accountDeleteData()">Delete cloud data</button></div><div id="account-sync-note" class="account-note"></div>';
     }else{
-      box.innerHTML='<div class="account-form"><span class="pill">SECURE SIGN IN</span><h2>Sign in or create your account</h2><label>Email<input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="accountPassword" type="password" autocomplete="current-password" placeholder="At least 8 characters" autocomplete="new-password"></label><div class="account-actions"><button class="btn primary" onclick="accountEmailSignIn()">Sign in</button><button class="btn secondary" onclick="accountEmailSignUp()">Create account</button></div><div class="account-divider"><span>or</span></div><button class="btn secondary wide" onclick="accountGoogleSignIn()">Continue with Google</button><div id="account-error" class="account-error"></div></div>';
+      box.innerHTML='<div class="account-form"><span class="pill">SECURE SIGN IN</span><h2>Sign in or create your account</h2><label>Email<input id="accountEmail" type="email" autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="accountPassword" type="password" autocomplete="new-password" placeholder="At least 8 characters"></label><div class="account-actions"><button class="btn primary" onclick="accountEmailSignIn()">Sign in</button><button class="btn secondary" onclick="accountEmailSignUp()">Create account</button></div><div class="account-divider"><span>or</span></div><button class="btn secondary wide" onclick="accountGoogleSignIn()">Continue with Google</button><div id="account-error" class="account-error"></div></div>';
     }
   }
 
@@ -152,11 +152,6 @@
   window.render=function(){
     if(state.view==="account"){const root=document.getElementById("app");if(root)root.innerHTML=window.shell(accountPage());renderAccountBox();return;}
     if(typeof oldRender==="function")oldRender();
-  };
-  const originalShell=window.shell;
-  window.shell=function(c){
-    const html=originalShell(c);
-    return html.replace('<div class="sidefoot">','<button class="nav '+(state.view==="account"?"active":"")+'" onclick="view(\'account\')"><span>◎</span>Account</button><div class="sidefoot">');
   };
   const originalView=window.view;
   window.view=function(v){

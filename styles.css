@@ -215,3 +215,14 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background-ima
 .progress-topic i{display:block;height:6px;background:#edf0f4;border-radius:999px;overflow:hidden}
 .progress-topic i em{display:block;height:100%;background:var(--blue);border-radius:999px}
 @media(max-width:950px){.progressgrid{grid-template-columns:1fr}}
+
+/* Product polish */
+.plan-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.plan-summary>div{padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.plan-summary small,.plan-summary span{display:block;color:var(--muted);font-size:10px}
+.plan-summary b{display:block;font-size:20px;margin:4px 0}
+.topright{gap:8px}
+.mobile-nav{overflow-x:auto;justify-content:flex-start;padding-left:10px;padding-right:10px}
+.mobile-nav .nav{min-width:78px}
+@media(max-width:720px){.plan-summary{grid-template-columns:1fr 1fr}.plan-summary>div:last-child{grid-column:1/-1}}
+@media(max-width:520px){.plan-summary{grid-template-columns:1fr}.plan-summary>div:last-child{grid-column:auto}.topright .saved{display:none}}

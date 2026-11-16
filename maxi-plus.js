@@ -329,14 +329,6 @@
     return base.replace('</section>',value+'</section>');
   };
 
-  const oldShell4=window.shell;
-  window.shell=function(c){
-    let base=oldShell4(c);
-    const sidebarNeed='<div class="nav-extra">'+nav("progress","Progress","◌")+nav("tutor","AI Tutor","✦")+'</div>';
-    base=base.replace(nav("account","Account","◎"),sidebarNeed+nav("account","Account","◎"));
-    return base;
-  };
-
   const oldToday2=window.todayPage;
   window.todayPage=function(){
     const html=oldToday2();

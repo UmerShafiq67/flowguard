@@ -41,11 +41,11 @@ function shell(c){
   '<nav class="mobile-nav" aria-label="StudySprint pages">'+mobileNav.map(([v,t,i])=>nav(v,t,i)).join("")+'</nav>'+
   '<div class="toast '+(state.toast?"show":"")+'">'+esc(state.toast)+'</div>'+ (state.modal?setup():"");
 }
-function pageHintfunction pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
+function pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
 function head(k,t,p,a=""){
   return '<div class="head"><div><div class="kicker">'+esc(k)+'</div><h1>'+t+'</h1><p>'+p+'</p></div>'+(a||"")+'</div>';
 }
-function onboardingPagefunction onboardingPage(){
+function onboardingPage(){
   return '<section class="landing">'+
     '<header class="landingbar"><button class="landingbrand" onclick="view(\'today\')"><span class="landinglogo">S</span><span>StudySprint</span></button><div class="landingmeta"><span>ADAPTIVE LEARNING SYSTEM</span><button class="landinglink" onclick="openSetup()">Get started →</button></div></header>'+
     '<div class="landinghero">'+

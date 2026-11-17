@@ -118,6 +118,7 @@ function todayPage(){
       '<div><span>FOCUS TIME</span><b>'+Number(state.data.focus.minutes||0)+'m</b><small>'+Number(state.data.focus.sessions||0)+' sessions</small></div>'+
       '<div><span>WEAK TOPIC</span><b>'+(signal.weak?esc(signal.weak.name):"None flagged")+'</b><small>'+(signal.weak?"Needs another retrieval":"Keep building evidence")+'</small></div>'+
     '</div>'+
+    '<div class="today-visual-story"><div class="today-visual-copy"><span class="eyebrow">THE STUDYSPRINT METHOD</span><h2>Turn a study session into <em>evidence.</em></h2><p>Plan the move, do the work, prove what you know, then let the system decide what deserves attention next.</p><div class="today-visual-steps"><span><b>01</b>Plan</span><span><b>02</b>Practice</span><span><b>03</b>Adapt</span></div></div><div class="today-visual-art"><img src="./assets/adaptive-network.svg" alt="StudySprint adaptive learning network"><div class="today-visual-badge"><i></i><span>LEARNING SIGNAL</span><b>Updating after practice</b></div></div></div>'+
     '<div class="today-lower">'+
       '<div class="timeline-panel"><div class="section-title"><div><span class="eyebrow">TODAY</span><h2>Your study queue</h2></div><button class="text" onclick="view(\'plan\')">View full plan →</button></div>'+
       (tasks.map(task).join("")||'<div class="empty">No sessions scheduled today. <button class="text" onclick="regen()">Rebuild the plan →</button></div>')+

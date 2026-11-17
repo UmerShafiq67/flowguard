@@ -233,24 +233,3 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;background-ima
 .pagehint{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
 .pagehint b{font-size:11px}.pagehint span{font-size:10px;color:var(--muted)}
 @media(max-width:760px){.navlabel{display:none}.pagehint{align-items:flex-start;flex-direction:column;gap:3px}}
-
-/* Cross-browser resilience: keep the UI readable when advanced effects are unavailable. */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .top,
-  .side,
-  .mobile-nav,
-  .secondary,
-  .stats>div,
-  .welcome-steps>div,
-  .welcome-proof>div,
-  .account-hero,
-  .page-guide {
-    background:#fff;
-  }
-}
-@supports not (mask-image: linear-gradient(#000, transparent)) {
-  body:before { display:none; }
-}
-@supports (-webkit-background-clip:text) {
-  .welcome-hero h1 em { -webkit-text-fill-color:transparent; }
-}

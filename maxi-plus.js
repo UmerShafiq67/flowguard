@@ -244,7 +244,13 @@
   const BILL=window.STUDYSPRINT_BILLING||{};
   function deviceId(){
     let id=localStorage.getItem("studysprint_device_id");
-    if(!id){id="ss_"+crypto.randomUUID();localStorage.setItem("studysprint_device_id",id)}
+    if(!id){
+      const uuid=(window.crypto&&typeof window.crypto.randomUUID==="function")
+        ? window.crypto.randomUUID()
+        : "fallback-"+Date.now()+"-"+Math.random().toString(36).slice(2,10);
+      id="ss_"+uuid;
+      localStorage.setItem("studysprint_device_id",id);
+    }
     return id;
   }
   window.studySprintDeviceId=deviceId;
@@ -288,6 +294,9 @@
     }
     try{
       if(!window.__studySprintPaddleReady){
+        if(BILL.environment==="sandbox"&&Paddle.Environment&&typeof Paddle.Environment.set==="function"){
+          Paddle.Environment.set("sandbox");
+        }
         Paddle.Initialize({
           token:BILL.clientToken,
           eventCallback:function(event){

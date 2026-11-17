@@ -342,7 +342,7 @@ function addTopic(sid){captureSetupDraft();const s=state.data.subjects.find(x=>x
 function removeTopic(sid,tid){captureSetupDraft();const s=state.data.subjects.find(x=>x.id===sid);if(!s)return;if(s.topics.length<=1){toast("Keep at least one topic.");return}s.topics=s.topics.filter(t=>t.id!==tid);save();render()}
 function moveSubject(i,delta){captureSetupDraft();const j=i+delta;if(j<0||j>=state.data.subjects.length)return;[state.data.subjects[i],state.data.subjects[j]]=[state.data.subjects[j],state.data.subjects[i]];save();render()}
 function moveTopic(sid,i,delta){captureSetupDraft();const s=state.data.subjects.find(x=>x.id===sid),j=i+delta;if(!s||j<0||j>=s.topics.length)return;[s.topics[i],s.topics[j]]=[s.topics[j],s.topics[i]];save();render()}
-function resetDemo(){localStorage.removeItem("studysprint");state.data=load();save();render()}
+function resetDemo(){localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(BACKUP_KEY);state.data=load();save();render()}
 function saveSetup(){
   state.data.availableMinutes=Math.max(20,Math.min(600,Number(document.getElementById("mins")?.value||90)));
   for(const s of state.data.subjects){
@@ -396,15 +396,16 @@ function startPractice(){let x=state.currentTask;if(!x){x=state.data.plan.find(a
   })});
   const data=await res.json();if(!res.ok)throw new Error(data.error||"Feedback unavailable.");
   const text=data.text||"",result=practiceResult(text);
+  if(!result)throw new Error("The tutor returned feedback without a clear result. Your attempt was not counted; try again.");
   const topic=state.data.subjects.flatMap(s=>s.topics||[]).find(t=>t&&t.name===x.topic);
   state.data.practice.attempts++;
   state.data.practice.evidence=Array.isArray(state.data.practice.evidence)?state.data.practice.evidence:[];
-  state.data.practice.evidence.push({topic:x.topic,subject:x.subject,correct:result==="correct",date:today()});
+  state.data.practice.evidence.push({topic:x.topic,subject:x.subject,correct:result==="correct",date:today(),source:"practice"});
   state.data.practice.evidence=state.data.practice.evidence.slice(-200);
   if(result==="correct"){
    state.data.practice.correct++;
    if(topic)topic.confidence=Math.min(5,Number(topic.confidence||3)+1);
-  }else if(result==="wrong"){
+  }else{
    if(topic)topic.confidence=Math.max(1,Number(topic.confidence||3)-1);
    state.data.mistakes.push({id:"mistake-"+Date.now(),topic:x.topic,subject:x.subject,question:state.practice.question,answer:a,feedback:text,date:today()});
    const reviewDate=add(today(),1),reviewId=x.id+"-mistake-review-"+today();
@@ -417,7 +418,7 @@ function startFocusForTask(){const x=state.currentTask;if(!x)return;selectedMinu
 async function tutorForTask(mode){ const x=state.currentTask;if(!x)return; if(mode==="Practice"){startPractice();return} if(mode==="Quiz me"){state.tutorMode="Quiz me";state.tutorQuiz={question:"",answer:"",feedback:"",result:"",correctAnswer:"",options:[],busy:false,history:[]};state.view="tutor";render();generateTutorQuiz();return} state.tutorMode="Explain simply";state.view="tutor";render(); const i=document.getElementById("tutorInput");if(i){i.value="Explain "+x.topic+" from "+x.subject+" simply, then give me one example.";await askTutor()} }
 function finishCurrentTask(){const x=state.currentTask;if(!x)return;const item=state.data.plan.find(a=>a.id===x.id&&a.date===x.date);if(item){item.done=true;const reviewDay=new Date(x.date+"T00:00:00");reviewDay.setDate(reviewDay.getDate()+3);const rd=localDate(reviewDay);if(rd<x.examDate&&!state.data.plan.some(p=>p.id===x.id+"-review"&&p.date===rd))state.data.plan.push({...x,id:x.id+"-review",date:rd,minutes:Math.min(20,Math.max(15,Math.round(x.minutes/3))),priority:Math.min(100,x.priority+5),done:false,kind:"review"});state.data.plan.sort((a,b)=>a.date.localeCompare(b.date)||b.priority-a.priority)}save();state.view="today";state.currentTask=null;render();toast("Session complete. A later review is scheduled.")}
 function timerSet(m){clearInterval(timer);timer=null;selectedMinutes=m;seconds=m*60;render()}
-function timerToggle(){const b=document.getElementById("timerbtn");if(timer){clearInterval(timer);timer=null;b.textContent="Resume focus";return}b.textContent="Pause focus";timer=setInterval(()=>{seconds--;const c=document.getElementById("clock");if(c)c.textContent=Math.floor(seconds/60).toString().padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");if(seconds<=0){clearInterval(timer);timer=null;state.data.focus.sessions++;state.data.focus.minutes+=selectedMinutes;if(state.currentTask){const x=state.data.plan.find(a=>a.id===state.currentTask.id&&a.date===state.currentTask.date);if(x)x.done=true}save();b.textContent="Session complete";toast("Focus session complete — task marked done.")}},1000)}
+function timerToggle(){const b=document.getElementById("timerbtn");if(timer){clearInterval(timer);timer=null;b.textContent="Resume focus";return}b.textContent="Pause focus";timer=setInterval(()=>{seconds--;const c=document.getElementById("clock");if(c)c.textContent=Math.floor(seconds/60).toString().padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");if(seconds<=0){clearInterval(timer);timer=null;state.data.focus.sessions++;state.data.focus.minutes+=selectedMinutes;save();if(state.currentTask){finishCurrentTask()}else{toast("Focus session complete — time logged.");render()}}},1000)}
 function openTutor(){state.view="tutor";state.modal=false;render()}function view(v){state.view=v;state.modal=false;render()}function toast(m){state.toast=m;render();setTimeout(()=>{state.toast="";render()},2200)}
 function topicInsight(t){const c=Number(t?.confidence||3);if(c<=1)return "Needs immediate practice";if(c===2)return "Needs another retrieval attempt";if(c===3)return "Still building";if(c===4)return "Looking strong";return "Strong and ready for a check"}
 function render(){const root=document.getElementById("app");if(!root)return;try{let c=state.view==="today"?todayPage():state.view==="plan"?planPage():state.view==="subjects"?subjectsPage():state.view==="session"?sessionPage():state.view==="practice"?practicePage():state.view==="focus"?focusPage():state.view==="review"?reviewPage():state.view==="progress"?progressPage():state.view==="tutor"?tutorPage():tutorPage();root.innerHTML=shell(c)}catch(e){console.error(e);state.view="today";try{root.innerHTML=shell('<section><div class="card"><h1>StudySprint</h1><p>That page hit a display error, but your saved subjects and progress are still here.</p><button class="btn primary" onclick="view(\'today\')">Back to Today</button></div></section>')}catch(_){root.innerHTML='<section class="welcome"><div class="card"><h1>StudySprint</h1><p>Your saved study data is still stored on this device.</p><button class="btn primary" onclick="location.reload()">Reload StudySprint</button></div></section>'}}}render();

@@ -105,3 +105,159 @@
 .vu-toolkit-grid button{border:0;background:none;padding:0;color:#4938bd;font-size:11px;font-weight:850;cursor:pointer}
 @media(max-width:900px){.vu-toolkit-head{grid-template-columns:1fr;gap:16px}.vu-toolkit-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.vu-toolkit{margin-bottom:75px}.vu-toolkit-grid{grid-template-columns:1fr}.vu-toolkit-grid article{min-height:205px}}
+
+
+/* V14 MASTER VISUAL SYSTEM
+   This file is intentionally LAST in the cascade.
+   Fixes the previous conflict where visual-upgrade.css overrode the colorful V13 shell.
+*/
+:root{
+  --ss-violet:#6f4cff;
+  --ss-purple:#4b2bd6;
+  --ss-cyan:#18cde8;
+  --ss-mint:#38dfaa;
+  --ss-pink:#ef5bb8;
+  --ss-orange:#ff9c5a;
+  --ss-ink:#17183f;
+  --ss-lav:#f0edff;
+  --ss-sky:#e8faff;
+  --ss-green:#eafff6;
+}
+html{background:#eef1ff!important}
+body{
+  background:
+    radial-gradient(circle at 4% 7%,rgba(111,76,255,.22),transparent 24rem),
+    radial-gradient(circle at 96% 18%,rgba(24,205,232,.20),transparent 25rem),
+    radial-gradient(circle at 60% 100%,rgba(56,223,170,.16),transparent 27rem),
+    linear-gradient(180deg,#f1efff 0%,#eef9ff 46%,#f0fff8 100%)!important;
+  color:var(--ss-ink)!important;
+}
+.appbar{
+  background:linear-gradient(105deg,#17123f 0%,#4a2bc8 42%,#087fa4 73%,#087e72 100%)!important;
+  border:0!important;
+  box-shadow:0 16px 50px rgba(53,35,154,.30)!important;
+}
+.appbar .brand,.appbar .brand-copy b,.appbar .brand-copy small,
+.appbar .desktop-nav .nav,.appbar .topright .ghost,.appbar .v2-progress,
+.appbar .v2-more>button{color:#fff!important}
+.appbar .desktop-nav .nav:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}
+.appbar .desktop-nav .nav.active{
+  background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(255,255,255,.08))!important;
+  color:#fff!important;
+}
+.appbar .desktop-nav .nav.active:before{background:#7ff4d0!important;box-shadow:0 0 0 4px rgba(127,244,208,.15)!important}
+.appbar .logo{
+  background:linear-gradient(135deg,#b179ff,#22d8ff,#4de6ad)!important;
+  box-shadow:0 8px 22px rgba(30,220,220,.24)!important;
+}
+.appbar .plus-link{
+  background:linear-gradient(135deg,#ff72bf,#ff9b5d)!important;
+  border:0!important;color:#fff!important;
+  box-shadow:0 10px 24px rgba(239,91,184,.28)!important;
+}
+.appbar .edit-plan{
+  background:rgba(255,255,255,.12)!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+}
+.app-main{background:transparent!important}
+.app-main:before{
+  background:radial-gradient(circle,rgba(111,76,255,.13),transparent 66%)!important;
+}
+.head{
+  background:linear-gradient(120deg,#e9e3ff 0%,#e2f9ff 52%,#e5fff5 100%)!important;
+  border:1px solid #d6daf3!important;
+  box-shadow:0 24px 70px rgba(71,58,170,.14)!important;
+}
+.head .kicker{color:#6547e5!important}
+.head h1{color:#17183f!important}
+.head p{color:#65708c!important}
+.btn.primary{
+  background:linear-gradient(135deg,#5f3ce5,#8b5cf6 50%,#16b9d4)!important;
+  color:#fff!important;border:0!important;
+  box-shadow:0 14px 30px rgba(91,61,218,.24)!important;
+}
+.btn.secondary{background:#fff!important;color:#4f4aa8!important;border-color:#d9dcf1!important}
+.card,.stats>div,.timeline-panel,.next-panel,.practice-side,.tutorbox,.site-footer{
+  background:linear-gradient(145deg,#fff 0%,#f4f1ff 52%,#ecfbff 100%)!important;
+  border-color:#d8def2!important;
+}
+.card:hover{box-shadow:0 20px 50px rgba(72,60,160,.13)!important;border-color:#bfc6eb!important}
+.stats>div:nth-child(1){background:linear-gradient(135deg,#6040dc,#9a70ff)!important;color:#fff!important}
+.stats>div:nth-child(2){background:linear-gradient(135deg,#078eac,#4fe1ef)!important;color:#fff!important}
+.stats>div:nth-child(3){background:linear-gradient(135deg,#0c9e75,#54e6b5)!important;color:#fff!important}
+.stats>div:nth-child(4){background:linear-gradient(135deg,#d4489a,#ff86c5)!important;color:#fff!important}
+.stats>div *{color:#fff!important}
+.command-strip{
+  background:linear-gradient(100deg,#fff,#f1edff 34%,#e7fbff 67%,#edfff7)!important;
+  border:1px solid #d8def2!important;
+}
+.command-strip>div:nth-child(1) b{color:#6547e5!important}
+.command-strip>div:nth-child(2) b{color:#079dbb!important}
+.command-strip>div:nth-child(3) b{color:#0ca879!important}
+.command-strip>div:nth-child(4) b{color:#d84d9d!important}
+.hero-action,.practicecard,.tutor-quiz-card{
+  background:linear-gradient(135deg,#211550 0%,#5130c9 48%,#079ab2 100%)!important;
+  color:#fff!important;border:0!important;
+  box-shadow:0 30px 80px rgba(55,36,155,.28)!important;
+}
+.hero-action *,.practicecard *,.tutor-quiz-card *{color:#fff!important}
+.hero-action .hero-subject{color:#7ff2d0!important}
+.hero-action .primary{background:#fff!important;color:#4a36b9!important}
+.signal-panel{
+  background:linear-gradient(155deg,#21164f,#5230c3 52%,#078ca6)!important;
+  color:#fff!important;border:0!important;
+}
+.signal-panel *{color:#fff!important}.signal-panel .eyebrow,.signal-panel .signal-head span{color:#9cf6d9!important}
+.task{
+  background:linear-gradient(110deg,#fff,#f4f0ff 48%,#ebfbff)!important;
+  border-color:#dce1f3!important;
+}
+.task:nth-child(3n+1){border-left:4px solid #6f4cff!important}
+.task:nth-child(3n+2){border-left:4px solid #18cde8!important}
+.task:nth-child(3n+3){border-left:4px solid #38dfaa!important}
+.days .day.card,.subjectgrid>.card,.practice-subject.card,.reviewgrid>.card,.progressgrid>.card,.focusgrid>.card{
+  background:linear-gradient(145deg,#fff 0%,#f1efff 48%,#eafcff 100%)!important;
+}
+.day:nth-child(3n+1) .dayhead{background:linear-gradient(100deg,#704ff1,#ae86ff)!important;color:#fff!important}
+.day:nth-child(3n+2) .dayhead{background:linear-gradient(100deg,#0aa4c0,#5ee6ef)!important;color:#063c49!important}
+.day:nth-child(3n) .dayhead{background:linear-gradient(100deg,#25bc8b,#78edc1)!important;color:#073d2d!important}
+.mcq-option{
+  background:#fff!important;border-color:#d6dcef!important;
+}
+.mcq-option:hover,.mcq-option.selected{
+  background:linear-gradient(100deg,#eee8ff,#e4fbff)!important;
+  border-color:#7559ed!important;
+}
+.subject>span,.practice-subject-icon{
+  background:linear-gradient(135deg,#e8e2ff,#dcfaff)!important;color:#5d45d9!important;
+}
+.view-focus .card{
+  background:linear-gradient(135deg,#211550,#5130c5 55%,#078da6)!important;color:#fff!important;border:0!important;
+}
+.view-focus .card *{color:#fff!important}
+.modal-backdrop{background:rgba(35,26,90,.48)!important;backdrop-filter:blur(10px)!important}
+.modal{background:linear-gradient(145deg,#fff,#f2efff,#eafaff)!important;border-color:#d7ddf2!important}
+.mobile-nav,.v3-mobile-nav{background:linear-gradient(90deg,#f3efff,#e8fbff)!important;border-color:#d7ddf2!important}
+.v3-mobile-nav button.active{background:linear-gradient(135deg,#6042e5,#20c9df)!important;color:#fff!important}
+.site-footer{color:#65708c!important}
+.site-footer a{color:#5145bb!important}
+.landing,.v6-landing{
+  background:
+    radial-gradient(circle at 8% 10%,rgba(111,76,255,.25),transparent 28rem),
+    radial-gradient(circle at 92% 16%,rgba(24,205,232,.22),transparent 28rem),
+    radial-gradient(circle at 55% 90%,rgba(56,223,170,.17),transparent 30rem),
+    linear-gradient(180deg,#f3efff,#ecfaff 48%,#effff8)!important;
+  color:var(--ss-ink)!important;
+}
+.v6-nav,.landingbar{background:rgba(243,239,255,.78)!important;border-color:rgba(105,82,190,.15)!important}
+.v6-hero-art{background:linear-gradient(145deg,#25155e,#5130ca,#079ab4)!important}
+.v6-engine{background:linear-gradient(145deg,#17103e,#4630a5,#087f9a)!important}
+.v6-dark{background:linear-gradient(135deg,#17103e,#38227e 48%,#075f73)!important}
+.v6-main,.v6-cta{background:linear-gradient(135deg,#6141e8,#20cce7,#38dca8)!important;color:#fff!important}
+.v6-card.purple{background:linear-gradient(145deg,#eee8ff,#fff)!important;border-color:#d6cef8!important}
+.v6-card.blue{background:linear-gradient(145deg,#e6faff,#fff)!important;border-color:#c9eaf3!important}
+.v6-card.green{background:linear-gradient(145deg,#e7fff6,#fff)!important;border-color:#c7efdf!important}
+.v6-plus{background:linear-gradient(135deg,#e8e1ff,#e2faff 55%,#e5fff4)!important}
+@media(max-width:800px){
+  .appbar{background:linear-gradient(135deg,#21144f,#5130c5,#087f94)!important}
+}

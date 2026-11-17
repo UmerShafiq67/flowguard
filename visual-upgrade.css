@@ -89,3 +89,19 @@
 .vu-gallery-card span{display:block;margin-top:7px;color:#cbd0e5;font-size:11px;line-height:1.45}
 @media(max-width:900px){.vu-gallery-head{grid-template-columns:1fr;gap:16px}.vu-gallery-grid{grid-template-columns:1fr 1fr}.vu-gallery-card.large{grid-column:1/-1;min-height:420px}.vu-gallery-card{min-height:340px}}
 @media(max-width:560px){.vu-gallery{margin-bottom:75px}.vu-gallery-grid{grid-template-columns:1fr}.vu-gallery-card,.vu-gallery-card.large{min-height:360px}.vu-gallery-card.large{grid-column:auto}}
+
+/* V11 — study toolkit / product breadth */
+.vu-toolkit{max-width:1250px;margin:0 auto 120px;padding:0 clamp(18px,5vw,70px)}
+.vu-toolkit-head{display:grid;grid-template-columns:1fr .72fr;gap:60px;align-items:end;margin-bottom:30px}
+.vu-toolkit-head h2{font-size:clamp(40px,4.8vw,64px);line-height:.98;letter-spacing:-.055em;margin:12px 0 0}
+.vu-toolkit-head p{font-size:15px;line-height:1.75;color:#707995;margin:0}
+.vu-toolkit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.vu-toolkit-grid article{position:relative;padding:26px;border-radius:24px;background:rgba(255,255,255,.76);border:1px solid #e0e4f1;box-shadow:0 18px 55px rgba(45,48,100,.07);min-height:235px;transition:transform .25s ease,box-shadow .25s ease}
+.vu-toolkit-grid article:hover{transform:translateY(-5px);box-shadow:0 26px 70px rgba(45,48,100,.13)}
+.vu-toolkit-grid .tool-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#6952f2,#20d9e8);color:#fff;font-size:21px;box-shadow:0 12px 24px rgba(85,76,225,.2)}
+.vu-toolkit-grid small{display:block;margin-top:22px;font:800 9px "DM Mono",monospace;letter-spacing:.14em;color:#6653dc}
+.vu-toolkit-grid h3{font-size:21px;letter-spacing:-.035em;margin:7px 0}
+.vu-toolkit-grid p{font-size:12px;line-height:1.55;color:#707995;margin:0 0 18px}
+.vu-toolkit-grid button{border:0;background:none;padding:0;color:#4938bd;font-size:11px;font-weight:850;cursor:pointer}
+@media(max-width:900px){.vu-toolkit-head{grid-template-columns:1fr;gap:16px}.vu-toolkit-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.vu-toolkit{margin-bottom:75px}.vu-toolkit-grid{grid-template-columns:1fr}.vu-toolkit-grid article{min-height:205px}}

@@ -17,7 +17,7 @@ assert.match(index,/visual-v36\.css\?v=36/);
 assert.match(index,/visual-v36\.js\?v=36/);
 assert.match(index,/visual-v37\.css\?v=37/);
 assert.match(index,/visual-v37\.js\?v=37/);
-assert.match(sw,/studysprint-shell-v57-v37/);
+assert.match(sw,/studysprint-shell-v58-v38/);
 assert.match(sw,/visual-v35\.css\?v=36/);
 assert.match(sw,/visual-v35\.js\?v=36/);
 assert.match(sw,/visual-v36\.css\?v=36/);

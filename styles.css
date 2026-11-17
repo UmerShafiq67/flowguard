@@ -262,7 +262,6 @@ body{background:#fff;color:#111;font-family:Inter,ui-sans-serif,system-ui,-apple
 .side{background:#fff;border-right:1px solid #e8e8e8;padding:20px 12px}
 .nav{color:#777;border-radius:8px;padding:10px 11px;margin:1px 0}
 .nav.active,.nav:hover{background:#f4f4f4;color:#111;font-weight:750}
-.nav span{filter:grayscale(1)}
 .navlabel{color:#999}
 .sidefoot{border-top-color:#e8e8e8;color:#777}
 .sidefoot b{color:#111}
@@ -366,7 +365,6 @@ button{transition:background .16s ease,border-color .16s ease,transform .16s eas
 .navgroup{margin-bottom:28px!important}
 .navlabel{padding:0 12px 9px!important;font-size:8px!important;letter-spacing:.18em!important;color:#a0a3a7!important}
 .nav{width:100%;display:flex;align-items:center;gap:10px;background:transparent!important;color:#74787d!important;border:0!important;border-radius:7px!important;padding:10px 12px!important;margin:2px 0!important;font-size:11px!important;text-align:left}
-.nav span{width:17px;opacity:.75;filter:grayscale(1)}
 .nav.active{background:#f2f2f3!important;color:#0b0c0e!important;font-weight:750!important}
 .nav:hover{background:#f7f7f8!important;color:#0b0c0e!important}
 .sidefoot{border-top:1px solid #e8e9eb!important;padding:18px 12px!important;color:#92959a!important}
@@ -642,9 +640,6 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 }
 @media(max-width:520px){.app-main{padding:24px 13px 86px}.head h1{font-size:34px}.landinghero{padding-top:62px}.landinghero h1{font-size:48px}.landingeyebrow span{display:none}.landingactions .btn{width:100%}.landingactions>span{max-width:none}.signal-number{font-size:46px!important}}
 
-/* FINAL MONOCHROME LOCK — no colored UI surfaces */
-html,body,#app,.app-main,.landing{filter:grayscale(1)}
-*{accent-color:#111315}
 
 
 /* PUBLIC LEGAL PAGES + FOOTER */

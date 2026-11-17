@@ -171,6 +171,7 @@ async function enforceTutorAccess(body, env) {
   if (!deviceId || !env.STUDYSPRINT_ENTITLEMENTS) {
     return { ok: true, serverEnforced: false, plus: false };
   }
+
   const entitlement = await getEntitlementRecord(deviceId, env);
   const plus = entitlement?.active === true;
   if (body?.attachment && !plus) {
@@ -178,14 +179,32 @@ async function enforceTutorAccess(body, env) {
   }
   if (plus) return { ok: true, serverEnforced: true, plus: true };
 
+  /*
+   * Keep the server limits aligned with the product's client-side guardrails.
+   * Only question-generation modes consume Practice/Quiz allowances; their
+   * answer-check requests do not double-charge the student for the same attempt.
+   */
+  const mode = clean(body?.mode, 60);
+  const usageKind =
+    mode === "Practice" ? "practice" :
+    mode === "Quiz me" ? "quiz" :
+    mode === "Explain simply" || mode === "Revise" ? "ai" :
+    null;
+
+  if (!usageKind) return { ok: true, serverEnforced: true, plus: false };
+
+  const limits = { ai: 5, practice: 8, quiz: 3 };
   const key = "usage:" + deviceId + ":" + new Date().toISOString().slice(0, 10);
-  const usage = await env.STUDYSPRINT_ENTITLEMENTS.get(key, "json") || { ai: 0 };
-  const used = Number(usage.ai || 0);
-  const limit = 5;
+  const usage = await env.STUDYSPRINT_ENTITLEMENTS.get(key, "json") || { ai: 0, practice: 0, quiz: 0 };
+  const used = Number(usage[usageKind] || 0);
+  const limit = limits[usageKind];
+
   if (used >= limit) {
-    return { ok: false, response: json({ error: "Daily free AI Tutor limit reached. Plus removes the limit." }, 429) };
+    const label = usageKind === "ai" ? "AI Tutor" : usageKind === "practice" ? "Practice" : "Quiz";
+    return { ok: false, response: json({ error: "Daily free " + label + " limit reached. Plus removes the limit." }, 429) };
   }
-  usage.ai = used + 1;
+
+  usage[usageKind] = used + 1;
   usage.updatedAt = new Date().toISOString();
   await env.STUDYSPRINT_ENTITLEMENTS.put(key, JSON.stringify(usage), { expirationTtl: 172800 });
   return { ok: true, serverEnforced: true, plus: false };

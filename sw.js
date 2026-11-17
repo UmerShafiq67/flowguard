@@ -1,4 +1,4 @@
-const CACHE="studysprint-shell-v29-v7";
+const CACHE="studysprint-shell-v30-v8";
 const ASSETS=["./","./index.html","./styles.css?v=7","./design-v2.css?v=7","./design-v3.css?v=7","./config.js?v=7","./study-core.js?v=7","./app.js?v=7","./maxi-plus.js?v=7","./enhancements.js?v=7","./manifest.webmanifest","./icon.svg","./icon-maskable.svg","./account.js?v=7","./terms.html","./privacy.html","./refund.html","./contact.html","./pricing.html"];
 self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

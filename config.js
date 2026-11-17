@@ -11,7 +11,6 @@ window.STUDYSPRINT_BILLING = {
 
 /* Keep sandbox until the Paddle integration has been tested end-to-end.
    Production uses a live_ client token and the live Plus price ID. */
-};
 
 // Account sync uses Supabase when these public browser values are configured.
 // The anon/publishable key is designed for browser use; never put a service-role key here.

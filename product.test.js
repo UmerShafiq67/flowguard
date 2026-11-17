@@ -30,3 +30,7 @@ assert.match(sw,/visual-v37\.css\?v=37/);
 assert.match(sw,/visual-v37\.js\?v=37/);
 
 console.log("StudySprint product integration tests: PASS");
+
+assert.match(app,/function accountPage\(\)/);
+assert.match(app,/state\.view==="account"\?accountPage\(\)/);
+assert.match(app,/if\(state\.practice\.packId\)return base/);

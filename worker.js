@@ -203,29 +203,27 @@ async function billingStatus(env) {
 async function billingWebhook(request, env) {
   const secret = String(env.PADDLE_WEBHOOK_SECRET || env.BILLING_WEBHOOK_SECRET || "");
   if (!secret) return json({ error: "Billing webhook is not configured." }, 503);
+
   const rawBody = await request.text();
   if (!(await verifyPaddleSignature(request, rawBody, secret))) {
     return json({ error: "Invalid webhook signature." }, 401);
   }
+
   let body;
   try { body = JSON.parse(rawBody); } catch { return json({ error: "Invalid JSON." }, 400); }
-  const type = String(body?.event_type || body?.event || "");
-  const eventId = clean(body?.event_id || body?.notification_id, 120);
-  if (eventId && env.STUDYSPRINT_ENTITLEMENTS) {
-    const seenKey = "billing-event:" + eventId;
-    if (await env.STUDYSPRINT_ENTITLEMENTS.get(seenKey)) return json({ ok: true, duplicate: true });
-    await env.STUDYSPRINT_ENTITLEMENTS.put(seenKey, "1", { expirationTtl: 604800 });
-  }
 
+  const type = String(body?.event_type || body?.event || "");
   const data = body?.data || {};
   const custom = data?.custom_data || {};
   const deviceId = clean(custom.deviceId, 160);
   if (!deviceId) return json({ error: "Missing StudySprint device reference." }, 400);
   if (!env.STUDYSPRINT_ENTITLEMENTS) return json({ error: "Entitlement storage is not configured." }, 503);
 
-  /* Only the configured StudySprint Plus price may grant or revoke Plus.
-     This prevents a future unrelated Paddle product from accidentally
-     changing StudySprint access. */
+  /*
+   * Only the configured StudySprint Plus price may grant or change Plus access.
+   * Paddle checkout customData is copied to recurring subscriptions, so the
+   * same device reference is available on subscription lifecycle webhooks.
+   */
   const plusPriceId = clean(env.PADDLE_PLUS_PRICE_ID, 100);
   if (!plusPriceId) return json({ error: "Plus price is not configured." }, 503);
 
@@ -238,43 +236,75 @@ async function billingWebhook(request, env) {
   const hasPlusPrice = itemPrices.includes(plusPriceId);
   if (!hasPlusPrice) return json({ ok: true, ignored: true, reason: "not-study-sprint-plus" });
 
+  /*
+   * Paddle subscription access is status-based:
+   * active/trialing/past_due retain access; canceled/paused revoke it.
+   * A scheduled cancellation is still status=active until it takes effect.
+   * subscription.updated must be processed while active so price changes and
+   * scheduled changes are reflected in the cached entitlement.
+   */
   const subscriptionStatus = String(data?.status || "");
-  const active = (type === "transaction.completed" && data?.status === "completed") ||
-    (type === "subscription.created" || type === "subscription.activated" ||
-      type === "subscription.trialing" || type === "subscription.resumed") &&
-      (subscriptionStatus === "active" || subscriptionStatus === "trialing");
-  const inactive = type === "transaction.canceled" ||
-    type === "subscription.canceled" ||
-    type === "subscription.past_due" ||
-    type === "subscription.paused" ||
-    (type === "subscription.updated" &&
-      !["active", "trialing"].includes(subscriptionStatus));
+  const activeStatus = ["active", "trialing", "past_due"].includes(subscriptionStatus);
+  const inactiveStatus = ["canceled", "paused"].includes(subscriptionStatus);
+  const isSubscriptionEvent = type.startsWith("subscription.");
+  const isCompletedTransaction = type === "transaction.completed" && data?.status === "completed";
 
-  if (!active && !inactive) return json({ ok: true, ignored: true });
+  if (!isSubscriptionEvent && !isCompletedTransaction) {
+    return json({ ok: true, ignored: true });
+  }
 
-  /* Paddle can retry or deliver events out of order. Keep the newest event
-     timestamp so an older notification cannot roll a newer entitlement back. */
+  const active = activeStatus || isCompletedTransaction;
+  const inactive = inactiveStatus;
+
+  const eventId = clean(body?.event_id || body?.notification_id, 120);
+  if (eventId) {
+    const seenKey = "billing-event:" + eventId;
+    if (await env.STUDYSPRINT_ENTITLEMENTS.get(seenKey)) {
+      return json({ ok: true, duplicate: true });
+    }
+    /*
+     * Mark the event only after signature, identity, storage, and product
+     * validation have succeeded. Invalid/misconfigured deliveries can then
+     * be retried safely instead of being permanently swallowed.
+     */
+    await env.STUDYSPRINT_ENTITLEMENTS.put(seenKey, "1", { expirationTtl: 604800 });
+  }
+
   const occurredAt = clean(body?.occurred_at, 50) || new Date().toISOString();
   const key = "entitlement:" + deviceId;
   const existing = await env.STUDYSPRINT_ENTITLEMENTS.get(key, "json");
+
   if (existing?.occurredAt && Date.parse(existing.occurredAt) > Date.parse(occurredAt)) {
     return json({ ok: true, ignored: true, reason: "older-event" });
   }
 
   const matchedItem = items.find(item => clean(item?.price?.id, 100) === plusPriceId);
+  const scheduled = data?.scheduled_change || null;
+  const expiresAt =
+    clean(data?.current_billing_period?.ends_at, 40) ||
+    clean(data?.next_billed_at, 40) ||
+    clean(data?.ends_at, 40) ||
+    null;
+
   const record = {
     active: active && !inactive,
     plan: active && !inactive ? "plus" : "free",
+    status: subscriptionStatus || (isCompletedTransaction ? "completed" : "unknown"),
     priceId: plusPriceId,
     productId: clean(matchedItem?.price?.product_id, 100) || existing?.productId || null,
     customerId: clean(data?.customer_id, 100) || existing?.customerId || null,
     subscriptionId: clean(data?.subscription_id, 100) || clean(data?.id, 100) || existing?.subscriptionId || null,
-    expiresAt: clean(data?.next_billed_at, 40) || null,
+    expiresAt,
+    scheduledChange: scheduled ? {
+      action: clean(scheduled?.action, 40),
+      effectiveAt: clean(scheduled?.effective_at, 40)
+    } : null,
     occurredAt,
     updatedAt: new Date().toISOString()
   };
+
   await env.STUDYSPRINT_ENTITLEMENTS.put(key, JSON.stringify(record));
-  return json({ ok: true, plan: record.plan });
+  return json({ ok: true, plan: record.plan, status: record.status });
 }
 
 export default {

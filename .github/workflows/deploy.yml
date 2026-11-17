@@ -30,6 +30,7 @@ jobs:
           cp worker.js /tmp/studysprint-worker.mjs
           node --check /tmp/studysprint-worker.mjs
           node --check enhancements.js
+          node --check visual-v32.js
       - name: Run core tests
         run: npm test
       - name: Check required files

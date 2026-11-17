@@ -32,6 +32,7 @@ jobs:
           node --check enhancements.js
           node --check visual-v32.js
           node --check visual-v34.js
+          node --check visual-v35.js
       - name: Run core tests
         run: npm test
       - name: Check required files
@@ -46,6 +47,8 @@ jobs:
           test -f enhancements.js
           test -f visual-v34.js
           test -f visual-v34.css
+          test -f visual-v35.css
+          test -f visual-v35.js
           test -f manifest.webmanifest
           test -f sw.js
 

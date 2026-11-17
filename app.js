@@ -30,14 +30,22 @@ function practiceResult(text){
 }
 function nav(v,t,i){return `<button class="nav ${state.view===v?"active":""}" onclick="view('${v}')"><span>${i}</span>${t}</button>`}
 function shell(c){
+  const desktopNav=[["today","Today"],["plan","My plan"],["practice","Practice"],["tutor","Tutor"],["review","Review"],["progress","Progress"],["subjects","Subjects"],["account","Account"]];
   const mobileNav=[["today","Today","⌂"],["plan","Plan","◷"],["practice","Practice","✎"],["tutor","Tutor","✦"],["review","Review","✓"],["progress","Progress","◌"]];
-  return `<header class="top"><button class="brand" onclick="view('today')" aria-label="StudySprint home"><span class="logo">S</span>StudySprint</button><div class="topright"><span class="saved">● Saved locally · backup protected</span><button class="ghost" onclick="openPremium()">Plus</button><button class="ghost" onclick="openSetup()">Edit plan</button></div></header><div class="layout"><aside class="side"><div class="navgroup"><div class="navlabel">LEARN</div>${nav("today","Today","⌂")}${nav("plan","My plan","◷")}${nav("practice","Practice","✎")}${nav("tutor","Tutor","✦")}${nav("review","Review","✓")}${nav("progress","Progress","◌")}</div><div class="navgroup"><div class="navlabel">SETUP</div>${nav("subjects","Subjects","▦")}${nav("account","Account","◎")}</div><div class="sidefoot"><b>StudySprint</b><span>Decide → learn → prove → review → adapt.</span></div></aside><main class="main view-${state.view}">${c}</main></div><nav class="mobile-nav" aria-label="StudySprint pages">${mobileNav.map(([v,t,i])=>nav(v,t,i)).join("")}</nav><div class="toast ${state.toast?"show":""}">${esc(state.toast)}</div>${state.modal?setup():""}`}function pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
-function head(k,t,p,a=""){
-  const guides={TODAY:["Start here","StudySprint chooses one useful next action."],PLAN:["Your roadmap","See the schedule. Rebuild it when your time or exam dates change."],SUBJECTS:["What you are learning","Add subjects, topics, confidence, and exam dates."],FOCUS:["Focus","Use a timer when you already know what you are studying."],PRACTICE:["Prove what you know","Answer first. Your result becomes evidence for the next plan."],REVIEW:["Fix what is weak","Retry mistakes and topics that need another retrieval."],PROGRESS:["See your learning signal","Track practice evidence, topic health, plan coverage, and review."],"AI TUTOR":["Learn with guidance","Ask for explanations, practice, quizzes, or revision with context from your study plan."],ACCOUNT:["Your account & sync","Manage sign-in, cloud backup, and data portability. StudySprint also works locally."],SESSION:["Your next study action","Follow the recommended learn → recall → practice loop for the topic StudySprint chose."]};
-  const g=guides[String(k).toUpperCase()];
-  return `<div class="head"><div><div class="kicker">${k}</div><h1>${t}</h1><p>${p}</p>${g?`<div class="page-guide"><span>WHAT THIS PAGE DOES</span><b>${g[0]}</b><small>${g[1]}</small></div>`:""}</div>${a}</div>`;
+  return '<header class="appbar">'+
+    '<button class="brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo">S</span><span>StudySprint</span></button>'+
+    '<nav class="desktop-nav" aria-label="StudySprint pages">'+desktopNav.map(([v,t])=>nav(v,t,"")).join("")+'</nav>'+
+    '<div class="topright"><span class="saved">● Saved locally</span><button class="ghost" onclick="openPremium()">Plus</button><button class="ghost edit-plan" onclick="openSetup()">Edit plan</button></div>'+
+  '</header>'+
+  '<main class="app-main view-'+state.view+'">'+c+'</main>'+
+  '<nav class="mobile-nav" aria-label="StudySprint pages">'+mobileNav.map(([v,t,i])=>nav(v,t,i)).join("")+'</nav>'+
+  '<div class="toast '+(state.toast?"show":"")+'">'+esc(state.toast)+'</div>'+ (state.modal?setup():"");
 }
-function onboardingPage(){
+function pageHintfunction pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
+function head(k,t,p,a=""){
+  return '<div class="head"><div><div class="kicker">'+esc(k)+'</div><h1>'+t+'</h1><p>'+p+'</p></div>'+(a||"")+'</div>';
+}
+function onboardingPagefunction onboardingPage(){
   return '<section class="landing">'+
     '<header class="landingbar"><button class="landingbrand" onclick="view(\'today\')"><span class="landinglogo">S</span><span>StudySprint</span></button><div class="landingmeta"><span>ADAPTIVE LEARNING SYSTEM</span><button class="landinglink" onclick="openSetup()">Get started →</button></div></header>'+
     '<div class="landinghero">'+
@@ -70,28 +78,56 @@ function taskReason(x){
 function todayPage(){
   const ready=state.data.subjects.length&&state.data.plan.length;
   if(!ready)return onboardingPage();
+  const evidence={mistakes:state.data.mistakes,evidence:state.data.practice.evidence};
   const tasks=state.data.plan.filter(x=>x.date===today()),
-    next=state.data.plan.filter(x=>!x.done&&x.date>=today()).sort((a,b)=>b.priority-a.priority).slice(0,4),
+    next=state.data.plan.filter(x=>!x.done&&x.date>=today()).sort((a,b)=>StudySprintCore.adaptiveScore(b,evidence)-StudySprintCore.adaptiveScore(a,evidence)).slice(0,5),
     ex=state.data.exams.filter(e=>e&&e.date).map(e=>({...e,days:StudySprintCore.daysUntil(e.date)})).sort((a,b)=>a.days-b.days),
-    readiness=StudySprintCore.readiness(state.data.subjects,state.data.exams,state.data.plan);
+    signal=learningSignal();
   const todayMinutes=tasks.reduce((a,x)=>a+Number(x.minutes||0),0);
   const completedMinutes=tasks.filter(x=>x.done).reduce((a,x)=>a+Number(x.minutes||0),0);
   const progress=todayMinutes?Math.min(100,Math.round(completedMinutes/todayMinutes*100)):0;
   const remaining=Math.max(0,todayMinutes-completedMinutes);
-  return '<section>'+
-    head("TODAY","Know what to do next.","StudySprint picks the highest-value unfinished session. You do not need to plan the next step yourself.",'<button class="btn primary" onclick="startNext()">Start next</button>')+
-    '<div class="today-signal"><div><span class="metric-label">TODAY</span><b>'+remaining+' min left</b><small>'+tasks.filter(x=>!x.done).length+' unfinished session'+(tasks.filter(x=>!x.done).length===1?'':'s')+'</small></div><div><span class="metric-label">NEXT EXAM</span><b>'+(ex[0]?(ex[0].days<0?Math.abs(ex[0].days)+"d ago":ex[0].days+"d"):"—")+'</b><small>'+(ex[0]?esc(ex[0].name):"Add an exam date in Subjects")+'</small></div><div><span class="metric-label">NEED HELP?</span><b>Ask Tutor</b><small>Get unstuck without leaving your study flow.</small><button class="text" onclick="view(&quot;tutor&quot;)">Open tutor →</button></div></div>'+
-    '<div class="cols"><div class="card"><div class="cardhead"><div><h2>Do this first</h2><p>Finish this before choosing anything else.</p></div><span class="pill">'+date(today())+'</span></div>'+
-    (tasks.length?tasks.map(task).join(""):'<div class="empty">Nothing is scheduled today. <button class="text" onclick="regen()">Refresh my plan</button></div>')+
-    '</div><div class="stack"><div class="card"><div class="cardhead"><h2>Coming next</h2><button class="text" onclick="view(&quot;plan&quot;)">Full plan</button></div>'+
-    (next.map(x=>'<div class="mini"><i></i><div><b>'+esc(x.topic)+'</b><small>'+esc(x.subject)+' · '+date(x.date)+' · '+x.minutes+'m</small></div></div>').join("")||'<div class="empty">You are caught up.</div>')+
-    '</div><div class="card dark"><div class="kicker">NEXT EXAM</div>'+
-    (ex[0]?'<div class="exam"><div><b>'+esc(ex[0].name)+'</b><small>'+date(ex[0].date)+'</small></div><strong>'+ex[0].days+'d</strong></div>':'<div class="empty">No exam date yet.</div>')+
-    '</div></div></div>'+
-    
-    '</section>';
+  const nextTask=tasks.find(x=>!x.done)||next[0];
+  const reason=nextTask?taskReason(nextTask):"You have no unfinished sessions right now.";
+  const examLabel=nextTask&&nextTask.examDate?(()=>{const d=StudySprintCore.daysUntil(nextTask.examDate);return d<0?Math.abs(d)+"d since exam":d===0?"Exam today":d+"d to exam"})():"No exam date";
+  return '<section class="command">'+
+    head("TODAY","Your next move is already chosen.","StudySprint turns your deadlines, confidence and practice evidence into one focused action.",'<button class="btn secondary" onclick="openSetup()">Edit plan</button>')+
+    '<div class="command-grid">'+
+      '<div class="hero-action">'+
+        '<div class="hero-top"><span class="eyebrow">RECOMMENDED NEXT</span><span class="live-dot">LIVE</span></div>'+
+        (nextTask?
+          '<div class="hero-subject">'+esc(nextTask.subject)+'</div><h2>'+esc(nextTask.topic)+'</h2><p>'+esc(reason)+'</p>'+
+          '<div class="hero-meta"><span>'+nextTask.minutes+' min</span><span>'+esc(examLabel)+'</span><span>'+esc(nextTask.done?"Complete":"Unfinished")+'</span></div>'+
+          '<div class="hero-actions"><button class="btn primary" onclick="startTask(\''+nextTask.id+'\',\''+nextTask.date+'\')">Start this session <span>→</span></button><button class="btn textbtn" onclick="view(\'practice\')">Practice instead</button></div>'
+        :
+          '<div class="hero-subject">ALL CAUGHT UP</div><h2>Your plan is clear.</h2><p>Rebuild your schedule if your available time or exam dates changed.</p><div class="hero-actions"><button class="btn primary" onclick="regen()">Rebuild my plan <span>→</span></button></div>')+
+      '</div>'+
+      '<aside class="signal-panel">'+
+        '<div class="signal-head"><span class="eyebrow">LEARNING SIGNAL</span><span>'+signal.accuracy+'%</span></div>'+
+        '<div class="signal-number">'+(signal.topics.length?signal.accuracy+"%":"—")+'</div>'+
+        '<p>'+ (signal.attempts?signal.correct+" correct from "+signal.attempts+" practice attempts.":"Practice creates the evidence StudySprint uses to adapt your plan.")+'</p>'+
+        '<div class="signal-row"><span>Weak topics</span><b>'+signal.topics.filter(t=>Number(t.confidence||3)<=2).length+'</b></div>'+
+        '<div class="signal-row"><span>Reviews due</span><b>'+state.data.plan.filter(x=>x.kind==="review"&&!x.done&&x.date<=today()).length+'</b></div>'+
+        '<div class="signal-row"><span>Today left</span><b>'+remaining+'m</b></div>'+
+      '</aside>'+
+    '</div>'+
+    '<div class="command-strip">'+
+      '<div><span>DAY PROGRESS</span><b>'+progress+'%</b><i><em style="width:'+progress+'%"></em></i></div>'+
+      '<div><span>NEXT EXAM</span><b>'+(ex[0]?(ex[0].days<0?Math.abs(ex[0].days)+"d ago":ex[0].days===0?"Today":ex[0].days+"d"):"—")+'</b><small>'+(ex[0]?esc(ex[0].name):"Add an exam date")+'</small></div>'+
+      '<div><span>FOCUS TIME</span><b>'+Number(state.data.focus.minutes||0)+'m</b><small>'+Number(state.data.focus.sessions||0)+' sessions</small></div>'+
+      '<div><span>WEAK TOPIC</span><b>'+(signal.weak?esc(signal.weak.name):"None flagged")+'</b><small>'+(signal.weak?"Needs another retrieval":"Keep building evidence")+'</small></div>'+
+    '</div>'+
+    '<div class="today-lower">'+
+      '<div class="timeline-panel"><div class="section-title"><div><span class="eyebrow">TODAY</span><h2>Your study queue</h2></div><button class="text" onclick="view(\'plan\')">View full plan →</button></div>'+
+      (tasks.map(task).join("")||'<div class="empty">No sessions scheduled today. <button class="text" onclick="regen()">Rebuild the plan →</button></div>')+
+      '</div>'+
+      '<div class="next-panel"><div class="section-title"><div><span class="eyebrow">UP NEXT</span><h2>Keep moving</h2></div></div>'+
+      (next.map(x=>'<button class="next-item" onclick="startTask(\''+x.id+'\',\''+x.date+'\')"><span class="next-index">→</span><span><b>'+esc(x.topic)+'</b><small>'+esc(x.subject)+' · '+date(x.date)+' · '+x.minutes+'m</small></span></button>').join("")||'<div class="empty">Nothing waiting.</div>')+
+      '</div>'+
+    '</div>'+
+  '</section>';
 }
-function task(x){const examDays=typeof StudySprintCore!=="undefined"&&x.examDate?StudySprintCore.daysUntil(x.examDate):null;const examLabel=examDays===null?"exam date not set":examDays<0?Math.abs(examDays)+"d since exam":examDays===0?"exam today":examDays===1?"exam tomorrow":examDays+"d to exam";return `<div class="task ${x.done?"done":""}"><button class="check" onclick="toggle('${x.id}','${x.date}')" aria-label="${x.done?"Mark incomplete":"Mark complete"}">${x.done?"✓":""}</button><div class="grow"><small>${esc(x.subject)}</small><b>${esc(x.topic)}</b><span>${x.minutes} min · ${examLabel}</span></div><button class="btn small" onclick="startTask('${x.id}','${x.date}')">${x.done?"Review":"Start"}</button></div>`}
+function taskfunction task(x){const examDays=typeof StudySprintCore!=="undefined"&&x.examDate?StudySprintCore.daysUntil(x.examDate):null;const examLabel=examDays===null?"exam date not set":examDays<0?Math.abs(examDays)+"d since exam":examDays===0?"exam today":examDays===1?"exam tomorrow":examDays+"d to exam";return `<div class="task ${x.done?"done":""}"><button class="check" onclick="toggle('${x.id}','${x.date}')" aria-label="${x.done?"Mark incomplete":"Mark complete"}">${x.done?"✓":""}</button><div class="grow"><small>${esc(x.subject)}</small><b>${esc(x.topic)}</b><span>${x.minutes} min · ${examLabel}</span></div><button class="btn small" onclick="startTask('${x.id}','${x.date}')">${x.done?"Review":"Start"}</button></div>`}
 function planPage(){const groups={};state.data.plan.forEach(x=>(groups[x.date]??=[]).push(x));return `<section>${head("PLAN","Your roadmap.","Today tells you what to do. Plan lets you inspect the full schedule and rebuild it when your inputs change.",`<button class="btn secondary" onclick="regen()">Rebuild plan</button>`)}<div class="days">${Object.keys(groups).sort().map(d=>`<div class="day card"><div class="dayhead"><b>${d===today()?"Today":date(d)}</b><span>${groups[d].reduce((a,x)=>a+x.minutes,0)} min</span></div>${groups[d].map(task).join("")}</div>`).join("")}</div></section>`}
 function subjectsPage(){
   const subjects=state.data.subjects.filter(s=>s&&s.name);

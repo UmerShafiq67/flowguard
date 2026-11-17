@@ -89,8 +89,9 @@ function makeMessages(body) {
     const data = String(attachment.data || "");
     const isImage = type.startsWith("image/");
     const isPdf = type === "application/pdf" || /\\.pdf$/i.test(name);
-    if (!data || (!isImage && !isPdf)) {
-      return { error: "StudySprint supports image and PDF attachments only." };
+    const isText = type === "text/plain" || type === "text/markdown" || /\\.(txt|md)$/i.test(name);
+    if (!data || (!isImage && !isPdf && !isText)) {
+      return { error: "StudySprint supports images, PDFs, and plain-text/Markdown study files." };
     }
     if (data.length > 10_500_000) {
       return { error: "That file is too large. Please use an image or PDF under 8 MB." };
@@ -115,6 +116,12 @@ function makeMessages(body) {
     const content = [{ type: "text", text: message }];
     if (type.startsWith("image/")) {
       content.push({ type: "image_url", image_url: { url: data } });
+    } else if (type === "text/plain" || type === "text/markdown" || /\\.(txt|md)$/i.test(name)) {
+      let decoded = data;
+      try {
+        if (data.startsWith("data:")) decoded = atob(data.split(",")[1] || "");
+      } catch {}
+      content[0].text += "\\n\\nAttached study text (use it as the source of truth):\\n" + clean(decoded, 12000);
     } else {
       content.push({
         type: "file",

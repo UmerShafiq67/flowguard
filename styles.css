@@ -641,3 +641,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
  .landing{padding:0 16px}.landingbar{height:68px}.landingmeta>span{display:none}.landinghero{padding:78px 0 70px}.landinghero h1{font-size:clamp(46px,14vw,74px)}.landinghero p{font-size:13px}.landingactions{align-items:flex-start;flex-direction:column}.landingrail{grid-template-columns:1fr}.landingrail>div{border-right:0;border-bottom:1px solid #e7e8ea;padding:18px 0}.landingrail>div:last-child{border-bottom:0}.landingbottom{flex-wrap:wrap}.landingbottom b{display:none}
 }
 @media(max-width:520px){.app-main{padding:24px 13px 86px}.head h1{font-size:34px}.landinghero{padding-top:62px}.landinghero h1{font-size:48px}.landingeyebrow span{display:none}.landingactions .btn{width:100%}.landingactions>span{max-width:none}.signal-number{font-size:46px!important}}
+
+/* FINAL MONOCHROME LOCK — no colored UI surfaces */
+html,body,#app,.app-main,.landing{filter:grayscale(1)}
+*{accent-color:#111315}

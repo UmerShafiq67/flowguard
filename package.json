@@ -1,1 +1,1 @@
-{"name":"studysprint","private":true,"version":"1.0.0","description":"StudySprint — exam planning and daily study execution","scripts":{"test":"node study-core.test.js && node core.test.js && node worker.test.js","start":"node server.js"}}
+{"name":"studysprint","private":true,"version":"1.0.0","description":"StudySprint — exam planning and daily study execution","scripts":{"test":"node study-core.test.js && node core.test.js && node worker.test.js && node product.test.js","start":"node server.js"}}

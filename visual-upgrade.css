@@ -261,3 +261,10 @@ body{
 @media(max-width:800px){
   .appbar{background:linear-gradient(135deg,#21144f,#5130c5,#087f94)!important}
 }
+
+
+/* V15 — remove legacy monochrome filter from the shipped UI */
+html,body,#app,.app-main,.landing,.v6-landing{
+  filter:none!important;
+  -webkit-filter:none!important;
+}

@@ -74,7 +74,7 @@ const __STUDYSPRINT_V3_STYLE="<style>\n.progress-grid{display:grid;grid-template
 
   function registerPWA(){
     try{
-      if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js").catch(()=>{});
+      if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js").then(r=>r.update()).catch(()=>{});
       const online=()=>document.documentElement.classList.toggle("offline-mode",!navigator.onLine);
       addEventListener("online",online);addEventListener("offline",online);online();
     }catch{}

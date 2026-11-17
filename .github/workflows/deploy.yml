@@ -27,7 +27,8 @@ jobs:
           node --check study-core.js
           node --check config.js
           node --check maxi-plus.js
-          node --check worker.js
+          cp worker.js /tmp/studysprint-worker.mjs
+          node --check /tmp/studysprint-worker.mjs
           node --check enhancements.js
       - name: Check required files
         run: |

@@ -33,9 +33,9 @@ function shell(c){
   const desktopNav=[["today","Today"],["plan","My plan"],["practice","Practice"],["tutor","Tutor"],["review","Review"],["progress","Progress"]];
   const mobileNav=[["today","Today","⌂"],["plan","Plan","◷"],["practice","Practice","✎"],["tutor","Tutor","✦"],["review","Review","✓"],["progress","Progress","◌"]];
   return '<header class="appbar">'+
-    '<button class="brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo">S</span><span>StudySprint</span></button>'+
+    '<button class="brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo">S</span><span class="brand-copy"><b>StudySprint</b><small>adaptive learning</small></span></button>'+
     '<nav class="desktop-nav" aria-label="StudySprint pages">'+desktopNav.map(([v,t])=>nav(v,t,"")).join("")+'</nav>'+
-    '<div class="topright"><button class="utility-link" onclick="view(\'subjects\')">Subjects</button><button class="utility-link" onclick="view(\'account\')">Account</button><span class="saved">● Saved locally</span><button class="ghost plus-link" onclick="openPremium()">Plus</button><button class="ghost edit-plan" onclick="openSetup()">Edit plan</button></div>'+
+    '<div class="topright"><button class="utility-link" onclick="view(\'subjects\')">Subjects</button><button class="utility-link" onclick="view(\'account\')">Account</button><span class="saved"><i></i> Saved</span><button class="ghost plus-link" onclick="openPremium()">Plus</button><button class="ghost edit-plan" onclick="openSetup()">Edit plan</button></div>'+
   '</header>'+
   '<main class="app-main view-'+state.view+'">'+c+'</main>'+
   '<nav class="mobile-nav" aria-label="StudySprint pages">'+mobileNav.map(([v,t,i])=>nav(v,t,i)).join("")+'</nav>'+
@@ -47,15 +47,15 @@ function head(k,t,p,a=""){
 }
 function onboardingPage(){
   return '<section class="landing">'+
-    '<header class="landingbar"><button class="landingbrand" onclick="view(\'today\')"><span class="landinglogo">S</span><span>StudySprint</span></button><div class="landingmeta"><span>ADAPTIVE LEARNING SYSTEM</span><button class="landinglink" onclick="openSetup()">Get started →</button></div></header>'+
+    '<header class="landingbar"><button class="landingbrand" onclick="view(\'today\')"><span class="landinglogo">S</span><span><b>StudySprint</b><small>adaptive learning</small></span></button><div class="landingmeta"><span>LEARNING SYSTEM · 01</span><button class="landinglink" onclick="openSetup()">Get started <b>↗</b></button></div></header>'+
     '<div class="landinghero">'+
-      '<div class="landingeyebrow"><i></i> PERSONAL STUDY INTELLIGENCE</div>'+
-      '<h1>Study less randomly.<br><span>Learn with a system.</span></h1>'+
-      '<p>StudySprint turns your subjects, deadlines, confidence and practice results into one adaptive plan — then tells you exactly what to do next.</p>'+
-      '<div class="landingactions"><button class="btn primary" onclick="openSetup()">Build my study plan <span>→</span></button><span>Free to start · local-first · works offline</span></div>'+
+      '<div class="landingeyebrow"><i></i> PERSONAL STUDY INTELLIGENCE <span>BUILT AROUND EVIDENCE</span></div>'+
+      '<h1>Your study plan should<br><em>think with you.</em></h1>'+
+      '<p>StudySprint connects what you need to learn, how confident you are, when your exams arrive, and what you can actually prove — then chooses the next useful step.</p>'+
+      '<div class="landingactions"><button class="btn primary" onclick="openSetup()">Build my study system <span>↗</span></button><span>No complicated setup. Start free. Your data stays yours.</span></div>'+
     '</div>'+
-    '<div class="landingrail"><div><small>01</small><b>PLAN</b><span>Set subjects, topics and deadlines.</span></div><div><small>02</small><b>PROVE</b><span>Practice creates evidence of what you know.</span></div><div><small>03</small><b>ADAPT</b><span>Your next session changes with the evidence.</span></div></div>'+
-    '<div class="landingbottom"><span>DECIDE</span><i>→</i><span>LEARN</span><i>→</i><span>PROVE</span><i>→</i><span>REVIEW</span><i>→</i><span>ADAPT</span></div>'+
+    '<div class="landingrail"><div><small>01</small><b>DECIDE</b><span>Turn subjects, confidence and deadlines into a realistic roadmap.</span></div><div><small>02</small><b>PROVE</b><span>Practice answers become evidence of what you actually know.</span></div><div><small>03</small><b>ADAPT</b><span>The next session changes when your learning signal changes.</span></div></div>'+
+    '<div class="landingbottom"><span>PLAN</span><i>→</i><span>LEARN</span><i>→</i><span>PROVE</span><i>→</i><span>REVIEW</span><i>→</i><span>ADAPT</span><b>01—05</b></div>'+
   '</section>';
 }
 function learningSignal(){

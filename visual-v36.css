@@ -52,3 +52,4 @@
  .v36-scroll span:after,.v36-pulse span{animation:none!important}
  .v36-ready .v34-tool,.v36-ready .v34-problem-grid article,.v36-ready .v34-signal-card,.v36-ready .v34-next,.v36-ready .v34-sticker{transition:none!important}
 }
+.v36-ready .logo{display:flex!important;align-items:center;justify-content:center;overflow:hidden}.v36-ready .logo img{width:28px;height:28px;display:block;filter:none;box-shadow:none}

@@ -13,8 +13,12 @@ assert.match(app,/packContext/);
 assert.match(app,/sourcePackId/);
 assert.match(index,/visual-v35\.css\?v=36/);
 assert.match(index,/visual-v35\.js\?v=36/);
+assert.match(index,/visual-v36\.css\?v=36/);
+assert.match(index,/visual-v36\.js\?v=36/);
 assert.match(sw,/studysprint-shell-v56-v36/);
 assert.match(sw,/visual-v35\.css\?v=36/);
-assert.match(sw,/visual-v35\.js\?v=36/);\nassert.match(index,/visual-v36\\.css\\?v=36/);\nassert.match(index,/visual-v36\\.js\\?v=36/);\nassert.match(sw,/visual-v36\\.css\\?v=36/);\nassert.match(sw,/visual-v36\\.js\\?v=36/);
+assert.match(sw,/visual-v35\.js\?v=36/);
+assert.match(sw,/visual-v36\.css\?v=36/);
+assert.match(sw,/visual-v36\.js\?v=36/);
 
 console.log("StudySprint product integration tests: PASS");

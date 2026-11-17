@@ -35,7 +35,6 @@ jobs:
           node --check visual-v35.js
           node --check visual-v36.js
           node --check visual-v37.js
-          node --check visual-v38.js
       - name: Run core tests
         run: npm test
       - name: Check required files

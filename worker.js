@@ -257,17 +257,9 @@ async function billingWebhook(request, env) {
   const inactive = inactiveStatus;
 
   const eventId = clean(body?.event_id || body?.notification_id, 120);
-  if (eventId) {
-    const seenKey = "billing-event:" + eventId;
-    if (await env.STUDYSPRINT_ENTITLEMENTS.get(seenKey)) {
-      return json({ ok: true, duplicate: true });
-    }
-    /*
-     * Mark the event only after signature, identity, storage, and product
-     * validation have succeeded. Invalid/misconfigured deliveries can then
-     * be retried safely instead of being permanently swallowed.
-     */
-    await env.STUDYSPRINT_ENTITLEMENTS.put(seenKey, "1", { expirationTtl: 604800 });
+  const seenKey = eventId ? "billing-event:" + eventId : "";
+  if (seenKey && await env.STUDYSPRINT_ENTITLEMENTS.get(seenKey)) {
+    return json({ ok: true, duplicate: true });
   }
 
   const occurredAt = clean(body?.occurred_at, 50) || new Date().toISOString();
@@ -304,6 +296,9 @@ async function billingWebhook(request, env) {
   };
 
   await env.STUDYSPRINT_ENTITLEMENTS.put(key, JSON.stringify(record));
+  if (seenKey) {
+    await env.STUDYSPRINT_ENTITLEMENTS.put(seenKey, "1", { expirationTtl: 604800 });
+  }
   return json({ ok: true, plan: record.plan, status: record.status });
 }
 

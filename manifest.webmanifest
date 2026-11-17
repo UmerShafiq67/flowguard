@@ -3,8 +3,8 @@
   "short_name": "StudySprint",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f5f7fb",
-  "theme_color": "#f5f7fb",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "description": "An adaptive study system that turns learning evidence into your next best study action.",
   "icons": [
     {

@@ -1,5 +1,5 @@
-const CACHE="studysprint-shell-v38-v18";
-const ASSETS=["./","./index.html","./styles.css?v=18","./design-v2.css?v=18","./design-v3.css?v=18","./config.js?v=18","./study-core.js?v=18","./app.js?v=18","./maxi-plus.js?v=18","./enhancements.js?v=18","./manifest.webmanifest","./icon.svg","./icon-maskable.svg","./account.js?v=18","./terms.html","./privacy.html","./refund.html","./contact.html","./pricing.html" ,"./visual-upgrade.css?v=18","./visual-upgrade.js?v=18"];
+const CACHE="studysprint-shell-v39-v19";
+const ASSETS=["./","./index.html","./styles.css?v=19","./design-v2.css?v=19","./design-v3.css?v=19","./config.js?v=19","./study-core.js?v=19","./app.js?v=19","./maxi-plus.js?v=19","./enhancements.js?v=19","./manifest.webmanifest","./icon.svg","./icon-maskable.svg","./account.js?v=19","./terms.html","./privacy.html","./refund.html","./contact.html","./pricing.html" ,"./visual-upgrade.css?v=19","./visual-upgrade.js?v=19"];
 self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener("fetch",e=>{

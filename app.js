@@ -38,19 +38,17 @@ function head(k,t,p,a=""){
   return `<div class="head"><div><div class="kicker">${k}</div><h1>${t}</h1><p>${p}</p>${g?`<div class="page-guide"><span>WHAT THIS PAGE DOES</span><b>${g[0]}</b><small>${g[1]}</small></div>`:""}</div>${a}</div>`;
 }
 function onboardingPage(){
-  return '<section class="welcome">'+
-    '<div class="welcome-hero">'+
-      '<div class="welcome-copy">'+
-        '<span class="hero-badge"><i></i> ADAPTIVE STUDY ENGINE</span>'+
-        '<h1>Study smarter.<br><em>Know what to do next.</em></h1>'+
-        '<p>StudySprint turns your subjects, deadlines, confidence, and practice results into one living study plan — so you spend less time planning and more time actually learning.</p>'+
-        '<div class="welcome-actions"><button class="btn primary" onclick="openSetup()">Build my study plan <span>→</span></button><span class="hero-note">Free to start · local-first · works offline</span></div>'+
-      '</div>'+
-      '<div class="welcome-orbit" aria-hidden="true"><div class="orbit-ring r1"></div><div class="orbit-ring r2"></div><div class="orbit-core"><span>S</span><small>LEARN</small></div><div class="orbit-dot d1"></div><div class="orbit-dot d2"></div><div class="orbit-dot d3"></div></div>'+
+  return '<section class="landing">'+
+    '<header class="landingbar"><button class="landingbrand" onclick="view(\'today\')"><span class="landinglogo">S</span><span>StudySprint</span></button><div class="landingmeta"><span>ADAPTIVE LEARNING SYSTEM</span><button class="landinglink" onclick="openSetup()">Get started →</button></div></header>'+
+    '<div class="landinghero">'+
+      '<div class="landingeyebrow"><i></i> PERSONAL STUDY INTELLIGENCE</div>'+
+      '<h1>Study less randomly.<br><span>Learn with a system.</span></h1>'+
+      '<p>StudySprint turns your subjects, deadlines, confidence and practice results into one adaptive plan — then tells you exactly what to do next.</p>'+
+      '<div class="landingactions"><button class="btn primary" onclick="openSetup()">Build my study plan <span>→</span></button><span>Free to start · local-first · works offline</span></div>'+
     '</div>'+
-    '<div class="welcome-steps"><div><span>01</span><b>Tell it what matters</b><small>Subjects, topics, confidence and exam dates.</small></div><div><span>02</span><b>Prove what you know</b><small>Practice questions create real learning evidence.</small></div><div><span>03</span><b>Let the plan adapt</b><small>Weak and urgent topics rise when they need you.</small></div></div>'+
-    '<div class="welcome-proof"><div><span class="proof-icon">↗</span><div><b>Adaptive, not static</b><small>Your next session changes as your evidence changes.</small></div></div><div><span class="proof-icon">✓</span><div><b>Built around retrieval</b><small>Practice and review matter more than simply running a timer.</small></div></div><div><span class="proof-icon">⌁</span><div><b>Your data stays yours</b><small>Local-first storage, exportable backups, optional cloud sync.</small></div></div></div>'+
-    '</section>';
+    '<div class="landingrail"><div><small>01</small><b>PLAN</b><span>Set subjects, topics and deadlines.</span></div><div><small>02</small><b>PROVE</b><span>Practice creates evidence of what you know.</span></div><div><small>03</small><b>ADAPT</b><span>Your next session changes with the evidence.</span></div></div>'+
+    '<div class="landingbottom"><span>DECIDE</span><i>→</i><span>LEARN</span><i>→</i><span>PROVE</span><i>→</i><span>REVIEW</span><i>→</i><span>ADAPT</span></div>'+
+  '</section>';
 }
 function learningSignal(){
   const topics=state.data.subjects.flatMap(s=>(s.topics||[]).map(t=>({...t,subject:s.name})));

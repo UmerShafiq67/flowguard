@@ -339,3 +339,109 @@ body{background:#fff;color:#111;font-family:Inter,ui-sans-serif,system-ui,-apple
 @media(max-width:520px){
   .head h1{font-size:32px}
 }
+
+/* =========================================================
+   STUDYSPRINT // FUTURE WHITE SYSTEM
+   A deliberate redesign: editorial, monochrome, spacious.
+   ========================================================= */
+:root{
+  --bg:#ffffff;--white:#fff;--text:#0b0c0e;--muted:#73777d;--line:#e8e9eb;
+  --blue:#0b0c0e;--green:#0b0c0e;--yellow:#0b0c0e;--soft:#f6f6f7;
+  --panel:#fff;--shadow:0 1px 0 rgba(0,0,0,.02);
+}
+*{box-sizing:border-box}
+html,body{background:#fff!important;color:#0b0c0e}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;letter-spacing:-.01em}
+button,input,textarea,select{font:inherit}
+button{transition:background .16s ease,border-color .16s ease,transform .16s ease}
+.top{height:72px!important;background:#fff!important;border-bottom:1px solid #e8e9eb!important;padding:0 34px!important;box-shadow:none!important;backdrop-filter:none!important}
+.brand{font-size:15px!important;font-weight:800!important;letter-spacing:-.03em!important;color:#0b0c0e!important}
+.logo{width:28px!important;height:28px!important;border-radius:7px!important;background:#0b0c0e!important;color:#fff!important;font-size:12px!important}
+.topright{gap:8px!important}
+.saved{font-size:10px!important;color:#8a8e94!important}
+.topright .ghost{border:1px solid #e4e5e7!important;background:#fff!important;color:#111!important;border-radius:7px!important;padding:8px 12px!important}
+.topright .ghost:hover{background:#f5f5f6!important}
+.layout{grid-template-columns:224px minmax(0,1fr)!important;background:#fff}
+.side{background:#fff!important;border-right:1px solid #e8e9eb!important;padding:28px 14px!important}
+.navgroup{margin-bottom:28px!important}
+.navlabel{padding:0 12px 9px!important;font-size:8px!important;letter-spacing:.18em!important;color:#a0a3a7!important}
+.nav{width:100%;display:flex;align-items:center;gap:10px;background:transparent!important;color:#74787d!important;border:0!important;border-radius:7px!important;padding:10px 12px!important;margin:2px 0!important;font-size:11px!important;text-align:left}
+.nav span{width:17px;opacity:.75;filter:grayscale(1)}
+.nav.active{background:#f2f2f3!important;color:#0b0c0e!important;font-weight:750!important}
+.nav:hover{background:#f7f7f8!important;color:#0b0c0e!important}
+.sidefoot{border-top:1px solid #e8e9eb!important;padding:18px 12px!important;color:#92959a!important}
+.sidefoot b{font-size:11px!important;color:#0b0c0e!important}
+.sidefoot span{font-size:9px!important;line-height:1.5!important}
+.main{max-width:1280px!important;padding:46px 54px 72px!important;margin:0 auto}
+.head{margin-bottom:26px!important}
+.kicker,.metric-label,.sessionlabel{font-size:8px!important;letter-spacing:.18em!important;color:#999da2!important;font-weight:800!important}
+.head h1{font-size:44px!important;line-height:1.02!important;letter-spacing:-.055em!important;font-weight:800!important;color:#0b0c0e!important;margin:7px 0!important}
+.head p{font-size:12px!important;line-height:1.6!important;color:#777b80!important;max-width:650px}
+.page-guide,.pagehint{background:#fff!important;border:1px solid #e7e8ea!important;box-shadow:none!important;border-radius:8px!important}
+.page-guide{max-width:680px!important;padding:11px 13px!important}
+.page-guide span{font-size:8px!important;color:#a0a3a7!important}
+.page-guide b{font-size:11px!important}
+.page-guide small{font-size:10px!important;color:#777b80!important}
+.pagehint{padding:10px 12px!important}
+.pagehint b{font-size:10px!important}.pagehint span{font-size:9px!important;color:#888c91!important}
+.stats{gap:10px!important}
+.stats>div{background:#fff!important;border:1px solid #e6e7e9!important;border-radius:9px!important;box-shadow:none!important;padding:18px!important}
+.stats small{font-size:8px!important;letter-spacing:.14em!important;color:#a0a3a7!important}
+.stats b{font-size:25px!important;letter-spacing:-.04em!important;color:#0b0c0e!important}
+.stats span{font-size:9px!important;color:#85898e!important}
+.card{background:#fff!important;border:1px solid #e6e7e9!important;border-radius:10px!important;box-shadow:none!important;padding:22px!important}
+.card h2{font-size:16px!important;letter-spacing:-.03em!important;color:#0b0c0e!important}
+.cardhead p{font-size:10px!important;color:#85898e!important}
+.task,.mini,.rule,.topic,.mistake,.setupsub{border-color:#ececee!important}
+.task{padding:13px 0!important}
+.task:hover,.mini:hover{background:#fafafa!important}
+.grow small,.grow span,.mini small,.subject small{font-size:9px!important;color:#85898e!important}
+.grow b,.mini b{font-size:11px!important;color:#111!important}
+.check{border:1px solid #d4d6d9!important;background:#fff!important}
+.done .check{background:#111!important;border-color:#111!important}
+.btn{border-radius:7px!important;font-weight:750!important;letter-spacing:-.01em!important}
+.primary{background:#0b0c0e!important;color:#fff!important;border:1px solid #0b0c0e!important}
+.primary:hover{background:#2a2b2d!important;transform:translateY(-1px)}
+.secondary{background:#fff!important;color:#111!important;border:1px solid #dfe1e3!important}
+.secondary:hover{background:#f6f6f7!important}
+.small{background:#f4f4f5!important;color:#111!important;border:1px solid #e6e7e9!important}
+.text,.ghost{color:#111!important}
+.pill{background:#f4f4f5!important;color:#777!important;border:0!important}
+.callout,.focusstat,.feedback,.practice-result,.setup-guide,.conversion-card,.adaptive-hero{background:#f7f7f7!important;border-color:#e7e8ea!important;box-shadow:none!important}
+.subject>span,.welcomeicon,.proof-icon,.practice-subject-icon{background:#f1f1f2!important;color:#111!important}
+.dark{background:#0b0c0e!important;color:#fff!important;border-color:#0b0c0e!important}
+.dark .kicker{color:#aeb0b4!important}
+.choice,.mode,.upload,.tutor-quiz-card{background:#fff!important;border-color:#dedfe2!important}
+.choice.active,.mode.selected{background:#f1f1f2!important;color:#111!important;border-color:#cfd1d4!important}
+.modal-backdrop{background:#0b0c0e66!important}
+.modal{background:#fff!important;border:1px solid #e1e2e4!important;box-shadow:0 28px 80px #0000001c!important;border-radius:12px!important}
+.modal input,.formrow input,.confrow select,.topicedit input,.topicedit select,.examedit input,.editorhead input,.quick-topic input,.quick-topic select,.exam-simple input,.composer textarea,.tutor-quiz-answer,.practicecard textarea{background:#fff!important;border-color:#dcdde0!important;color:#111!important;border-radius:7px!important}
+.toast{background:#0b0c0e!important}
+.plan-summary>div{background:#fff!important;border-color:#e6e7e9!important;border-radius:9px!important}
+.progress-topic i{background:#ededee!important}.progress-topic i em{background:#111!important}
+.mobile-nav{background:#fff!important;border-top:1px solid #e6e7e9!important;backdrop-filter:none!important}
+.mobile-nav .nav.active{background:#f1f1f2!important}
+.conversion-card,.conversion-points>div{background:#fff!important;border-color:#e4e5e7!important}
+.bubble.ai,.bubble.user{background:#f4f4f5!important;color:#111!important}
+.study-visual,.visual-flow span,.setup-guide>div,.simple-examples b{background:#fff!important;border-color:#e4e5e7!important}
+.welcome-hero{background:#fff!important;border:0!important;box-shadow:none!important}
+.welcome-orbit{display:none!important}
+.welcome-steps>div,.welcome-proof>div{background:#fff!important;border:1px solid #e5e6e8!important;box-shadow:none!important}
+@media(max-width:760px){.top{padding:0 18px!important}.side{display:none!important}.layout{display:block!important}.main{padding:30px 18px 96px!important}.head h1{font-size:36px!important}.mobile-nav{display:flex!important}.topright .saved{display:none!important}}
+
+/* Landing page — intentionally separate from the app shell. */
+.landing{min-height:100vh;background:#fff;color:#0b0c0e;padding:0 5vw 42px}
+.landingbar{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ececee}
+.landingbrand{display:flex;align-items:center;gap:10px;background:none;border:0;color:#0b0c0e;font-size:15px;font-weight:800;letter-spacing:-.03em}
+.landinglogo{display:grid;place-items:center;width:29px;height:29px;background:#0b0c0e;color:#fff;border-radius:7px;font-size:12px}
+.landingmeta{display:flex;align-items:center;gap:25px}.landingmeta span{font-size:8px;letter-spacing:.18em;color:#a0a3a7;font-weight:800}.landinglink{border:0;background:none;color:#111;font-size:10px;font-weight:750}
+.landinghero{max-width:1000px;padding:clamp(80px,12vh,150px) 0 82px}
+.landingeyebrow{display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.18em;font-weight:800;color:#898d92}.landingeyebrow i{width:6px;height:6px;border-radius:50%;background:#111}
+.landinghero h1{font-size:clamp(52px,7.5vw,108px);line-height:.93;letter-spacing:-.075em;margin:22px 0 28px;font-weight:850;max-width:1000px}.landinghero h1 span{color:#a0a3a7}
+.landinghero p{font-size:15px;line-height:1.65;color:#6f7378;max-width:650px;margin:0}
+.landingactions{display:flex;align-items:center;gap:18px;margin-top:34px}.landingactions>span{font-size:9px;color:#999da2}
+.landingactions .btn{padding:12px 17px}
+.landingrail{border-top:1px solid #e5e6e8;border-bottom:1px solid #e5e6e8;display:grid;grid-template-columns:repeat(3,1fr)}
+.landingrail>div{padding:25px 22px;border-right:1px solid #e5e6e8}.landingrail>div:last-child{border-right:0}.landingrail small{display:block;font-size:8px;color:#a0a3a7;margin-bottom:20px}.landingrail b{display:block;font-size:11px;letter-spacing:.12em;margin-bottom:6px}.landingrail span{font-size:10px;color:#777b80;line-height:1.5}
+.landingbottom{display:flex;align-items:center;gap:15px;margin-top:35px;font-size:8px;letter-spacing:.2em;color:#92969b;font-weight:800}.landingbottom i{font-style:normal;color:#c0c2c5}
+@media(max-width:700px){.landing{padding:0 20px 30px}.landingbar{height:64px}.landingmeta span{display:none}.landinghero{padding:72px 0 64px}.landinghero h1{font-size:48px}.landinghero p{font-size:13px}.landingactions{align-items:flex-start;flex-direction:column}.landingrail{grid-template-columns:1fr}.landingrail>div{border-right:0;border-bottom:1px solid #e5e6e8}.landingrail>div:last-child{border-bottom:0}.landingbottom{flex-wrap:wrap;gap:10px}}

@@ -425,3 +425,22 @@ body{
   .topright .plus-link{padding:8px 9px!important}
   .topright .utility-link[onclick*="account"]{padding:8px 9px!important}
 }
+
+
+/* V18 — accessibility + interaction finish
+   Keyboard focus, touch targets, and readable controls should feel as deliberate as the visuals. */
+:where(button,a,input,select,textarea):focus-visible{
+  outline:3px solid rgba(24,205,232,.72)!important;
+  outline-offset:3px!important;
+}
+:where(.btn,.mobile-nav .nav,.desktop-nav .nav,.topright .utility-link,.topright .ghost){
+  min-height:42px;
+}
+.mobile-nav .nav{min-height:48px!important}
+button:disabled{cursor:not-allowed!important}
+input::placeholder,textarea::placeholder{color:#8b93aa!important}
+@media(max-width:560px){
+  .topright .utility-link[onclick*="account"],
+  .topright .plus-link{min-height:38px!important}
+  .btn{min-height:44px!important}
+}

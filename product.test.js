@@ -33,4 +33,8 @@ console.log("StudySprint product integration tests: PASS");
 
 assert.match(app,/function accountPage\(\)/);
 assert.match(app,/state\.view==="account"\?accountPage\(\)/);
-assert.match(app,/if\(state\.practice\.packId\)return base/);
+assert.match(app,/if\(state\.practice\.packId\)return base/);\nassert.match(app,/source:"tutor-quiz",sourcePackId:packId/);
+assert.match(app,/kind:"evidence-review"/);
+assert.match(app,/pack.reviewDate=today\(\)/);
+assert.match(app,/const preserved=oldPlan\.filter/);
+

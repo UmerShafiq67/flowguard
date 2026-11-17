@@ -49,6 +49,18 @@
     return html.slice(0,html.lastIndexOf(marker))+extra+marker;
   };
   window.reviewPage=function(){
+  function learningSnapshot(){
+    const topics=allTopics();
+    const attempts=Number(state.data.practice?.attempts||0);
+    const correct=Number(state.data.practice?.correct||0);
+    const accuracy=attempts?Math.round(correct/attempts*100):0;
+    const weak=topics.filter(t=>Number(t.confidence||3)<=2);
+    const strong=topics.filter(t=>Number(t.confidence||3)>=4);
+    const plan=Array.isArray(state.data.plan)?state.data.plan:[];
+    const due=plan.filter(x=>x&&!x.done&&x.date<=today()).length;
+    return {topics,attempts,correct,accuracy,weak,strong,due};
+  }
+
     const s=learningSnapshot(), weak=s.weak.slice().sort((a,b)=>Number(a.confidence||3)-Number(b.confidence||3)), mistakes=state.data.mistakes||[], r=readinessPlus(), due=dueReviews();
     return '<section>'+head("REVIEW","Your learning evidence.","See what is weak, what is improving, and whether your preparation is actually holding up.",'<button class="btn primary" onclick="view(\'practice\')">Practice weak topics</button>')+
       readinessCard()+

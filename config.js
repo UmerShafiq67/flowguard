@@ -6,10 +6,11 @@ window.STUDYSPRINT_BILLING = {
   environment: "sandbox",
   clientToken: "",
   plusPriceId: "",
-  currencyLabel: "USD",
-  // Keep "sandbox" until the Paddle integration has been tested end-to-end.
-  // Production uses a live_ client token and the live Plus price ID.
-  environment: "sandbox"
+  currencyLabel: "USD"
+};
+
+/* Keep sandbox until the Paddle integration has been tested end-to-end.
+   Production uses a live_ client token and the live Plus price ID. */
 };
 
 // Account sync uses Supabase when these public browser values are configured.

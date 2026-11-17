@@ -129,7 +129,7 @@ function todayPage(){
       '<div class="next-panel"><div class="section-title"><div><span class="eyebrow">UP NEXT</span><h2>Keep moving</h2></div></div>'+
       (next.map(x=>'<button class="next-item" onclick="startTask(\''+x.id+'\',\''+x.date+'\')"><span class="next-index">→</span><span><b>'+esc(x.topic)+'</b><small>'+esc(x.subject)+' · '+date(x.date)+' · '+x.minutes+'m</small></span></button>').join("")||'<div class="empty">Nothing waiting.</div>')+
       '</div>'+
-    '</div>'+
+    '</div>'+packCard+
   '</section>'+pageQuote("The expert in anything was once a beginner.","Helen Hayes");
 
 }

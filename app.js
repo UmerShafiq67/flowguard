@@ -4,7 +4,7 @@ const DATA_VERSION=2;
 const API_BASE=window.STUDYSPRINT_API_BASE||"";
 const emptyData=()=>({subjects:[],exams:[],availableMinutes:90,plan:[],focus:{sessions:0,minutes:0},mistakes:[],studyPacks:[],practice:{attempts:0,correct:0,evidence:[]},meta:{lastModified:new Date().toISOString()}});
 const state={view:"today",modal:false,data:load(),toast:"",currentTask:null,tutorMode:"Explain simply",tutorQuiz:{question:"",answer:"",feedback:"",result:"",correctAnswer:"",options:[],busy:false,history:[]},practice:{question:"",answer:"",feedback:"",result:"",correctAnswer:"",type:"SHORT",options:[],busy:false,history:[]}};
-function normalizeData(x){const base=emptyData();if(!x||typeof x!=="object"||!Array.isArray(x.subjects))return null;const data={...base,...x};data.subjects=data.subjects.map((s,i)=>({...s,id:s.id||"subject-"+i,name:String(s.name||"Subject "+(i+1)),topics:Array.isArray(s.topics)?s.topics.map((t,j)=>({...t,id:t.id||"topic-"+i+"-"+j,name:String(t.name||"Topic "+(j+1)),confidence:Math.max(1,Math.min(5,Number(t.confidence||3))),minutes:Math.max(15,Math.min(180,Number(t.minutes||30)))})):[]}));data.exams=Array.isArray(data.exams)?data.exams.filter(e=>e&&e.subjectId):[];data.plan=Array.isArray(data.plan)?data.plan.filter(x=>x&&x.subject&&x.topic&&x.date).map(x=>({...x,subject:String(x.subject),topic:String(x.topic),date:String(x.date),minutes:Math.max(15,Math.min(180,Number(x.minutes||30))),priority:Number(x.priority||50),done:Boolean(x.done)})):[];data.mistakes=Array.isArray(data.mistakes)?data.mistakes.filter(x=>x&&x.topic&&x.subject):[];data.focus={sessions:0,minutes:0,...(data.focus||{})};data.practice={attempts:0,correct:0,evidence:[],...(data.practice||{})};data.practice.evidence=Array.isArray(data.practice.evidence)?data.practice.evidence.slice(-200):[];data.studyPacks=Array.isArray(data.studyPacks)?data.studyPacks.filter(p=>p&&p.id&&p.name).slice(-30):[];data.availableMinutes=Math.max(20,Math.min(600,Number(data.availableMinutes||90)));data.meta={lastModified:data.meta?.lastModified||new Date().toISOString()};data.version=DATA_VERSION;return data}
+function normalizeData(x){const base=emptyData();if(!x||typeof x!=="object"||!Array.isArray(x.subjects))return null;const data={...base,...x};data.subjects=data.subjects.map((s,i)=>({...s,id:s.id||"subject-"+i,name:String(s.name||"Subject "+(i+1)),topics:Array.isArray(s.topics)?s.topics.map((t,j)=>({...t,id:t.id||"topic-"+i+"-"+j,name:String(t.name||"Topic "+(j+1)),confidence:Math.max(1,Math.min(5,Number(t.confidence||3))),minutes:Math.max(15,Math.min(180,Number(t.minutes||30)))})):[]}));data.exams=Array.isArray(data.exams)?data.exams.filter(e=>e&&e.subjectId):[];data.plan=Array.isArray(data.plan)?data.plan.filter(x=>x&&x.subject&&x.topic&&x.date).map(x=>({...x,subject:String(x.subject),topic:String(x.topic),date:String(x.date),minutes:Math.max(15,Math.min(180,Number(x.minutes||30))),priority:Number(x.priority||50),done:Boolean(x.done)})):[];data.mistakes=Array.isArray(data.mistakes)?data.mistakes.filter(x=>x&&x.topic&&x.subject):[];data.focus={sessions:0,minutes:0,...(data.focus||{})};data.practice={attempts:0,correct:0,evidence:[],...(data.practice||{})};data.practice.evidence=Array.isArray(data.practice.evidence)?data.practice.evidence.slice(-200):[];data.studyPacks=Array.isArray(data.studyPacks)?data.studyPacks.filter(p=>p&&p.id&&p.name).map(p=>({...p,reviewDate:String(p.reviewDate||today()),sourceText:String(p.sourceText||"").slice(0,12000),keyNotes:String(p.keyNotes||""),activeRecall:String(p.activeRecall||""),watchOut:String(p.watchOut||"")})).slice(-30):[];data.availableMinutes=Math.max(20,Math.min(600,Number(data.availableMinutes||90)));data.meta={lastModified:data.meta?.lastModified||new Date().toISOString()};data.version=DATA_VERSION;return data}
 function load(){const base=emptyData();try{const primary=JSON.parse(localStorage.getItem(STORAGE_KEY));const normalized=normalizeData(primary);if(normalized)return normalized;const backup=JSON.parse(localStorage.getItem(BACKUP_KEY));const recovered=normalizeData(backup);if(recovered){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(recovered))}catch{};return recovered}return base}catch{try{const backup=normalizeData(JSON.parse(localStorage.getItem(BACKUP_KEY)));if(backup)return backup}catch{}return base}}
 function add(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return localDate(x)}
 function today(){const n=new Date();return localDate(n)}
@@ -70,7 +70,12 @@ function learningSignal(){
 function taskReason(x){
   const topic=state.data.subjects.flatMap(s=>s.topics||[]).find(t=>t&&t.name===x.topic);
   const confidence=Number(topic?.confidence||x.confidence||3);
+  const evidence=(state.data.practice?.evidence||[]).filter(e=>e&&e.topic===x.topic);
+  const recent=evidence.slice(-5);
+  const recentAccuracy=recent.length?Math.round(recent.filter(e=>e.correct).length/recent.length*100):null;
   const days=Math.max(1,StudySprintCore.daysUntil(x.examDate));
+  if(recentAccuracy!==null&&recentAccuracy<60)return "Recent practice is below 60% here, so StudySprint is bringing this topic forward for another retrieval attempt.";
+  if(recentAccuracy!==null&&recentAccuracy>=80&&confidence>=4&&days>3)return "Recent practice is strong, so this is a lighter retention check rather than a rescue session.";
   if(confidence<=2)return "This topic is marked weak, so StudySprint is bringing it forward for extra practice.";
   if(days<=3)return "Your exam is close, so this topic gets priority even if your confidence looks okay.";
   if(confidence===3)return "This topic is still developing. A short learn → recall → practice loop should strengthen it.";
@@ -93,7 +98,7 @@ function todayPage(){
   const reason=nextTask?taskReason(nextTask):"You have no unfinished sessions right now.";
   const examLabel=nextTask&&nextTask.examDate?(()=>{const d=StudySprintCore.daysUntil(nextTask.examDate);return d<0?Math.abs(d)+"d since exam":d===0?"Exam today":d+"d to exam"})():"No exam date";
   const packs=(state.data.studyPacks||[]).slice(-4).reverse();
-  const packCard=packs.length?'<div class="today-pack-panel"><div class="section-title"><div><span class="eyebrow">STUDY MATERIAL</span><h2>Keep your packs active</h2></div><button class="text" onclick="view(\'tutor\')">Create another →</button></div>'+packs.map(p=>'<div class="today-pack-item"><div class="today-pack-icon">↗</div><div class="grow"><b>'+esc(p.name)+'</b><small>'+esc(p.subject)+' · '+esc(p.topic)+' · review '+date(p.reviewDate)+'</small></div><button class="btn small" onclick="practiceStudyPack(\''+p.id+'\')">Practice</button></div>').join('')+'</div>':'<div class="today-pack-panel today-pack-empty"><div><span class="eyebrow">STUDY MATERIAL</span><h2>Turn your material into a learning loop.</h2><p>Upload a PDF, image, TXT or Markdown file in Tutor to create a saved Study Pack, then practice it and let the evidence update your plan.</p></div><button class="btn secondary" onclick="view(\'tutor\')">Open Tutor →</button></div>';
+  const packCard=packs.length?'<div class="today-pack-panel"><div class="section-title"><div><span class="eyebrow">STUDY MATERIAL</span><h2>Keep your packs active</h2></div><button class="text" onclick="view(\'tutor\')">Create another →</button></div>'+packs.map(p=>'<div class="today-pack-item"><div class="today-pack-icon">↗</div><div class="grow"><b>'+esc(p.name)+'</b><small>'+esc(p.subject)+' · '+esc(p.topic)+' · '+(p.lastResult?('last result '+(p.lastResult==="correct"?"correct":"needs work")+' · '):"")+ 'review '+date(p.reviewDate)+'</small></div><button class="btn small" onclick="practiceStudyPack(\''+p.id+'\')">Practice</button></div>').join('')+'</div>':'<div class="today-pack-panel today-pack-empty"><div><span class="eyebrow">STUDY MATERIAL</span><h2>Turn your material into a learning loop.</h2><p>Upload a PDF, image, TXT or Markdown file in Tutor to create a saved Study Pack, then practice it and let the evidence update your plan.</p></div><button class="btn secondary" onclick="view(\'tutor\')">Open Tutor →</button></div>';
   return '<section class="command">'+
     head("TODAY","Your next move is already chosen.","StudySprint turns your deadlines, confidence and practice evidence into one focused action.",'<button class="btn secondary" onclick="openSetup()">Edit plan</button>')+
     '<div class="command-grid">'+
@@ -226,7 +231,7 @@ async function studyPack(){
   const subject=task?.subject||fallbackSubject?.name||"General study",topic=task?.topic||fallbackTopic?.name||"Study material";
   const examDate=task?.examDate||state.data.exams.find(e=>e.subjectId===fallbackSubject?.id)?.date||add(new Date(),14);
   const packId="pack-"+Date.now(),reviewDate=add(today(),2);
-  const pack={id:packId,name:file.name,subject,topic,examDate,createdAt:new Date().toISOString(),reviewDate,sourceText:cleanText.slice(0,12000)};
+  const pack={id:packId,name:file.name,subject,topic,examDate,createdAt:new Date().toISOString(),reviewDate,sourceText:cleanText.slice(0,12000),keyNotes:cleanText.match(/KEY NOTES[\s—:-]*([\s\S]*?)(?=ACTIVE RECALL|WATCH OUT|NEXT REVIEW|$)/i)?.[1]?.trim()||"",activeRecall:cleanText.match(/ACTIVE RECALL[\s—:-]*([\s\S]*?)(?=WATCH OUT|NEXT REVIEW|$)/i)?.[1]?.trim()||"",watchOut:cleanText.match(/WATCH OUT[\s—:-]*([\s\S]*?)(?=NEXT REVIEW|$)/i)?.[1]?.trim()||""};
   state.data.studyPacks=[...(state.data.studyPacks||[]),pack].slice(-30);
   const reviewId=packId+"-review";
   if(!state.data.plan.some(p=>p.id===reviewId)){state.data.plan.push({id:reviewId,subject,topic,examDate,date:reviewDate,minutes:15,priority:Math.min(100,Number(task?.priority||70)+8),confidence:Number(task?.confidence||3),done:false,kind:"study-pack-review",sourcePackId:packId});state.data.plan.sort((u,v)=>u.date.localeCompare(v.date)||Number(v.priority||0)-Number(u.priority||0))}
@@ -444,16 +449,27 @@ function startPractice(){let x=state.currentTask;if(!x){x=state.data.plan.find(a
   const topic=state.data.subjects.flatMap(s=>s.topics||[]).find(t=>t&&t.name===x.topic);
   state.data.practice.attempts++;
   state.data.practice.evidence=Array.isArray(state.data.practice.evidence)?state.data.practice.evidence:[];
-  state.data.practice.evidence.push({topic:x.topic,subject:x.subject,correct:result==="correct",date:today(),source:"practice"});
+  const packId=state.practice.packId||x.sourcePackId||null;
+  state.data.practice.evidence.push({topic:x.topic,subject:x.subject,correct:result==="correct",date:today(),source:"practice",sourcePackId:packId});
   state.data.practice.evidence=state.data.practice.evidence.slice(-200);
   if(result==="correct"){
    state.data.practice.correct++;
    if(topic)topic.confidence=Math.min(5,Number(topic.confidence||3)+1);
+   const reviewDays=Number(topic?.confidence||3)>=5?7:Number(topic?.confidence||3)>=4?5:3;
+   const reviewDate=add(today(),reviewDays),reviewId=x.id+"-evidence-review";
+   if(!state.data.plan.some(p=>p.id===reviewId)){
+    state.data.plan.push({...x,id:reviewId,date:reviewDate,minutes:Math.min(20,Math.max(15,Math.round(x.minutes/3))),priority:Math.max(20,Number(x.priority||50)-5),done:false,kind:"evidence-review",sourcePackId:packId||undefined});
+    state.data.plan.sort((u,v)=>u.date.localeCompare(v.date)||Number(v.priority||0)-Number(u.priority||0));
+   }
   }else{
    if(topic)topic.confidence=Math.max(1,Number(topic.confidence||3)-1);
-   state.data.mistakes.push({id:"mistake-"+Date.now(),topic:x.topic,subject:x.subject,question:state.practice.question,answer:a,feedback:text,date:today()});
+   state.data.mistakes.push({id:"mistake-"+Date.now(),topic:x.topic,subject:x.subject,question:state.practice.question,answer:a,feedback:text,date:today(),source:"practice",sourcePackId:packId});
    const reviewDate=add(today(),1),reviewId=x.id+"-mistake-review-"+today();
-   if(!state.data.plan.some(p=>p.id===reviewId)){state.data.plan.push({...x,id:reviewId,date:reviewDate,minutes:Math.min(20,Math.max(15,Math.round(x.minutes/3))),priority:Math.min(100,x.priority+10),done:false,kind:"mistake-review"});state.data.plan.sort((u,v)=>u.date.localeCompare(v.date)||v.priority-u.priority)}
+   if(!state.data.plan.some(p=>p.id===reviewId)){state.data.plan.push({...x,id:reviewId,date:reviewDate,minutes:Math.min(20,Math.max(15,Math.round(x.minutes/3))),priority:Math.min(100,Number(x.priority||50)+10),done:false,kind:"mistake-review",sourcePackId:packId||undefined});state.data.plan.sort((u,v)=>u.date.localeCompare(v.date)||Number(v.priority||0)-Number(u.priority||0))}
+  }
+  if(packId){
+   const pack=state.data.studyPacks?.find(p=>p.id===packId);
+   if(pack){pack.lastPracticedAt=new Date().toISOString();pack.lastResult=result;pack.reviewDate=result==="correct"?add(today(),Number(topic?.confidence||3)>=5?7:Number(topic?.confidence||3)>=4?5:3):add(today(),1);}
   }
   state.practice={...state.practice,busy:false,feedback:text,result};save();render();
  }catch(e){state.practice={...state.practice,busy:false,feedback:e.message,result:""};render()}

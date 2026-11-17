@@ -71,3 +71,21 @@
 @media(max-width:560px){
   .vu-photo-frame{border-width:6px;border-radius:24px}.vu-photo-ui{left:12px;bottom:12px;width:185px;padding:12px}.vu-photo-ui b{font-size:15px}.vu-float.one{left:5px;bottom:68px}.vu-float.two{right:5px;top:28px}.vu-story-photo{min-height:300px;border-radius:24px}.vu-mini-grid{grid-template-columns:1fr}.vu-photo-band-image{height:300px;border-radius:24px}
 }
+
+/* V10.1 — contextual photography gallery */
+.vu-gallery{max-width:1250px;margin:0 auto 120px;padding:0 clamp(18px,5vw,70px)}
+.vu-gallery-head{display:grid;grid-template-columns:1fr .72fr;gap:60px;align-items:end;margin-bottom:34px}
+.vu-gallery-head h2{font-size:clamp(38px,4.7vw,62px);line-height:1;letter-spacing:-.055em;margin:12px 0 0}
+.vu-gallery-head p{font-size:15px;line-height:1.75;color:#707995;margin:0}
+.vu-gallery-grid{display:grid;grid-template-columns:1.35fr .82fr .82fr;gap:16px}
+.vu-gallery-card{position:relative;min-height:430px;border-radius:30px;overflow:hidden;background:#171534;box-shadow:0 28px 80px rgba(42,48,104,.16)}
+.vu-gallery-card.large{min-height:520px}
+.vu-gallery-card img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;transition:transform .6s ease}
+.vu-gallery-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(10,12,37,.88) 100%)}
+.vu-gallery-card:hover img{transform:scale(1.045)}
+.vu-gallery-card figcaption{position:absolute;z-index:2;left:24px;right:24px;bottom:22px;color:#fff}
+.vu-gallery-card small{display:block;font:800 9px "DM Mono",monospace;letter-spacing:.14em;color:#7df0cf;margin-bottom:8px}
+.vu-gallery-card b{display:block;font-size:22px;line-height:1.1;letter-spacing:-.03em}
+.vu-gallery-card span{display:block;margin-top:7px;color:#cbd0e5;font-size:11px;line-height:1.45}
+@media(max-width:900px){.vu-gallery-head{grid-template-columns:1fr;gap:16px}.vu-gallery-grid{grid-template-columns:1fr 1fr}.vu-gallery-card.large{grid-column:1/-1;min-height:420px}.vu-gallery-card{min-height:340px}}
+@media(max-width:560px){.vu-gallery{margin-bottom:75px}.vu-gallery-grid{grid-template-columns:1fr}.vu-gallery-card,.vu-gallery-card.large{min-height:360px}.vu-gallery-card.large{grid-column:auto}}

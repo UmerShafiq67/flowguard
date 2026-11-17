@@ -4,6 +4,7 @@ const fs=require("node:fs");
 const app=fs.readFileSync("app.js","utf8");
 const index=fs.readFileSync("index.html","utf8");
 const sw=fs.readFileSync("sw.js","utf8");
+const core=fs.readFileSync("study-core.js","utf8");
 
 assert.match(app,/function studyPack\(\)/);
 assert.match(app,/function practiceStudyPack\(packId\)/);

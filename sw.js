@@ -1,5 +1,5 @@
-const CACHE="studysprint-shell-v24";
-const ASSETS=["./","./index.html","./styles.css","./config.js","./study-core.js","./app.js","./maxi-plus.js","./enhancements.js","./manifest.webmanifest","./icon.svg","./icon-maskable.svg","./account.js","./terms.html","./privacy.html","./refund.html","./contact.html","./pricing.html"];
+const CACHE="studysprint-shell-v25";
+const ASSETS=["./","./index.html","./styles.css","./design-v2.css","./config.js","./study-core.js","./app.js","./maxi-plus.js","./enhancements.js","./manifest.webmanifest","./icon.svg","./icon-maskable.svg","./account.js","./terms.html","./privacy.html","./refund.html","./contact.html","./pricing.html"];
 self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener("fetch",e=>{const r=e.request;if(r.method!=="GET"||new URL(r.url).origin!==self.location.origin)return;e.respondWith(caches.match(r).then(cached=>cached||fetch(r).then(res=>{const copy=res.clone();caches.open(CACHE).then(c=>c.put(r,copy)).catch(()=>{});return res}).catch(()=>cached||caches.match("./index.html"))))});

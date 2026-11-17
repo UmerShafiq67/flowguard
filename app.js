@@ -227,7 +227,36 @@ async function tutorPrompt(x){state.tutorMode=x;if(x==="Quiz me"){state.tutorQui
 async function generateTutorQuiz(){const q=state.tutorQuiz||{};state.tutorQuiz={...q,question:"",answer:"",feedback:"",result:"",correctAnswer:"",options:[],busy:true};render();const x=state.currentTask;const topic=x?.topic||state.data.subjects.flatMap(s=>s.topics||[]).find(t=>t&&t.name)?.name||"your current study topics";const subject=x?.subject||state.data.subjects.find(s=>s&&s.name)?.name||"your subject";const previous=(q.history||[]).slice(-12);try{const res=await fetch(API_BASE+"/api/tutor",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({deviceId:window.studySprintDeviceId?window.studySprintDeviceId():null,message:"Create ONE fresh student-answer-first quiz question about '"+topic+"' for '"+subject+"'. Never reveal the answer in the question or options. Prefer exactly 4 plausible MCQ options. Do not reuse any previous question or wording. Return ONLY:\nTYPE: MCQ\nQUESTION: ...\nOPTIONS:\nA) ...\nB) ...\nC) ...\nD) ...\nANSWER: A\nPrevious questions to avoid: "+JSON.stringify(previous),mode:"Quiz me",context:{subjects:state.data.subjects,exams:state.data.exams,currentTask:x}})});const data=await res.json();if(!res.ok)throw new Error(data.error||"Quiz unavailable.");const raw=String(data.text||"").replace(/\r/g,"").trim();const qm=raw.match(/QUESTION:\s*([\\s\\S]*?)(?=\nOPTIONS:|\nANSWER:|$)/i),om=raw.match(/OPTIONS:\s*([\\s\\S]*?)(?=\nANSWER:|$)/i),am=raw.match(/ANSWER:\s*([A-D])/i);const question=(qm?.[1]||"").trim(),options=(om?.[1]||"").split("\n").map(s=>s.trim()).filter(s=>/^[A-D][.)]\s+/i.test(s)).map(s=>s.replace(/^[A-D][.)]\s+/i,"").trim()).slice(0,4),letter=am?.[1]?.toUpperCase(),correctAnswer=letter?options["ABCD".indexOf(letter)]:"";if(!question||options.length!==4||!correctAnswer)throw new Error("The tutor returned an invalid quiz. Try the next question.");state.tutorQuiz={question,answer:"",feedback:"",result:"",correctAnswer,options,busy:false,history:[...previous,question].slice(-12)};render()}catch(e){state.tutorQuiz={...state.tutorQuiz,busy:false,feedback:e.message};render()}}
 function chooseTutorQuiz(i){const o=state.tutorQuiz.options?.[i];if(!o)return;state.tutorQuiz.answer=o;render()}
 function tutorQuizInput(value){state.tutorQuiz.answer=String(value||"")}
-async function checkTutorQuiz(){const q=state.tutorQuiz,typed=document.getElementById("tutorQuizAnswer")?.value?.trim();const answer=(typed||q.answer||"").trim();if(!q.question||!answer||q.busy||q.result){if(q.question&&!answer)toast("Write your answer first.");return}state.tutorQuiz={...q,answer,busy:true};render();try{const res=await fetch(API_BASE+"/api/tutor",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({deviceId:window.studySprintDeviceId?window.studySprintDeviceId():null,message:"Evaluate this student's quiz answer. Start exactly with RESULT: CORRECT or RESULT: NEEDS WORK. Then give a small professional explanation: why the answer is correct, or why it is wrong and what the correct reasoning is. Do not reveal the correct answer before the result line. Question: "+q.question+"\nExpected answer: "+q.correctAnswer+"\nStudent answer: "+answer,mode:"Quiz feedback",context:{subjects:state.data.subjects,exams:state.data.exams,currentTask:state.currentTask}})});const data=await res.json();if(!res.ok)throw new Error(data.error||"Quiz feedback unavailable.");const text=data.text||"",result=practiceResult(text);state.tutorQuiz={...state.tutorQuiz,busy:false,feedback:text,result};const x=state.currentTask;if(result&&x){const topic=state.data.subjects.flatMap(s=>s.topics||[]).find(t=>t&&t.name===x.topic);state.data.practice.attempts++;state.data.practice.evidence=Array.isArray(state.data.practice.evidence)?state.data.practice.evidence:[];state.data.practice.evidence.push({topic:x.topic,subject:x.subject,correct:result==="correct",date:today(),source:"tutor-quiz"});state.data.practice.evidence=state.data.practice.evidence.slice(-200);if(result==="correct"){state.data.practice.correct++;if(topic)topic.confidence=Math.min(5,Number(topic.confidence||3)+1)}else if(result==="wrong"){if(topic)topic.confidence=Math.max(1,Number(topic.confidence||3)-1);state.data.mistakes.push({id:"mistake-"+Date.now(),topic:x.topic,subject:x.subject,question:q.question,answer,feedback:text,date:today(),source:"tutor-quiz"});const reviewDate=add(today(),1),reviewId=x.id+"-mistake-review-"+today();if(!state.data.plan.some(p=>p.id===reviewId)){state.data.plan.push({...x,id:reviewId,date:reviewDate,minutes:Math.min(20,Math.max(15,Math.round(x.minutes/3))),priority:Math.min(100,x.priority+10),done:false,kind:"mistake-review"});state.data.plan.sort((u,v)=>u.date.localeCompare(v.date)||v.priority-u.priority)}}save()}render()}catch(e){state.tutorQuiz={...state.tutorQuiz,busy:false,feedback:e.message};render()}}
+async function checkTutorQuiz(){const q=state.tutorQuiz,typed=document.getElementById("tutorQuizAnswer")?.value?.trim();const answer=(typed||q.answer||"").trim();if(!q.question||!answer||q.busy||q.result){if(q.question&&!answer)toast("Write your answer first.");return}state.tutorQuiz={...q,answer,busy:true};render();try{const res=await fetch(API_BASE+"/api/tutor",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({deviceId:window.studySprintDeviceId?window.studySprintDeviceId():null,message:"Evaluate this student's quiz answer. Start exactly with RESULT: CORRECT or RESULT: NEEDS WORK. Then give a small professional explanation: why the answer is correct, or why it is wrong and what the correct reasoning is. Do not reveal the correct answer before the result line. Question: "+q.question+"\nExpected answer: "+q.correctAnswer+"\nStudent answer: "+answer,mode:"Quiz feedback",context:{subjects:state.data.subjects,exams:state.data.exams,currentTask:state.currentTask}})});const data=await res.json();if(!res.ok)throw new Error(data.error||"Quiz feedback unavailable.");const text=data.text||"",result=practiceResult(text);state.tutorQuiz={...state.tutorQuiz,busy:false,feedback:text,result};const x=state.currentTask;if(result&&x){
+  const topic=state.data.subjects.flatMap(s=>s.topics||[]).find(t=>t&&t.name===x.topic);
+  const packId=state.practice.packId||x.sourcePackId||null;
+  state.data.practice.attempts++;
+  state.data.practice.evidence=Array.isArray(state.data.practice.evidence)?state.data.practice.evidence:[];
+  state.data.practice.evidence.push({topic:x.topic,subject:x.subject,correct:result==="correct",date:today(),source:"tutor-quiz",sourcePackId:packId});
+  state.data.practice.evidence=state.data.practice.evidence.slice(-200);
+  if(result==="correct"){
+    state.data.practice.correct++;
+    if(topic)topic.confidence=Math.min(5,Number(topic.confidence||3)+1);
+    const reviewDays=Number(topic?.confidence||3)>=5?7:Number(topic?.confidence||3)>=4?5:3;
+    const reviewDate=add(today(),reviewDays),reviewId=x.id+"-quiz-review";
+    if(!state.data.plan.some(p=>p.id===reviewId)){
+      state.data.plan.push({...x,id:reviewId,date:reviewDate,minutes:Math.min(20,Math.max(15,Math.round(x.minutes/3))),priority:Math.max(20,Number(x.priority||50)-5),done:false,kind:"evidence-review",sourcePackId:packId||undefined});
+    }
+  }else if(result==="wrong"){
+    if(topic)topic.confidence=Math.max(1,Number(topic.confidence||3)-1);
+    state.data.mistakes.push({id:"mistake-"+Date.now(),topic:x.topic,subject:x.subject,question:q.question,answer,feedback:text,date:today(),source:"tutor-quiz",sourcePackId:packId});
+    const reviewDate=add(today(),1),reviewId=x.id+"-mistake-review-"+today();
+    if(!state.data.plan.some(p=>p.id===reviewId)){
+      state.data.plan.push({...x,id:reviewId,date:reviewDate,minutes:Math.min(20,Math.max(15,Math.round(x.minutes/3))),priority:Math.min(100,Number(x.priority||50)+10),done:false,kind:"mistake-review",sourcePackId:packId||undefined});
+    }
+  }
+  if(packId){
+    const pack=state.data.studyPacks?.find(p=>p.id===packId);
+    if(pack){pack.lastPracticedAt=new Date().toISOString();pack.lastResult=result;pack.reviewDate=result==="correct"?add(today(),Number(topic?.confidence||3)>=5?7:Number(topic?.confidence||3)>=4?5:3):add(today(),1);}
+  }
+  state.data.plan.sort((u,v)=>u.date.localeCompare(v.date)||Number(v.priority||0)-Number(u.priority||0));
+  save()
+}render()}catch(e){state.tutorQuiz={...state.tutorQuiz,busy:false,feedback:e.message};render()}}
 async function studyPack(){
  const file=document.getElementById("tutorFile")?.files?.[0], chat=document.getElementById("chat");
  if(!file){toast("Attach a study file first.");return}
@@ -263,8 +292,15 @@ function practiceStudyPack(packId){
 }
 function reviewStudyPack(packId){
  const pack=(state.data.studyPacks||[]).find(p=>p.id===packId);if(!pack)return;
- const item=state.data.plan.find(p=>p.sourcePackId===packId);
- if(item){item.done=false;item.date=today();item.minutes=15;item.priority=Math.min(100,Number(item.priority||70)+5);save();toast("Pack review moved to today.");view("review")}
+ const item=state.data.plan.find(p=>p.sourcePackId===packId&&p.kind==="study-pack-review")||state.data.plan.find(p=>p.sourcePackId===packId);
+ if(item){
+   item.done=false;item.date=today();item.minutes=15;item.priority=Math.min(100,Number(item.priority||70)+5);
+ }else{
+   state.data.plan.push({id:pack.id+"-review-now",subject:pack.subject,topic:pack.topic,examDate:pack.examDate,date:today(),minutes:15,priority:Math.min(100,85),confidence:3,done:false,kind:"study-pack-review",sourcePackId:pack.id});
+ }
+ pack.reviewDate=today();
+ state.data.plan.sort((a,b)=>a.date.localeCompare(b.date)||Number(b.priority||0)-Number(a.priority||0));
+ save();toast("Pack review moved to today.");view("review");
 }
 async function askTutor(){const i=document.getElementById("tutorInput"),chat=document.getElementById("chat"),file=document.getElementById("tutorFile")?.files?.[0];if(!i||!chat||(!i.value.trim()&&!file))return;if(file&&file.size>8_000_000){toast("Please attach a study file smaller than 8 MB.");return}const q=i.value.trim()||"Please explain this attached study material.";chat.insertAdjacentHTML("beforeend",`<div class="bubble user">${esc(q)}${file?`<small>Attached: ${esc(file.name)}</small>`:""}</div>`);i.value="";const previous=Array.from(chat.querySelectorAll(".bubble")).slice(-9,-1).map(b=>({role:b.classList.contains("user")?"user":"assistant",text:b.innerText}));let attachment=null;if(file){attachment=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve({name:file.name,type:file.type,data:r.result});r.onerror=reject;r.readAsDataURL(file)})}const currentTask=state.currentTask?{subject:state.currentTask.subject,topic:state.currentTask.topic,examDate:state.currentTask.examDate,minutes:state.currentTask.minutes}:null;try{const res=await fetch(API_BASE+"/api/tutor",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({deviceId:window.studySprintDeviceId?window.studySprintDeviceId():null,message:q,mode:state.tutorMode||"Explain simply",attachment,history:previous,context:{subjects:state.data.subjects.map(s=>({name:s.name,topics:s.topics.map(t=>({name:t.name,confidence:t.confidence}))})),exams:state.data.exams,currentTask}})});const data=await res.json();if(!res.ok)throw new Error(data.error||"Tutor unavailable");const visual=tutorVisual(data.text,q);const cleanText=data.text.replace(/^VISUAL:\s*[a-z-]+\s*$/gim,"").trim();chat.insertAdjacentHTML("beforeend",`<div class="bubble ai"><b>StudySprint Tutor</b><span>${formatTutorText(cleanText)}</span>${visual}</div>`);const f=document.getElementById("tutorFile");if(f)f.value="";document.getElementById("fileName").textContent=""}catch(e){chat.insertAdjacentHTML("beforeend",`<div class="bubble ai"><b>Couldn't answer yet</b><span>${esc(e.message)}</span></div>`)} }
 function practicePage(){
@@ -443,7 +479,16 @@ function loadExample(){
   state.modal=false;regen();toast("Example ready. Edit it with your own subjects.");
 }
 
-function regen(){const old=new Map(state.data.plan.map(x=>[x.id+"|"+x.date,x.done]));const fresh=StudySprintCore.makePlan(state.data.subjects,state.data.exams,state.data.availableMinutes,new Date(),{mistakes:state.data.mistakes,evidence:state.data.practice.evidence});fresh.forEach(x=>{if(old.get(x.id+"|"+x.date))x.done=true});state.data.plan=fresh;save();render()}
+function regen(){
+ const oldPlan=state.data.plan||[];
+ const oldDone=new Map(oldPlan.map(x=>[x.id+"|"+x.date,x.done]));
+ const fresh=StudySprintCore.makePlan(state.data.subjects,state.data.exams,state.data.availableMinutes,new Date(),{mistakes:state.data.mistakes,evidence:state.data.practice.evidence});
+ fresh.forEach(x=>{if(oldDone.get(x.id+"|"+x.date))x.done=true});
+ const validTopics=new Set(state.data.subjects.flatMap(s=>(s.topics||[]).map(t=>t.name)));
+ const preserved=oldPlan.filter(x=>x&&!x.done&&["mistake-review","evidence-review","study-pack-review","review"].includes(x.kind)&&x.date>=today()&&validTopics.has(x.topic)&&!fresh.some(y=>y.id===x.id));
+ state.data.plan=[...fresh,...preserved].sort((a,b)=>a.date.localeCompare(b.date)||Number(b.priority||0)-Number(a.priority||0));
+ save();render()
+}
 function toggle(id,d){const x=state.data.plan.find(a=>a.id===id&&a.date===d);if(x){x.done=!x.done;save();render()}}
 function startNext(){const open=state.data.plan.filter(a=>!a.done),evidence={mistakes:state.data.mistakes,evidence:state.data.practice.evidence};const x=open.sort((a,b)=>StudySprintCore.adaptiveScore(b,evidence)-StudySprintCore.adaptiveScore(a,evidence))[0];if(x)startTask(x.id,x.date);else toast("No unfinished sessions. Nice.")}
 function startTask(id,d){const x=state.data.plan.find(a=>a.id===id&&a.date===d);if(!x)return;state.currentTask=x;selectedMinutes=Math.min(60,Math.max(25,x.minutes));seconds=selectedMinutes*60;state.practice={question:"",answer:"",feedback:"",busy:false};state.view="session";render()}

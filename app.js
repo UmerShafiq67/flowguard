@@ -76,6 +76,7 @@ function taskReason(x){
   if(confidence===3)return "This topic is still developing. A short learn → recall → practice loop should strengthen it.";
   return "This keeps a stronger topic active so you do not lose it after learning it once.";
 }
+function pageQuote(text,source="StudySprint"){return '<div class="page-quote"><span>“</span><p>'+esc(text)+'</p><small>— '+esc(source)+'</small></div>';}
 function todayPage(){
   const ready=state.data.subjects.length&&state.data.plan.length;
   if(!ready)return onboardingPage();
@@ -119,7 +120,7 @@ function todayPage(){
       '<div><span>WEAK TOPIC</span><b>'+(signal.weak?esc(signal.weak.name):"None flagged")+'</b><small>'+(signal.weak?"Needs another retrieval":"Keep building evidence")+'</small></div>'+
     '</div>'+
     '<div class="today-visual-story"><div class="today-visual-copy"><span class="eyebrow">THE STUDYSPRINT METHOD</span><h2>Turn a study session into <em>evidence.</em></h2><p>Plan the move, do the work, prove what you know, then let the system decide what deserves attention next.</p><div class="today-visual-steps"><span><b>01</b>Plan</span><span><b>02</b>Practice</span><span><b>03</b>Adapt</span></div></div><div class="today-visual-art"><img src="./assets/adaptive-network.svg" alt="StudySprint adaptive learning network"><div class="today-visual-badge"><i></i><span>LEARNING SIGNAL</span><b>Updating after practice</b></div></div></div>'+
-    '<div class="today-lower">'+
+    pageQuote("You do not rise to the level of your goals. You fall to the level of your systems.","James Clear")+'<div class="today-lower">'+
       '<div class="timeline-panel"><div class="section-title"><div><span class="eyebrow">TODAY</span><h2>Your study queue</h2></div><button class="text" onclick="view(\'plan\')">View full plan →</button></div>'+
       (tasks.map(task).join("")||'<div class="empty">No sessions scheduled today. <button class="text" onclick="regen()">Rebuild the plan →</button></div>')+
       '</div>'+
@@ -127,7 +128,8 @@ function todayPage(){
       (next.map(x=>'<button class="next-item" onclick="startTask(\''+x.id+'\',\''+x.date+'\')"><span class="next-index">→</span><span><b>'+esc(x.topic)+'</b><small>'+esc(x.subject)+' · '+date(x.date)+' · '+x.minutes+'m</small></span></button>').join("")||'<div class="empty">Nothing waiting.</div>')+
       '</div>'+
     '</div>'+
-  '</section>';
+  '</section>'+pageQuote("The expert in anything was once a beginner.","Helen Hayes");
+
 }
 function task(x){const examDays=typeof StudySprintCore!=="undefined"&&x.examDate?StudySprintCore.daysUntil(x.examDate):null;const examLabel=examDays===null?"exam date not set":examDays<0?Math.abs(examDays)+"d since exam":examDays===0?"exam today":examDays===1?"exam tomorrow":examDays+"d to exam";return `<div class="task ${x.done?"done":""}"><button class="check" onclick="toggle('${x.id}','${x.date}')" aria-label="${x.done?"Mark incomplete":"Mark complete"}">${x.done?"✓":""}</button><div class="grow"><small>${esc(x.subject)}</small><b>${esc(x.topic)}</b><span>${x.minutes} min · ${examLabel}</span></div><button class="btn small" onclick="startTask('${x.id}','${x.date}')">${x.done?"Review":"Start"}</button></div>`}
 function planPage(){const groups={};state.data.plan.forEach(x=>(groups[x.date]??=[]).push(x));return `<section>${head("PLAN","Your roadmap.","Today tells you what to do. Plan lets you inspect the full schedule and rebuild it when your inputs change.",`<button class="btn secondary" onclick="regen()">Rebuild plan</button>`)}<div class="days">${Object.keys(groups).sort().map(d=>`<div class="day card"><div class="dayhead"><b>${d===today()?"Today":date(d)}</b><span>${groups[d].reduce((a,x)=>a+x.minutes,0)} min</span></div>${groups[d].map(task).join("")}</div>`).join("")}</div></section>`}

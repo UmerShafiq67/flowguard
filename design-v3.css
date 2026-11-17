@@ -721,3 +721,27 @@ body{background:#f5f7ff!important}
  .stats{grid-template-columns:1fr 1fr!important}
  .stats b{font-size:32px!important}
 }
+
+/* V9 — saturated visual product shell: StudySprint should feel alive, not monochrome */
+body{background:linear-gradient(180deg,#eef0ff 0%,#f5f3ff 42%,#edfaff 100%)!important}
+.appbar{background:linear-gradient(100deg,#15113c 0%,#302078 55%,#075d78 100%)!important;border-bottom:0!important;box-shadow:0 16px 45px rgba(40,28,100,.22)!important}
+.appbar .brand,.brand-copy b{color:#fff!important}.brand-copy small{color:#a8f4e2!important}.appbar .logo{background:linear-gradient(135deg,#9b6cff,#21d9ff,#4de3ad)!important;box-shadow:0 10px 30px rgba(32,217,255,.28)!important}
+.desktop-nav .nav{color:#c8c9e8!important}.desktop-nav .nav:hover{background:rgba(255,255,255,.1)!important;color:#fff!important}.desktop-nav .nav.active{background:linear-gradient(135deg,rgba(124,91,255,.5),rgba(32,217,255,.25))!important;color:#fff!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)!important}
+.utility-link{color:#d4d7ef!important}.ghost.edit-plan{background:rgba(255,255,255,.1)!important;border-color:rgba(255,255,255,.16)!important;color:#fff!important}
+.app-main{padding-top:48px!important}
+.head{position:relative;padding:26px 30px 34px!important;border-radius:30px!important;background:linear-gradient(120deg,#f0edff 0%,#e7faff 55%,#ecfff7 100%)!important;border:1px solid #d8ddf1!important;box-shadow:0 25px 70px rgba(65,57,145,.1)!important;margin-bottom:24px}
+.head:after{content:"";position:absolute;right:28px;top:18px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,#8f7aff 0%,rgba(32,217,255,.35) 35%,transparent 70%);filter:blur(4px);opacity:.35;pointer-events:none}
+.head h1{position:relative;z-index:1}.head p{position:relative;z-index:1}
+.view-today .head{background:linear-gradient(120deg,#eae6ff,#e8faff 58%,#e8fff4)!important}
+.view-plan .head{background:linear-gradient(120deg,#eee8ff,#edf2ff)!important}
+.view-practice .head{background:linear-gradient(120deg,#e9e5ff,#e4faff)!important}
+.view-review .head{background:linear-gradient(120deg,#fff0f8,#eaf5ff)!important}
+.view-progress .head{background:linear-gradient(120deg,#e9fff6,#edf1ff)!important}
+.card,.panel,.stat,.metric,.subject-card,.plan-card,.task-card,.practice-card,.review-card,.progress-card,.account-card,.focus-card,.tutor-card{background:linear-gradient(145deg,#ffffff 0%,#f4f1ff 55%,#edfbff 100%)!important}
+.view-plan .day.card{background:linear-gradient(145deg,#fff 0%,#f2efff 100%)!important}
+.view-subjects .card{background:linear-gradient(145deg,#fff 0%,#e9faff 100%)!important}
+.view-focus .card{background:linear-gradient(145deg,#171441,#3a287f 60%,#067f94)!important;color:#fff!important;border:0!important}
+.view-focus .card h2,.view-focus .card h3,.view-focus .card p,.view-focus .card b,.view-focus .card span{color:#fff!important}
+.view-progress .stats>div:nth-child(1){background:linear-gradient(145deg,#6b50f4,#9c73ff)!important;color:#fff!important}.view-progress .stats>div:nth-child(2){background:linear-gradient(145deg,#159ec1,#21d9ff)!important;color:#fff!important}.view-progress .stats>div:nth-child(3){background:linear-gradient(145deg,#19b98d,#4de3ad)!important;color:#fff!important}.view-progress .stats>div:nth-child(4){background:linear-gradient(145deg,#e45a9d,#ff8bc5)!important;color:#fff!important}.view-progress .stats>div *{color:#fff!important}
+.view-plan .day.card:nth-child(3n+1){background:linear-gradient(145deg,#f0ebff,#fff)!important}.view-plan .day.card:nth-child(3n+2){background:linear-gradient(145deg,#e8f9ff,#fff)!important}.view-plan .day.card:nth-child(3n+3){background:linear-gradient(145deg,#eafff6,#fff)!important}
+@media(max-width:800px){.appbar{border-radius:0 0 20px 20px!important}.app-main{padding-top:24px!important}.head{padding:23px 20px 27px!important;border-radius:24px!important}.head:after{right:-35px;top:-30px}.view-progress .stats{grid-template-columns:1fr 1fr!important}.view-focus .card{border-radius:24px!important}}

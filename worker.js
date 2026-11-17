@@ -216,30 +216,64 @@ async function billingWebhook(request, env) {
     if (await env.STUDYSPRINT_ENTITLEMENTS.get(seenKey)) return json({ ok: true, duplicate: true });
     await env.STUDYSPRINT_ENTITLEMENTS.put(seenKey, "1", { expirationTtl: 604800 });
   }
+
   const data = body?.data || {};
   const custom = data?.custom_data || {};
   const deviceId = clean(custom.deviceId, 160);
   if (!deviceId) return json({ error: "Missing StudySprint device reference." }, 400);
   if (!env.STUDYSPRINT_ENTITLEMENTS) return json({ error: "Entitlement storage is not configured." }, 503);
 
+  /* Only the configured StudySprint Plus price may grant or revoke Plus.
+     This prevents a future unrelated Paddle product from accidentally
+     changing StudySprint access. */
+  const plusPriceId = clean(env.PADDLE_PLUS_PRICE_ID, 100);
+  if (!plusPriceId) return json({ error: "Plus price is not configured." }, 503);
+
+  const items = Array.isArray(data?.items) ? data.items : [];
+  const lineItems = Array.isArray(data?.details?.line_items) ? data.details.line_items : [];
+  const itemPrices = [
+    ...items.map(item => clean(item?.price?.id, 100)),
+    ...lineItems.map(item => clean(item?.price_id, 100))
+  ].filter(Boolean);
+  const hasPlusPrice = itemPrices.includes(plusPriceId);
+  if (!hasPlusPrice) return json({ ok: true, ignored: true, reason: "not-study-sprint-plus" });
+
   const subscriptionStatus = String(data?.status || "");
   const active = (type === "transaction.completed" && data?.status === "completed") ||
-    ((type === "subscription.created" || type === "subscription.activated" || type === "subscription.updated") &&
-      (subscriptionStatus === "active" || subscriptionStatus === "trialing"));
-  const inactive = (type === "subscription.canceled" || type === "subscription.past_due" ||
-    type === "subscription.paused" || type === "transaction.canceled");
+    (type === "subscription.created" || type === "subscription.activated" ||
+      type === "subscription.trialing" || type === "subscription.resumed") &&
+      (subscriptionStatus === "active" || subscriptionStatus === "trialing");
+  const inactive = type === "transaction.canceled" ||
+    type === "subscription.canceled" ||
+    type === "subscription.past_due" ||
+    type === "subscription.paused" ||
+    (type === "subscription.updated" &&
+      !["active", "trialing"].includes(subscriptionStatus));
 
   if (!active && !inactive) return json({ ok: true, ignored: true });
 
+  /* Paddle can retry or deliver events out of order. Keep the newest event
+     timestamp so an older notification cannot roll a newer entitlement back. */
+  const occurredAt = clean(body?.occurred_at, 50) || new Date().toISOString();
+  const key = "entitlement:" + deviceId;
+  const existing = await env.STUDYSPRINT_ENTITLEMENTS.get(key, "json");
+  if (existing?.occurredAt && Date.parse(existing.occurredAt) > Date.parse(occurredAt)) {
+    return json({ ok: true, ignored: true, reason: "older-event" });
+  }
+
+  const matchedItem = items.find(item => clean(item?.price?.id, 100) === plusPriceId);
   const record = {
     active: active && !inactive,
     plan: active && !inactive ? "plus" : "free",
-    customerId: clean(data?.customer_id, 100) || null,
-    subscriptionId: clean(data?.subscription_id, 100) || clean(data?.id, 100) || null,
+    priceId: plusPriceId,
+    productId: clean(matchedItem?.price?.product_id, 100) || existing?.productId || null,
+    customerId: clean(data?.customer_id, 100) || existing?.customerId || null,
+    subscriptionId: clean(data?.subscription_id, 100) || clean(data?.id, 100) || existing?.subscriptionId || null,
     expiresAt: clean(data?.next_billed_at, 40) || null,
+    occurredAt,
     updatedAt: new Date().toISOString()
   };
-  await env.STUDYSPRINT_ENTITLEMENTS.put("entitlement:" + deviceId, JSON.stringify(record));
+  await env.STUDYSPRINT_ENTITLEMENTS.put(key, JSON.stringify(record));
   return json({ ok: true, plan: record.plan });
 }
 

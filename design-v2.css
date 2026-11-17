@@ -1,0 +1,223 @@
+/* StudySprint vNext — product-grade interface
+   Purpose: reduce navigation noise, increase hierarchy, make every screen feel like one product. */
+:root{
+  --v2-bg:#f7f7f5;
+  --v2-surface:#fff;
+  --v2-ink:#111315;
+  --v2-muted:#74787d;
+  --v2-faint:#9da1a5;
+  --v2-line:#e4e5e6;
+  --v2-soft:#f1f2f2;
+  --v2-radius:14px;
+}
+html,body{background:var(--v2-bg)!important;color:var(--v2-ink)!important}
+body{font-family:Manrope,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}
+#app{min-height:100vh;background:var(--v2-bg)}
+/* quieter shell */
+.appbar{
+  height:68px!important;
+  padding:0 32px!important;
+  background:rgba(255,255,255,.96)!important;
+  border-bottom:1px solid #dedfe1!important;
+  grid-template-columns:205px 1fr auto!important;
+  box-shadow:0 1px 0 rgba(17,19,21,.02)!important;
+}
+.brand{gap:10px!important}
+.logo{width:32px!important;height:32px!important;border-radius:9px!important}
+.brand-copy b{font-size:13px!important}
+.brand-copy small{font-size:7px!important;letter-spacing:.1em!important}
+.desktop-nav{justify-content:flex-start!important;gap:2px!important}
+.desktop-nav .nav{
+  padding:8px 11px!important;
+  border-radius:7px!important;
+  font-size:10px!important;
+  color:#7b8085!important;
+}
+.desktop-nav .nav:hover{background:#f1f2f2!important;color:#111315!important}
+.desktop-nav .nav.active{background:#111315!important;color:#fff!important}
+.topright{display:flex!important;align-items:center!important;gap:6px!important}
+.topright .utility-link,.topright .saved{display:none!important}
+.ghost{font-size:10px!important}
+.v2-progress{border:0;background:none;color:#73777c;font-size:10px;font-weight:750;padding:8px 9px;border-radius:7px;cursor:pointer}
+.v2-progress:hover{background:#f1f2f2;color:#111315}
+.v2-more{position:relative}
+.v2-more>button{border:1px solid #dedfe1;background:#fff;color:#111315;border-radius:7px;padding:8px 10px;font-size:10px;font-weight:800;cursor:pointer}
+.v2-more>button:hover{border-color:#111315}
+.v2-menu{
+  display:none;position:absolute;right:0;top:42px;width:210px;padding:7px;
+  background:#fff;border:1px solid #dedfe1;border-radius:12px;
+  box-shadow:0 20px 50px rgba(17,19,21,.12);z-index:60;
+}
+.v2-menu.open{display:grid}
+.v2-menu button{
+  border:0;background:none;text-align:left;padding:10px 11px;border-radius:7px;
+  color:#303438;font-size:11px;font-weight:700;cursor:pointer;
+}
+.v2-menu button:hover{background:#f3f4f4}
+.v2-menu .menu-label{
+  padding:7px 11px 5px;color:#a0a4a8;font:500 8px/1 DM Mono,monospace;
+  text-transform:uppercase;letter-spacing:.12em;
+}
+.v2-menu .menu-divider{height:1px;background:#ececed;margin:5px 0}
+.app-main{
+  max-width:1240px!important;
+  padding:42px 34px 88px!important;
+}
+.head{margin-bottom:30px!important}
+.head .kicker{font-size:8px!important;letter-spacing:.16em!important}
+.head h1{
+  font-size:clamp(32px,4.2vw,52px)!important;
+  line-height:1.02!important;
+  letter-spacing:-.065em!important;
+  margin:8px 0 9px!important;
+}
+.head p{font-size:12px!important;line-height:1.65!important;color:#777c81!important}
+.head .btn{margin-bottom:2px}
+/* consistent content surfaces */
+.card,.stats>div{
+  background:#fff!important;
+  border:1px solid var(--v2-line)!important;
+  border-radius:var(--v2-radius)!important;
+  box-shadow:0 1px 0 rgba(17,19,21,.015)!important;
+}
+.card:hover{border-color:#d5d7d9!important}
+.card h2{font-size:14px!important}
+.cardhead h2,.section-title h2{letter-spacing:-.035em!important}
+.section-title{margin-bottom:14px!important}
+.section-title h2{font-size:19px!important}
+/* page grids: more air, less dashboard clutter */
+.days,.subjectgrid,.progressgrid,.reviewgrid,.practicegrid,.tutorgrid,.focusgrid,.sessiongrid,.cols{gap:14px!important}
+.days .day{padding:17px!important}
+.dayhead{padding-bottom:10px!important}
+.task{
+  padding:14px 0!important;
+  border-top:1px solid #eeeeef!important;
+}
+.task:first-child{border-top:0!important}
+.task:hover{margin:0 -6px!important;padding-left:6px!important;padding-right:6px!important}
+.task .grow b{font-size:12px!important}
+.task .grow span,.task .grow small{font-size:8px!important}
+.task .btn.small{padding:8px 10px!important;font-size:9px!important}
+/* Today: one obvious action, everything else supporting it */
+.command .head{margin-bottom:24px!important}
+.command-grid{gap:14px!important}
+.hero-action{
+  min-height:410px!important;
+  padding:30px!important;
+  border-radius:20px!important;
+  box-shadow:0 22px 60px rgba(17,19,21,.09)!important;
+}
+.hero-action h2{max-width:720px!important;font-size:clamp(36px,4.6vw,60px)!important;line-height:.98!important}
+.hero-action p{max-width:590px!important;font-size:12px!important;line-height:1.75!important}
+.hero-meta{gap:7px!important}
+.hero-meta span{font-size:8px!important;padding:7px 9px!important;border-radius:5px!important}
+.signal-panel{border-radius:20px!important;padding:25px!important}
+.signal-panel p{font-size:11px!important;line-height:1.6!important}
+.signal-row{padding:11px 0!important}
+.command-strip{
+  margin-top:14px!important;
+  background:#fff!important;
+  border:1px solid var(--v2-line)!important;
+  border-radius:14px!important;
+  overflow:hidden!important;
+}
+.command-strip>div{padding:15px 17px!important}
+.command-strip b{font-size:17px!important}
+.today-lower{margin-top:14px!important;gap:14px!important}
+.timeline-panel,.next-panel{
+  background:#fff;border:1px solid var(--v2-line);border-radius:14px;padding:20px;
+}
+.next-item{
+  border:0!important;border-top:1px solid #eeeeef!important;border-radius:0!important;
+  background:none!important;padding:13px 0!important;
+}
+.next-item:hover{background:#fafafa!important;padding-left:7px!important}
+/* practice/tutor: make the work surface dominant */
+.practicecard,.tutorbox,.focusmain,.sessionmain{border-radius:18px!important}
+.practiceq{font-size:20px!important;line-height:1.55!important;max-width:780px}
+.mcq-option,.choice{padding:13px 14px!important;font-size:11px!important}
+.composer{padding:13px!important}
+.composer textarea,.practicecard textarea,.tutor-quiz-answer{font-size:12px!important;line-height:1.55!important}
+.mode{padding:9px 10px!important;font-size:9px!important}
+.bubble{font-size:11px!important;line-height:1.65!important}
+/* progress/review: emphasize conclusions, not decoration */
+.stats{gap:10px!important;margin-bottom:14px!important}
+.stats>div{padding:17px!important}
+.stats b{font-size:27px!important}
+.progressgrid,.reviewgrid{margin-top:14px!important}
+.readiness-card,.evidence-card,.rescue-card,.adaptive-hero{border-radius:16px!important}
+/* subjects */
+.subjectgrid .card{padding:18px!important}
+.subject{padding-bottom:13px!important;margin-bottom:3px!important}
+.subject>span{width:34px!important;height:34px!important}
+.topic{padding:10px 0!important}
+/* setup */
+.modal-backdrop{background:rgba(17,19,21,.32)!important}
+.modal{max-width:760px!important;border-radius:18px!important}
+.setup-guide{gap:7px!important}
+.setup-guide>div{background:#f7f7f7!important;border:1px solid #e7e8e9!important;border-radius:10px!important}
+/* footer should feel like product chrome */
+.site-footer{
+  max-width:1240px!important;width:calc(100% - 68px)!important;
+  margin:0 auto!important;padding:24px 0 34px!important;
+  color:#8b9095!important;font-size:10px!important;
+}
+.site-footer nav{gap:14px!important}.site-footer a{font-size:10px!important;color:#555a5f!important}
+/* hide the old mobile six-item bar; v2 creates a focused five-item bar */
+.mobile-nav{display:none!important}
+.v2-mobile-nav{
+  display:none;position:fixed;left:10px;right:10px;bottom:10px;height:60px;
+  grid-template-columns:repeat(5,1fr);z-index:80;background:rgba(255,255,255,.97);
+  border:1px solid #dfe0e2;border-radius:14px;box-shadow:0 16px 45px rgba(17,19,21,.13);
+  backdrop-filter:blur(18px);overflow:hidden;
+}
+.v2-mobile-nav button{
+  border:0;background:none;color:#8a8f94;font-size:8px;font-weight:800;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+}
+.v2-mobile-nav button span{font:500 14px/1 DM Mono,monospace}
+.v2-mobile-nav button.active{background:#111315;color:#fff}
+/* landing: make it feel like a product launch, not a dashboard */
+.landing{background:#fff!important}
+.landinghero{max-width:1120px!important;padding-top:clamp(90px,14vh,160px)!important}
+.landinghero h1{font-size:clamp(52px,8.5vw,112px)!important;max-width:1050px!important}
+.landinghero p{font-size:14px!important;max-width:620px!important}
+.landingrail{max-width:1120px!important}
+.landingbottom{max-width:1120px!important}
+/* responsive */
+@media(max-width:1080px){
+  .appbar{grid-template-columns:190px 1fr auto!important;padding:0 20px!important}
+  .desktop-nav .nav{padding:8px 8px!important}
+  .v2-progress{display:none}
+}
+@media(max-width:760px){
+  .appbar{height:62px!important;padding:0 14px!important;display:flex!important}
+  .desktop-nav{display:none!important}
+  .app-main{padding:28px 15px 94px!important}
+  .topright{margin-left:auto!important}
+  .plus-link{display:block!important}
+  .edit-plan{display:none!important}
+  .v2-more>button{font-size:9px;padding:8px 9px}
+  .v2-mobile-nav{display:grid}
+  .site-footer{width:calc(100% - 28px)!important;padding-bottom:90px!important;align-items:flex-start!important;flex-direction:column!important}
+  .head{align-items:flex-start!important}
+  .head h1{font-size:35px!important}
+  .hero-action{min-height:400px!important;padding:24px!important}
+  .hero-action h2{font-size:42px!important}
+  .signal-panel{min-height:0!important}
+  .command-strip{grid-template-columns:1fr 1fr!important}
+  .command-strip>div{border-right:1px solid #e7e8ea!important}
+  .command-strip>div:nth-child(2n){border-right:0!important}
+  .today-lower{grid-template-columns:1fr!important}
+  .landing{padding:0 16px!important}
+}
+@media(max-width:520px){
+  .app-main{padding:24px 13px 94px!important}
+  .head h1{font-size:32px!important}
+  .hero-action h2{font-size:37px!important}
+  .command-strip{grid-template-columns:1fr!important}
+  .command-strip>div{border-right:0!important;border-bottom:1px solid #e7e8ea!important}
+  .command-strip>div:last-child{border-bottom:0!important}
+  .landinghero{padding-top:64px!important}
+  .landinghero h1{font-size:49px!important}
+}

@@ -35,7 +35,7 @@ function shell(c){
   return '<header class="appbar">'+
     '<button class="brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo">S</span><span>StudySprint</span></button>'+
     '<nav class="desktop-nav" aria-label="StudySprint pages">'+desktopNav.map(([v,t])=>nav(v,t,"")).join("")+'</nav>'+
-    '<div class="topright"><button class="utility-link" onclick="view('subjects')">Subjects</button><button class="utility-link" onclick="view('account')">Account</button><span class="saved">● Saved locally</span><button class="ghost plus-link" onclick="openPremium()">Plus</button><button class="ghost edit-plan" onclick="openSetup()">Edit plan</button></div>'+
+    '<div class="topright"><button class="utility-link" onclick="view(\'subjects\')">Subjects</button><button class="utility-link" onclick="view(\'account\')">Account</button><span class="saved">● Saved locally</span><button class="ghost plus-link" onclick="openPremium()">Plus</button><button class="ghost edit-plan" onclick="openSetup()">Edit plan</button></div>'+
   '</header>'+
   '<main class="app-main view-'+state.view+'">'+c+'</main>'+
   '<nav class="mobile-nav" aria-label="StudySprint pages">'+mobileNav.map(([v,t,i])=>nav(v,t,i)).join("")+'</nav>'+

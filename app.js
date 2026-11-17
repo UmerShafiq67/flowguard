@@ -39,6 +39,7 @@ function shell(c){
   '</header>'+
   '<main class="app-main view-'+state.view+'">'+c+'</main>'+
   '<nav class="mobile-nav" aria-label="StudySprint pages">'+mobileNav.map(([v,t,i])=>nav(v,t,i)).join("")+'</nav>'+
+  '<footer class="site-footer"><span>StudySprint · Decide → learn → prove → review → adapt.</span><nav aria-label="Legal"><a href="./terms.html">Terms</a><a href="./privacy.html">Privacy</a><a href="./refund.html">Refunds</a><a href="./contact.html">Support</a></nav></footer>'+
   '<div class="toast '+(state.toast?"show":"")+'">'+esc(state.toast)+'</div>'+ (state.modal?setup():"");
 }
 function pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}

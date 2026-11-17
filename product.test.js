@@ -13,7 +13,7 @@ assert.match(app,/packContext/);
 assert.match(app,/sourcePackId/);
 assert.match(index,/visual-v35\.css\?v=35/);
 assert.match(index,/visual-v35\.js\?v=35/);
-assert.match(sw,/studysprint-shell-v55-v35/);
+assert.match(sw,/studysprint-shell-v56-v36/);
 assert.match(sw,/visual-v35\.css\?v=35/);
 assert.match(sw,/visual-v35\.js\?v=35/);
 

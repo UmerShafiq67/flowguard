@@ -9,7 +9,7 @@
   window.shell=function(content){
     const primary=[["today","Today"],["plan","Plan"],["practice","Practice"],["tutor","Tutor"],["review","Review"]];
     return '<aside class="appbar">'+
-      '<button class="brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo">S</span><span class="brand-copy"><b>StudySprint</b><small>ADAPTIVE LEARNING</small></span></button>'+
+      '<button class="brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo" aria-hidden="true"><svg viewBox="0 0 32 32" width="30" height="30" fill="none"><path d="M22.8 7.2C20.7 5.5 18 4.6 15.1 4.6c-5.2 0-9 2.8-9 6.7 0 4.1 3.7 5.4 8.2 6.1 4 .7 5.8 1.3 5.8 3.1 0 1.7-1.8 2.8-4.9 2.8-3.2 0-5.9-1-7.8-2.9" stroke="white" stroke-width="3.4" stroke-linecap="round"/><path d="M10.1 25.2c1.9 1.5 4.6 2.3 7.4 2.3 5.2 0 8.9-2.6 8.9-6.6 0-4-3.6-5.3-8.2-6.1-4-.7-5.8-1.3-5.8-3.1" stroke="white" stroke-width="3.4" stroke-linecap="round" opacity=".72"/><circle cx="24.5" cy="7.2" r="2.2" fill="white"/></svg></span><span class="brand-copy"><b>StudySprint</b><small>ADAPTIVE LEARNING</small></span></button>'+
       '<nav class="desktop-nav" aria-label="Primary navigation">'+primary.map(([v,t])=>'<button class="nav '+(state.view===v?"active":"")+'" onclick="view(\''+v+'\')"><span aria-hidden="true">'+navIcon(v)+'</span>'+t+'</button>').join("")+'</nav>'+
       '<div class="topright">'+
         '<button class="v2-progress" onclick="view(\'progress\')">◈ &nbsp; Progress & insights</button>'+
@@ -27,7 +27,7 @@
   };
   window.onboardingPage=function(){
     return '<section class="landing">'+
-      '<header class="landingbar"><button class="landingbrand" onclick="view(\'today\')"><span class="landinglogo">S</span><span><b>StudySprint</b><small>adaptive learning</small></span></button><div class="landingmeta"><span>PERSONAL LEARNING OS · 01</span><button class="landinglink" onclick="openSetup()">Start free <b>↗</b></button></div></header>'+
+      '<header class="landingbar"><button class="landingbrand" onclick="view(\'today\')"><span class="landinglogo" aria-hidden="true"><svg viewBox="0 0 32 32" width="30" height="30" fill="none"><path d="M22.8 7.2C20.7 5.5 18 4.6 15.1 4.6c-5.2 0-9 2.8-9 6.7 0 4.1 3.7 5.4 8.2 6.1 4 .7 5.8 1.3 5.8 3.1 0 1.7-1.8 2.8-4.9 2.8-3.2 0-5.9-1-7.8-2.9" stroke="white" stroke-width="3.4" stroke-linecap="round"/><path d="M10.1 25.2c1.9 1.5 4.6 2.3 7.4 2.3 5.2 0 8.9-2.6 8.9-6.6 0-4-3.6-5.3-8.2-6.1-4-.7-5.8-1.3-5.8-3.1" stroke="white" stroke-width="3.4" stroke-linecap="round" opacity=".72"/><circle cx="24.5" cy="7.2" r="2.2" fill="white"/></svg></span><span><b>StudySprint</b><small>adaptive learning</small></span></button><div class="landingmeta"><span>PERSONAL LEARNING OS · 01</span><button class="landinglink" onclick="openSetup()">Start free <b>↗</b></button></div></header>'+
       '<div class="landinghero"><div class="landingeyebrow"><i></i> PERSONAL LEARNING INTELLIGENCE <span>ADAPTS AS YOU LEARN</span></div>'+
       '<h1>Stop organizing your studying.<br><em>Start knowing what to do.</em></h1>'+
       '<p>StudySprint turns your subjects, confidence, deadlines, and real practice evidence into one clear next action — with an adaptive loop that keeps changing as your learning changes.</p>'+

@@ -55,6 +55,7 @@ async function read(response) {
   assert.equal(status.entitlementStorageConfigured, false);
 
   r = await handler.fetch(new Request("https://example.com/nope"), {});
+
   assert.equal(r.status, 404);
 
   console.log("StudySprint worker tests: PASS");

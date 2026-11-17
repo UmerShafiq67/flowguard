@@ -1,0 +1,40 @@
+/* StudySprint V37 — premium app shell and learning surfaces */
+:root{--v37-ink:#0b1731;--v37-muted:#647287;--v37-blue:#3157ff;--v37-cyan:#36c8d8;--v37-coral:#ff6b57;--v37-paper:#f5f7fb}
+.appbar{background:rgba(245,247,251,.88)!important;backdrop-filter:blur(18px);border-bottom:1px solid rgba(11,23,49,.08)!important;box-shadow:0 8px 28px rgba(11,23,49,.045)!important}
+.appbar .brand .logo{background:linear-gradient(145deg,#0b1731,#1d3b73)!important;border:1px solid rgba(54,200,216,.35)!important;box-shadow:0 8px 24px rgba(49,87,255,.18)!important}
+.appbar .brand-copy b{letter-spacing:-.03em}
+.desktop-nav .nav{transition:transform .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease}
+.desktop-nav .nav.active{background:#fff!important;color:var(--v37-blue)!important;box-shadow:0 8px 24px rgba(49,87,255,.09),inset 0 0 0 1px rgba(49,87,255,.08)}
+.mobile-nav{background:rgba(11,23,49,.96)!important;backdrop-filter:blur(18px);box-shadow:0 -12px 35px rgba(11,23,49,.18)!important}
+.mobile-nav .nav.active{color:#fff!important}
+.v37-status{display:inline-flex;align-items:center;gap:7px;margin-right:10px;padding:8px 10px;border-radius:999px;background:#fff;border:1px solid #dce4ef;color:#516075;font:700 8px/1 "DM Mono";letter-spacing:.1em;white-space:nowrap;box-shadow:0 7px 20px rgba(11,23,49,.05)}
+.v37-status i{width:6px;height:6px;border-radius:50%;background:#49e6a8;box-shadow:0 0 0 4px rgba(73,230,168,.13)}
+.v37-status span{color:#3157ff}
+.v37-main-enter{opacity:0;transform:translateY(8px)}
+.v37-main-visible{opacity:1;transform:none;transition:opacity .32s ease,transform .42s cubic-bezier(.2,.7,.2,1)}
+.v37-pressed{transform:translateY(1px) scale(.985)!important}
+.v37-card-in{opacity:0;transform:translateY(12px)}
+.v37-main-visible .v37-card-in{animation:v37in .55s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:var(--v37-delay)}
+@keyframes v37in{to{opacity:1;transform:none}}
+.command .hero-action{background:linear-gradient(135deg,#fff 0%,#f0f5ff 68%,#e8fbfc 100%)!important;border:1px solid #dce5f2!important;box-shadow:0 30px 80px rgba(11,23,49,.1)!important}
+.command .hero-action:before{background:radial-gradient(circle,rgba(54,200,216,.15),transparent 68%)!important}
+.command .signal-panel{background:linear-gradient(145deg,#09162f,#142d59)!important;color:#fff!important;border:1px solid rgba(255,255,255,.09)!important;box-shadow:0 30px 80px rgba(9,22,47,.18)!important}
+.command .signal-panel p,.command .signal-panel .signal-row span{color:#b8c7dd!important}
+.command .signal-number{background:linear-gradient(100deg,#fff,#36c8d8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.v37-evidence-note{margin-top:18px;padding:12px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1)}
+.v37-evidence-note span{display:block;color:#7f93b1;font:700 8px "DM Mono";letter-spacing:.12em;margin-bottom:5px}
+.v37-evidence-note b{font-size:12px;line-height:1.45;color:#fff}
+.head h1{letter-spacing:-.055em!important}
+.head p{max-width:720px!important}
+.card{border-color:#dfe6f0!important;box-shadow:0 12px 38px rgba(11,23,49,.055)!important}
+.card:hover{box-shadow:0 22px 55px rgba(11,23,49,.09)!important}
+.practice-subject{background:linear-gradient(145deg,#fff,#f5f8ff)!important;border:1px solid #dfe6f0!important}
+.practice-subject:hover{border-color:#9fb2ff!important;box-shadow:0 20px 50px rgba(49,87,255,.1)!important}
+.tutor-shell,.tutor-layout,.chat,.practice-card,.reviewgrid .card,.progress-card{border-color:#dfe6f0!important}
+.btn.primary{background:linear-gradient(100deg,#3157ff,#2748db)!important;box-shadow:0 12px 28px rgba(49,87,255,.2)!important}
+.btn.primary:hover{box-shadow:0 17px 35px rgba(49,87,255,.27)!important}
+.btn.secondary{background:#fff!important;border-color:#d7e0ed!important}
+.kicker,.eyebrow{color:#3157ff!important}
+@media(max-width:900px){.v37-status{display:none}.appbar{backdrop-filter:blur(14px)}}
+@media(max-width:650px){.v37-main-visible .v37-card-in{animation-delay:0ms}.command .hero-action,.command .signal-panel{box-shadow:0 18px 45px rgba(11,23,49,.1)!important}}
+@media(prefers-reduced-motion:reduce){.v37-main-enter,.v37-main-visible,.v37-card-in{opacity:1;transform:none;animation:none!important;transition:none!important}.v37-pressed{transform:none!important}}

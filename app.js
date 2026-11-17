@@ -33,7 +33,7 @@ function shell(c){
   const desktopNav=[["today","Today"],["plan","My plan"],["practice","Practice"],["tutor","Tutor"],["review","Review"],["progress","Progress"]];
   const mobileNav=[["today","Today","⌂"],["plan","Plan","◷"],["practice","Practice","✎"],["tutor","Tutor","✦"],["review","Review","✓"],["progress","Progress","◌"]];
   return '<header class="appbar">'+
-    '<button class="brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo">S</span><span class="brand-copy"><b>StudySprint</b><small>adaptive learning</small></span></button>'+
+    '<button class="brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span class="brand-copy"><b>StudySprint</b><small>adaptive learning</small></span></button>'+
     '<nav class="desktop-nav" aria-label="StudySprint pages">'+desktopNav.map(([v,t])=>nav(v,t,"")).join("")+'</nav>'+
     '<div class="topright"><button class="utility-link" onclick="view(\'subjects\')">Subjects</button><button class="utility-link" onclick="view(\'account\')">Account</button><span class="saved"><i></i> Saved</span><button class="ghost plus-link" onclick="openPremium()">Plus</button><button class="ghost edit-plan" onclick="openSetup()">Edit plan</button></div>'+
   '</header>'+

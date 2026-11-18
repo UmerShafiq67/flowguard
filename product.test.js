@@ -20,14 +20,14 @@ assert.match(index,/visual-v35\.js\?v=36/);
 assert.match(index,/visual-v36\.css\?v=36/);
 assert.match(index,/visual-v36\.js\?v=36/);
 assert.match(index,/visual-v37\.css\?v=37/);
-assert.match(index,/visual-v37\.js\?v=37/);
+assert.match(index,/visual-v37\.js\?v=37/);\nassert.match(index,/visual-v39\.css\?v=39/);\nassert.match(index,/visual-v39\.js\?v=39/);
 assert.match(sw,/studysprint-shell-v58-v38/);
 assert.match(sw,/visual-v35\.css\?v=36/);
 assert.match(sw,/visual-v35\.js\?v=36/);
 assert.match(sw,/visual-v36\.css\?v=36/);
 assert.match(sw,/visual-v36\.js\?v=36/);
 assert.match(sw,/visual-v37\.css\?v=37/);
-assert.match(sw,/visual-v37\.js\?v=37/);
+assert.match(sw,/visual-v37\.js\?v=37/);\nassert.match(sw,/studysprint-shell-v59-v39/);\nassert.match(sw,/visual-v39\.css\?v=39/);\nassert.match(sw,/visual-v39\.js\?v=39/);
 
 console.log("StudySprint product integration tests: PASS");
 

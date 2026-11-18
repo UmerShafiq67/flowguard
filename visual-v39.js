@@ -22,20 +22,21 @@
     if(!app)return;
     const head=app.querySelector(".app-main .head");
     if(head&&!head.querySelector(".v39-headline-line")){
-      const view=window.state?.view||document.body.dataset.view||"today";
+      const title=(head.querySelector("h1")?.textContent||"").toLowerCase();
+      const view=title.includes("plan")?"plan":title.includes("subject")?"subjects":title.includes("session")?"session":title.includes("practice")?"practice":title.includes("tutor")?"tutor":title.includes("review")?"review":title.includes("progress")?"progress":title.includes("focus")?"focus":title.includes("account")?"account":"today";
       const pair=copy[view]||copy.today;
       const line=document.createElement("p");
       line.className="v39-headline-line";
       line.textContent=pair[0];
       line.setAttribute("aria-label","Page guiding line");
-      head.appendChild(line);
+      head.querySelector("h1")?.insertAdjacentElement("afterend",line);
     }
     addScene(app);
   }
   function addScene(app){
     const main=app.querySelector(".app-main");
     if(!main||main.querySelector(".v39-scene"))return;
-    const view=window.state?.view||"today";
+    const view=main.querySelector(".command")?"today":main.querySelector(".practicegrid")?"practice":main.querySelector(".tutorgrid")?"tutor":main.querySelector(".reviewgrid")?"review":"today";
     if(!["today","practice","tutor","review"].includes(view))return;
     const anchor=main.querySelector(".command-grid,.practicegrid,.tutorgrid,.reviewgrid,.today-pack-panel");
     if(!anchor)return;

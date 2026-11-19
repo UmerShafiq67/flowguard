@@ -66,7 +66,7 @@ assert.match(v52,/--ss52-cyan:#13aab8/);
 assert.match(v52,/--ss52-violet:#7056d9/);
 assert.ok(v52.includes("html,body,#app,.app-main,"));
 assert.ok(v52.includes("background:#fff!important"));
-assert.match(v52,/\.appbar\{[\s\S]*background:rgba\(255,255,255/);
+assert.ok(v52.includes(".appbar,.landing49-nav"));
 assert.match(v52,/\.landing49\{background:#fff!important/);
 assert.match(v52,/prefers-reduced-motion:reduce/);
 

@@ -35,5 +35,12 @@ assert.doesNotMatch(app,/— James Clear/);
 assert.doesNotMatch(app,/— Helen Hayes/);
 
 
-assert.ok(index.includes("visual-v43.js?v=43"));
-assert.ok(index.includes("visual-v44.css?v=44"));\nassert.ok(index.includes("visual-v44.js?v=44"));\nassert.ok(sw.includes("studysprint-shell-v64-v44"));\nassert.ok(sw.includes("visual-v44.css?v=44"));\nassert.ok(sw.includes("visual-v44.js?v=44"));\nassert.doesNotMatch(index,/visual-v34\\.js/);\nassert.doesNotMatch(index,/visual-v41\\.js/);\nassert.doesNotMatch(index,/visual-v43\\.js/);\nassert.doesNotMatch(app,/“/);\n
+assert.ok(index.includes("visual-v44.css?v=44"));
+assert.ok(index.includes("visual-v44.js?v=44"));
+assert.ok(sw.includes("studysprint-shell-v64-v44"));
+assert.ok(sw.includes("visual-v44.css?v=44"));
+assert.ok(sw.includes("visual-v44.js?v=44"));
+assert.doesNotMatch(index,/visual-v34\\.js/);
+assert.doesNotMatch(index,/visual-v41\\.js/);
+assert.doesNotMatch(index,/visual-v43\\.js/);
+assert.doesNotMatch(app,/“/);

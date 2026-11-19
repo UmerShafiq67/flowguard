@@ -59,11 +59,11 @@ assert.doesNotMatch(app,/class="landing45"/);
 
 assert.match(v52,/--ss52-white:#fff/);
 assert.match(v52,/--ss52-blue:#2463eb/);
-assert.match(v52,/--ss52-cyan:#13b8c7/);
+assert.match(v52,/--ss52-cyan:#13aab8/);
 assert.match(v52,/--ss52-violet:#7056d9/);
 assert.match(v52,/html,body,#app,.app-main\{background:#fff!important/);
 assert.match(v52,/\.appbar\{[\s\S]*background:rgba\(255,255,255/);
-assert.match(v52,/\.landing49\{[\s\S]*#fff!important/);
+assert.match(v52,/\.landing49\{background:#fff!important/);
 assert.match(v52,/prefers-reduced-motion:reduce/);
 
 console.log("StudySprint visual integration tests: PASS");

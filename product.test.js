@@ -48,3 +48,9 @@ assert.match(app,/kind:"evidence-review"/);
 assert.match(app,/pack.reviewDate=today\(\)/);
 assert.match(app,/const preserved=oldPlan\.filter/);
 
+
+assert.match(index,/visual-v41\.css\?v=41/);
+assert.match(index,/visual-v41\.js\?v=41/);
+assert.match(sw,/studysprint-shell-v61-v41/);
+assert.match(sw,/visual-v41\.css\?v=41/);
+assert.match(sw,/visual-v41\.js\?v=41/);

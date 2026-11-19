@@ -33,9 +33,11 @@ assert.doesNotMatch(app,/— Helen Hayes/);
 assert.ok(index.includes("visual-v49.css?v=49"));
 assert.ok(index.includes("visual-v50.css?v=50"));
 assert.ok(index.includes("visual-v51.css?v=51"));
+assert.ok(index.includes("visual-v52.css?v=52"));
 assert.ok(index.includes('theme-color" content="#ffffff"'));
 assert.ok(index.includes("visual-v45.js?v=49"));
-assert.ok(sw.includes("studysprint-shell-v71-v51"));
+assert.ok(sw.includes("studysprint-shell-v72-v52"));
+assert.ok(sw.includes("visual-v52.css?v=52"));
 assert.ok(sw.includes("visual-v51.css?v=51"));
 assert.ok(sw.includes("visual-v49.css?v=49"));
 assert.ok(sw.includes("visual-v45.js?v=49"));
@@ -56,4 +58,4 @@ assert.doesNotMatch(app,/class="landing45"/);
 
 console.log("StudySprint visual integration tests: PASS");
 
-// V51 verification marker
+// V52 white signature visual verification

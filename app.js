@@ -28,6 +28,23 @@ function practiceResult(text){
   if(/RESULT:\s*CORRECT/i.test(text))return "correct";
   return "";
 }
+const THEME_KEY="studysprint_theme";
+function applyTheme(theme){
+  const next=theme==="dark"?"dark":"light";
+  document.documentElement.dataset.theme=next;
+  try{localStorage.setItem(THEME_KEY,next)}catch{}
+}
+function currentTheme(){
+  try{
+    const saved=localStorage.getItem(THEME_KEY);
+    if(saved==="dark"||saved==="light")return saved;
+  }catch{}
+  return window.matchMedia?.("(prefers-color-scheme: dark)").matches?"dark":"light";
+}
+function toggleTheme(){
+  applyTheme(currentTheme()==="dark"?"light":"dark");
+  render();
+}
 function nav(v,t,i){return `<button class="nav ${state.view===v?"active":""}" onclick="view('${v}')"><span>${i}</span>${t}</button>`}
 function shell(c){
   const desktopNav=[["today","Home","⌂"],["plan","My Plan","☷"],["practice","Practice","ϟ"],["tutor","Tutor","✦"],["review","Review","↻"],["progress","Progress","▥"],["subjects","Subjects","▤"],["focus","Focus","◎"],["account","Account","♙"]];
@@ -38,13 +55,13 @@ function shell(c){
       '<button class="brand ss-sidebar-brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span class="brand-copy"><b>StudySprint</b></span></button>'+
       '<nav class="ss-side-nav" aria-label="StudySprint pages">'+desktopNav.map(navItem).join("")+'</nav>'+
       '<div class="ss-plus-card"><div class="ss-plus-icon">♛</div><b>StudySprint Plus</b><span>Unlock your full learning potential.</span><button onclick="openPremium()">Go Plus <span>→</span></button></div>'+
-      '<div class="ss-side-footer"><button class="ss-theme" aria-label="Theme"><span>☀</span><i></i><span>☾</span></button></div>'+
+      '<div class="ss-side-footer"><button class="ss-theme" onclick="toggleTheme()" aria-label="Toggle light and dark mode"><span class="theme-sun">☀</span><i><b></b></i><span class="theme-moon">☾</span></button></div>'+
     '</aside>'+
     '<div class="ss-stage">'+
       '<header class="appbar">'+
         '<button class="brand ss-mobile-brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span class="brand-copy"><b>StudySprint</b></span></button>'+
         '<button class="ss-search" onclick="view(\'tutor\')" aria-label="Open Tutor search"><span>⌕</span><span>Search anything... (e.g. "Math problems")</span></button>'+
-        '<div class="topright"><span class="saved"><i></i> Saved</span><button class="ss-bell" aria-label="Notifications">♧<b>3</b></button><button class="ss-avatar" onclick="view(\'account\')" aria-label="Open account">S<span>⌄</span></button><button class="ghost edit-plan" onclick="openSetup()">Edit plan</button></div>'+
+        '<div class="topright"><span class="saved"><i></i> Saved</span><button class="ss-bell" aria-label="Notifications">♧<b>3</b></button><button class="ss-avatar" onclick="view(\'account\')" aria-label="Open account">S<span>⌄</span></button></div>'+
       '</header>'+
       '<main class="app-main view-'+state.view+'">'+c+'</main>'+
       '<footer class="site-footer"><span>StudySprint · Decide → learn → prove → review → adapt.</span><nav aria-label="Legal"><a href="./terms.html">Terms</a><a href="./privacy.html">Privacy</a><a href="./pricing.html">Pricing</a><a href="./refund.html">Refunds</a><a href="./contact.html">Support</a></nav></footer>'+
@@ -554,7 +571,8 @@ function timerSet(m){clearInterval(timer);timer=null;selectedMinutes=m;seconds=m
 function timerToggle(){const b=document.getElementById("timerbtn");if(timer){clearInterval(timer);timer=null;b.textContent="Resume focus";return}b.textContent="Pause focus";timer=setInterval(()=>{seconds--;const c=document.getElementById("clock");if(c)c.textContent=Math.floor(seconds/60).toString().padStart(2,"0")+":"+String(seconds%60).padStart(2,"0");if(seconds<=0){clearInterval(timer);timer=null;state.data.focus.sessions++;state.data.focus.minutes+=selectedMinutes;save();if(state.currentTask){finishCurrentTask()}else{toast("Focus session complete — time logged.");render()}}},1000)}
 function openTutor(){state.view="tutor";state.modal=false;render()}function view(v){state.view=v;state.modal=false;render()}function toast(m){state.toast=m;render();setTimeout(()=>{state.toast="";render()},2200)}
 function topicInsight(t){const c=Number(t?.confidence||3);if(c<=1)return "Needs immediate practice";if(c===2)return "Needs another retrieval attempt";if(c===3)return "Still building";if(c===4)return "Looking strong";return "Strong and ready for a check"}
-function render(){const root=document.getElementById("app");if(!root)return;try{let c=state.view==="today"?todayPage():state.view==="plan"?planPage():state.view==="subjects"?subjectsPage():state.view==="session"?sessionPage():state.view==="practice"?practicePage():state.view==="focus"?focusPage():state.view==="review"?reviewPage():state.view==="progress"?progressPage():state.view==="account"?accountPage():state.view==="tutor"?tutorPage():tutorPage();root.innerHTML=shell(c)}catch(e){console.error(e);state.view="today";try{root.innerHTML=shell('<section><div class="card"><h1>StudySprint</h1><p>That page hit a display error, but your saved subjects and progress are still here.</p><button class="btn primary" onclick="view(\'today\')">Back to Today</button></div></section>')}catch(_){root.innerHTML='<section class="welcome"><div class="card"><h1>StudySprint</h1><p>Your saved study data is still stored on this device.</p><button class="btn primary" onclick="location.reload()">Reload StudySprint</button></div></section>'}}}render();
+function render(){const root=document.getElementById("app");if(!root)return;try{let c=state.view==="today"?todayPage():state.view==="plan"?planPage():state.view==="subjects"?subjectsPage():state.view==="session"?sessionPage():state.view==="practice"?practicePage():state.view==="focus"?focusPage():state.view==="review"?reviewPage():state.view==="progress"?progressPage():state.view==="account"?accountPage():state.view==="tutor"?tutorPage():tutorPage();root.innerHTML=shell(c)}catch(e){console.error(e);state.view="today";try{root.innerHTML=shell('<section><div class="card"><h1>StudySprint</h1><p>That page hit a display error, but your saved subjects and progress are still here.</p><button class="btn primary" onclick="view(\'today\')">Back to Today</button></div></section>')}catch(_){root.innerHTML='<section class="welcome"><div class="card"><h1>StudySprint</h1><p>Your saved study data is still stored on this device.</p><button class="btn primary" onclick="location.reload()">Reload StudySprint</button></div></section>'}}}applyTheme(currentTheme());
+render();
 // Final quality overrides: deterministic grading, fresher questions, topic rotation.
 function resetPracticeState(){state.practice={question:"",answer:"",feedback:"",result:"",correctAnswer:"",type:"SHORT",options:[],busy:false,history:[],topicCursor:0}}
 function practiceTopicForCurrent(){const base=state.currentTask;if(!base)return base;if(state.practice.packId)return base;const subject=state.data.subjects.find(s=>s&&s.name===base.subject);const topics=(subject?.topics||[]).filter(t=>t&&t.name);const cursor=Number(state.practice.topicCursor||0);const topic=topics.length?topics[cursor%topics.length].name:base.topic;state.practice.topicCursor=topics.length?(cursor+1)%topics.length:cursor;return {...base,topic}}

@@ -1,0 +1,94 @@
+/* StudySprint V42 — final visual refinement: editorial clarity + product depth */
+:root{
+  --v42-ink:#0a1833;
+  --v42-muted:#5b6d86;
+  --v42-line:#d5dfeb;
+  --v42-blue:#3157ff;
+  --v42-cyan:#19b9c9;
+  --v42-bg:#eef3f9;
+}
+html,body{background:
+  radial-gradient(circle at 8% 4%,rgba(49,87,255,.09),transparent 25rem),
+  radial-gradient(circle at 94% 18%,rgba(25,185,201,.08),transparent 24rem),
+  var(--v42-bg)!important;color:var(--v42-ink)!important}
+body{font-family:"DM Sans",sans-serif!important}
+.appbar{
+  background:rgba(248,251,255,.88)!important;
+  backdrop-filter:blur(18px)!important;
+  -webkit-backdrop-filter:blur(18px)!important;
+  border-bottom:1px solid rgba(173,191,213,.58)!important;
+  box-shadow:0 8px 30px rgba(10,24,51,.05)!important;
+  min-height:72px!important;
+  position:sticky!important;top:0;z-index:50;
+}
+.appbar:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,transparent,#3157ff 22%,#19b9c9 70%,transparent);opacity:.55}
+.brand{min-height:64px!important}
+.brand .logo{box-shadow:0 8px 20px rgba(49,87,255,.2)!important}
+.desktop-nav .nav{border:1px solid transparent!important;border-radius:999px!important;font-weight:700!important;transition:all .2s ease!important}
+.desktop-nav .nav:hover{background:#e7edf7!important;color:#0a1833!important}
+.desktop-nav .nav.active{box-shadow:0 8px 20px rgba(10,24,51,.14)!important}
+.topright .utility-link{font-weight:700!important}
+.topright .ghost{border-radius:999px!important}
+.app-main{max-width:1240px!important;margin:0 auto!important;padding:34px 28px 70px!important}
+.app-main .head{margin-bottom:22px!important;align-items:flex-end!important}
+.app-main .head .kicker{font-family:"DM Mono",monospace!important;letter-spacing:.16em!important;font-weight:700!important;font-size:10px!important}
+.app-main .head h1{font-family:"Space Grotesk",sans-serif!important;font-weight:700!important;letter-spacing:-.055em!important}
+.app-main .head p{max-width:760px!important;color:#5b6d86!important;font-size:16px!important;line-height:1.65!important}
+.page-guide{margin:0 0 24px!important;display:flex!important;gap:11px!important;align-items:center!important}
+.page-guide i{display:block!important;width:4px!important;height:30px!important;border-radius:99px!important;background:linear-gradient(180deg,#3157ff,#19b9c9)!important;box-shadow:0 0 18px rgba(25,185,201,.22)!important}
+.page-guide p{margin:0!important;color:#30445f!important;font-size:13px!important;font-weight:700!important;line-height:1.45!important}
+.v41-page-visual{
+  min-height:340px!important;height:340px!important;margin:0 0 28px!important;border-radius:28px!important;
+  border:1px solid rgba(154,175,201,.55)!important;
+  box-shadow:0 28px 70px rgba(10,24,51,.14)!important;
+}
+.v41-page-visual img{height:340px!important;filter:saturate(.96) contrast(1.03)!important;transition:transform .8s cubic-bezier(.2,.7,.2,1)!important}
+.v41-page-visual:hover img{transform:scale(1.025)!important}
+.v41-page-visual:after{background:
+  linear-gradient(90deg,rgba(7,19,39,.72) 0%,rgba(7,19,39,.28) 55%,rgba(7,19,39,.08) 100%),
+  linear-gradient(0deg,rgba(7,19,39,.72),transparent 55%)!important}
+.v41-page-visual figcaption{left:30px!important;right:30px!important;bottom:28px!important}
+.v41-page-visual figcaption small{font-size:9px!important;letter-spacing:.18em!important}
+.v41-page-visual figcaption b{font-size:clamp(28px,4vw,48px)!important;max-width:700px!important}
+.v41-page-visual figcaption span{font-size:14px!important;max-width:620px!important}
+.app-main .card,.app-main .panel,.app-main .timeline-panel,.app-main .mistakes-panel,.app-main .review-pack{
+  border:1px solid rgba(202,215,231,.9)!important;
+  box-shadow:0 14px 42px rgba(10,24,51,.06)!important;
+  border-radius:20px!important;
+}
+.app-main .card:hover,.app-main .review-pack:hover{transform:translateY(-2px);box-shadow:0 20px 50px rgba(10,24,51,.09)!important}
+.app-main .section-title h2{font-family:"Space Grotesk",sans-serif!important;letter-spacing:-.035em!important}
+.app-main .btn{transition:transform .18s ease,box-shadow .18s ease,background .18s ease!important}
+.app-main .btn:hover{transform:translateY(-1px)!important}
+.app-main .btn.primary{box-shadow:0 12px 24px rgba(49,87,255,.22)!important}
+.app-main .hero-action{box-shadow:0 24px 60px rgba(10,24,51,.2)!important;position:relative;overflow:hidden!important}
+.app-main .hero-action:before{content:"";position:absolute;width:240px;height:240px;right:-90px;top:-110px;border-radius:50%;background:radial-gradient(circle,rgba(25,185,201,.32),transparent 68%);pointer-events:none}
+.app-main .signal-panel{box-shadow:0 20px 50px rgba(10,24,51,.07)!important}
+.command-strip{border:1px solid #d5dfeb!important;background:rgba(255,255,255,.78)!important;backdrop-filter:blur(12px)!important;border-radius:20px!important;box-shadow:0 14px 35px rgba(10,24,51,.05)!important}
+.today-visual-story{box-shadow:0 25px 65px rgba(10,24,51,.16)!important}
+.today-pack-panel{box-shadow:0 25px 65px rgba(10,24,51,.14)!important}
+.mobile-nav{box-shadow:0 -12px 35px rgba(5,17,35,.22)!important}
+.site-footer{border-top:1px solid rgba(70,94,124,.32)!important}
+@media(max-width:850px){
+  .app-main{padding:26px 18px 86px!important}
+  .app-main .head{align-items:flex-start!important}
+  .v41-page-visual,.v41-page-visual img{height:270px!important;min-height:270px!important}
+  .v41-page-visual{border-radius:22px!important}
+  .v41-page-visual figcaption{left:20px!important;right:20px!important;bottom:20px!important}
+}
+@media(max-width:560px){
+  .app-main{padding:22px 14px 84px!important}
+  .app-main .head h1{font-size:clamp(35px,10vw,48px)!important}
+  .app-main .head p{font-size:14px!important}
+  .page-guide{margin-bottom:18px!important}
+  .page-guide p{font-size:12.5px!important}
+  .v41-page-visual,.v41-page-visual img{height:225px!important;min-height:225px!important}
+  .v41-page-visual{border-radius:18px!important}
+  .v41-page-visual figcaption{left:16px!important;right:16px!important;bottom:15px!important}
+  .v41-page-visual figcaption b{font-size:24px!important}
+  .v41-page-visual figcaption span{font-size:12px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .v41-page-visual img,.app-main .btn,.app-main .card,.app-main .review-pack{transition:none!important}
+  .app-main .btn:hover,.app-main .card:hover,.app-main .review-pack:hover{transform:none!important}
+}

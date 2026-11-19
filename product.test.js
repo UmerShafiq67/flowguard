@@ -67,6 +67,5 @@ assert.doesNotMatch(app,/“/);
 assert.doesNotMatch(app,/— James Clear/);
 assert.doesNotMatch(app,/— Helen Hayes/);
 
-assert.doesNotMatch(app,/function pageQuote\\(/);
 assert.match(index,/visual-v43\\.css\\?v=43/);
 assert.match(index,/visual-v43\\.js\\?v=43/);

@@ -53,3 +53,7 @@ assert.doesNotMatch(index,/visual-upgrade\\.css/);
 assert.ok(index.includes("visual-v45.css?v=45"));
 assert.ok(index.includes("visual-v45.js?v=45"));
 assert.doesNotMatch(app,/“/);
+
+assert.match(app,/class="landing45"/);
+assert.match(app,/Know what to do next/);
+assert.doesNotMatch(app,/class="landing"/);

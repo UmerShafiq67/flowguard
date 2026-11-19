@@ -47,14 +47,14 @@ jobs:
           test -f visual-v49.css
           test -f visual-v50.css
           test -f visual-v51.css
-          test -f visual-v52.css
+          test -f visual-v52.css\n          test -f visual-v53.css
           test -f assets/adaptive-learning-system.svg
           test -f manifest.webmanifest
           test -f sw.js
           test -f visual-v45.js
           grep -q 'visual-v51.css?v=51' index.html
-          grep -q 'visual-v52.css?v=52' index.html
-          grep -q 'studysprint-shell-v72-v52' sw.js
+          grep -q 'visual-v52.css?v=52' index.html\n          grep -q 'visual-v53.css?v=53' index.html
+          grep -q 'studysprint-shell-v73-v53' sw.js\n          grep -q 'visual-v53.css?v=53' sw.js
           grep -q 'visual-v52.css?v=52' sw.js
 
   deploy:

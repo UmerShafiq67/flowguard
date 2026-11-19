@@ -34,7 +34,7 @@
   p.innerHTML='<i aria-hidden="true"></i><span>Plan with evidence. Practice with purpose. Adapt to what you actually know.</span>';
   const target=hero.querySelector(".v34-hero p"); target?.insertAdjacentElement("afterend",p);
  }
- function mount(){setTimeout(()=>{add();landingGuide()},40)}
+ function mount(){setTimeout(()=>{add();landingGuide()},40); setTimeout(()=>{document.querySelectorAll(".v41-page-visual img").forEach(img=>{img.addEventListener("error",()=>{img.closest(".v41-page-visual")?.classList.add("image-fallback")},{once:true})})},80)}
  const old=window.render;
  if(typeof old==="function")window.render=function(){old();mount()};
  mount();

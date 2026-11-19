@@ -56,10 +56,17 @@ assert.match(sw,/visual-v41\.css\?v=41/);
 assert.match(sw,/visual-v41\.js\?v=41/);
 
 assert.ok(index.includes("visual-v42.css?v=42"));
-assert.ok(index.includes("visual-v42.js?v=42"));\nassert.ok(index.includes("visual-v43.css?v=43"));\nassert.ok(index.includes("visual-v43.js?v=43"));
+assert.ok(index.includes("visual-v42.js?v=42"));
+assert.ok(index.includes("visual-v43.css?v=43"));
+assert.ok(index.includes("visual-v43.js?v=43"));
 assert.ok(sw.includes("visual-v42.css?v=42"));
-assert.ok(sw.includes("visual-v42.js?v=42"));\nassert.ok(sw.includes("visual-v43.css?v=43"));\nassert.ok(sw.includes("visual-v43.js?v=43"));
+assert.ok(sw.includes("visual-v42.js?v=42"));
+assert.ok(sw.includes("visual-v43.css?v=43"));
+assert.ok(sw.includes("visual-v43.js?v=43"));
 assert.doesNotMatch(app,/“/);
 assert.doesNotMatch(app,/— James Clear/);
 assert.doesNotMatch(app,/— Helen Hayes/);
-\nassert.doesNotMatch(app,/function pageQuote\\(/);\nassert.match(index,/visual-v43\\.css\\?v=43/);\nassert.match(index,/visual-v43\\.js\\?v=43/);\n
+
+assert.doesNotMatch(app,/function pageQuote\\(/);
+assert.match(index,/visual-v43\\.css\\?v=43/);
+assert.match(index,/visual-v43\\.js\\?v=43/);

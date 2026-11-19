@@ -31,7 +31,6 @@ jobs:
           cp worker.js /tmp/studysprint-worker.mjs
           node --check /tmp/studysprint-worker.mjs
           node --check enhancements.js
-          node --check visual-v45.js
       - name: Run core tests
         run: npm test
       - name: Check required files
@@ -50,16 +49,18 @@ jobs:
           test -f visual-v52.css
           test -f visual-v53.css
           test -f visual-v54.css
+          test -f visual-v55.css
           test -f assets/adaptive-learning-system.svg
           test -f manifest.webmanifest
           test -f sw.js
-          test -f visual-v45.js
           grep -q 'visual-v51.css?v=51' index.html
           grep -q 'visual-v52.css?v=52' index.html
           grep -q 'visual-v53.css?v=53' index.html
           grep -q 'visual-v54.css?v=54' index.html
-          grep -q 'studysprint-shell-v74-v54' sw.js
+          grep -q 'visual-v55.css?v=55' index.html
+          grep -q 'studysprint-shell-v76-v55' sw.js
           grep -q 'visual-v54.css?v=54' sw.js
+          grep -q 'visual-v55.css?v=55' sw.js
           grep -q 'visual-v53.css?v=53' sw.js
           grep -q 'visual-v52.css?v=52' sw.js
 

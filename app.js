@@ -48,15 +48,30 @@ function head(k,t,p,a=""){
 }
 function onboardingPage(){
   return '<section class="landing">'+
-    '<header class="landingbar"><button class="landingbrand" onclick="view(\'today\')"><span class="landinglogo">S</span><span><b>StudySprint</b><small>adaptive learning</small></span></button><div class="landingmeta"><span>LEARNING SYSTEM · 01</span><button class="landinglink" onclick="openSetup()">Get started <b>↗</b></button></div></header>'+
-    '<div class="landinghero">'+
-      '<div class="landingeyebrow"><i></i> PERSONAL STUDY INTELLIGENCE <span>BUILT AROUND EVIDENCE</span></div>'+
-      '<h1>Your study plan should<br><em>think with you.</em></h1>'+
-      '<p>StudySprint connects what you need to learn, how confident you are, when your exams arrive, and what you can actually prove — then chooses the next useful step.</p>'+
-      '<div class="landingactions"><button class="btn primary" onclick="openSetup()">Build my study system <span>↗</span></button><span>No complicated setup. Start free. Your data stays yours.</span></div>'+
-    '</div>'+
-    '<div class="landingrail"><div><small>01</small><b>DECIDE</b><span>Turn subjects, confidence and deadlines into a realistic roadmap.</span></div><div><small>02</small><b>PROVE</b><span>Practice answers become evidence of what you actually know.</span></div><div><small>03</small><b>ADAPT</b><span>The next session changes when your learning signal changes.</span></div></div>'+
-    '<div class="landingbottom"><span>PLAN</span><i>→</i><span>LEARN</span><i>→</i><span>PROVE</span><i>→</i><span>REVIEW</span><i>→</i><span>ADAPT</span><b>01—05</b></div>'+
+    '<header class="landingbar"><button class="landingbrand" onclick="view(\'today\')"><span class="landinglogo">S</span><span><b>StudySprint</b><small>ADAPTIVE LEARNING</small></span></button><div class="landingmeta"><span>PLAN · LEARN · PRACTICE · ADAPT</span><button class="landinglink" onclick="openSetup()">Start free ↗</button></div></header>'+
+    '<main>'+
+      '<section class="landinghero">'+
+        '<div>'+
+          '<div class="landingeyebrow"><i></i> PERSONAL STUDY INTELLIGENCE <span>BUILT AROUND EVIDENCE</span></div>'+
+          '<h1>Know what to study.<br><em>Know what comes next.</em></h1>'+
+          '<p>StudySprint turns your subjects, deadlines, confidence and practice results into one clear next action — then adapts when the evidence changes.</p>'+
+          '<div class="landingactions"><button class="btn primary" onclick="openSetup()">Build my study system <span>↗</span></button><span>Start free · no complicated setup</span></div>'+
+        '</div>'+
+        '<div class="landing-visual">'+
+          '<img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&fm=jpg&q=88&w=1400" alt="Students studying together" loading="eager">'+
+          '<div class="landing-dashboard"><div class="landing-dashboard-top"><small>TODAY / YOUR NEXT MOVE</small><span class="landing-live">● ADAPTIVE</span></div>'+
+            '<div class="landing-next"><small>RECOMMENDED NEXT</small><b>Practice Part of speech</b><span>15 min · recent accuracy below 60% · exam in 13 days</span></div>'+
+            '<div class="landing-mini-row"><div><b>62%</b><span>recent accuracy</span></div><div><b>3</b><span>weak topics</span></div><div><b>15m</b><span>next session</span></div></div>'+
+          '</div>'+
+        '</div>'+
+      '</section>'+
+      '<section class="landingrail">'+
+        '<div><small>01</small><b>DECIDE</b><span>Deadlines, confidence and available time shape the plan.</span></div>'+
+        '<div><small>02</small><b>PROVE</b><span>Practice answers become evidence of what you actually know.</span></div>'+
+        '<div><small>03</small><b>ADAPT</b><span>The next priority changes when your learning signal changes.</span></div>'+
+      '</section>'+
+    '</main>'+
+    '<div class="landingbottom"><span>PLAN</span><i>→</i><span>LEARN</span><i>→</i><span>PRACTICE</span><i>→</i><span>REVIEW</span><i>→</i><span>ADAPT</span><b>STUDYSPRINT</b></div>'+
   '</section>';
 }
 function learningSignal(){

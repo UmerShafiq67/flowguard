@@ -23,6 +23,8 @@ assert.match(index,/visual-v37\.css\?v=37/);
 assert.match(index,/visual-v37\.js\?v=37/);
 assert.match(index,/visual-v39\.css\?v=39/);
 assert.match(index,/visual-v39\.js\?v=39/);
+assert.match(index,/visual-v40\.css\?v=40/);
+assert.match(index,/visual-v40\.js\?v=40/);
 assert.match(sw,/studysprint-shell-v59-v39/);
 assert.match(sw,/visual-v35\.css\?v=36/);
 assert.match(sw,/visual-v35\.js\?v=36/);
@@ -33,6 +35,9 @@ assert.match(sw,/visual-v37\.js\?v=37/);
 assert.match(sw,/studysprint-shell-v59-v39/);
 assert.match(sw,/visual-v39\.css\?v=39/);
 assert.match(sw,/visual-v39\.js\?v=39/);
+assert.match(sw,/studysprint-shell-v60-v40/);
+assert.match(sw,/visual-v40\.css\?v=40/);
+assert.match(sw,/visual-v40\.js\?v=40/);
 
 console.log("StudySprint product integration tests: PASS");
 

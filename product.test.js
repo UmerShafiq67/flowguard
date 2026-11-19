@@ -42,7 +42,7 @@ assert.ok(index.includes("visual-v53.css?v=53"));
 assert.ok(index.includes("visual-v54.css?v=54"));
 assert.ok(index.includes('theme-color" content="#1976ee"'));
 assert.doesNotMatch(index,/visual-v45\.js/);
-assert.ok(sw.includes("studysprint-shell-v74-v54"));
+assert.ok(sw.includes("studysprint-shell-v75-v55"));
 assert.ok(sw.includes("visual-v52.css?v=52"));
 assert.ok(sw.includes("visual-v53.css?v=53"));
 assert.ok(sw.includes("visual-v54.css?v=54"));

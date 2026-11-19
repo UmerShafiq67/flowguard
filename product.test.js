@@ -39,7 +39,7 @@ assert.ok(index.includes("visual-v51.css?v=51"));
 assert.ok(index.includes("visual-v52.css?v=52"));
 assert.ok(index.includes("visual-v53.css?v=53"));
 assert.ok(index.includes("visual-v54.css?v=54"));
-assert.ok(index.includes('theme-color" content="#ffffff"'));
+assert.ok(index.includes('theme-color" content="#1976ee"'));
 assert.ok(index.includes("visual-v45.js?v=49"));
 assert.ok(sw.includes("studysprint-shell-v74-v54"));
 assert.ok(sw.includes("visual-v52.css?v=52"));

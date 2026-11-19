@@ -30,16 +30,27 @@ function practiceResult(text){
 }
 function nav(v,t,i){return `<button class="nav ${state.view===v?"active":""}" onclick="view('${v}')"><span>${i}</span>${t}</button>`}
 function shell(c){
-  const desktopNav=[["today","Today"],["plan","My plan"],["practice","Practice"],["tutor","Tutor"],["review","Review"],["progress","Progress"]];
+  const desktopNav=[["today","Home","⌂"],["plan","My Plan","☷"],["practice","Practice","ϟ"],["tutor","Tutor","✦"],["review","Review","↻"],["progress","Progress","▥"],["subjects","Subjects","▤"],["focus","Focus","◎"],["account","Account","♙"]];
   const mobileNav=[["today","Today","⌂"],["plan","Plan","◷"],["practice","Practice","✎"],["tutor","Tutor","✦"],["review","Review","✓"],["progress","Progress","◌"]];
-  return '<header class="appbar">'+
-    '<button class="brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span class="brand-copy"><b>StudySprint</b><small>adaptive learning</small></span></button>'+
-    '<nav class="desktop-nav" aria-label="StudySprint pages">'+desktopNav.map(([v,t])=>nav(v,t,"")).join("")+'</nav>'+
-    '<div class="topright"><button class="utility-link" onclick="view(\'subjects\')">Subjects</button><button class="utility-link" onclick="view(\'account\')">Account</button><span class="saved"><i></i> Saved</span><button class="ghost plus-link" onclick="openPremium()">Plus</button><button class="ghost edit-plan" onclick="openSetup()">Edit plan</button></div>'+
-  '</header>'+
-  '<main class="app-main view-'+state.view+'">'+c+'</main>'+
-  '<nav class="mobile-nav" aria-label="StudySprint pages">'+mobileNav.map(([v,t,i])=>nav(v,t,i)).join("")+'</nav>'+
-  '<footer class="site-footer"><span>StudySprint · Decide → learn → prove → review → adapt.</span><nav aria-label="Legal"><a href="./terms.html">Terms</a><a href="./privacy.html">Privacy</a><a href="./pricing.html">Pricing</a><a href="./refund.html">Refunds</a><a href="./contact.html">Support</a></nav></footer>'+
+  const navItem=([v,t,i])=>'<button class="nav '+(state.view===v?"active":"")+'" onclick="view(\''+v+'\')"><span class="nav-icon">'+i+'</span><span>'+t+'</span></button>';
+  return '<div class="ss-shell">'+
+    '<aside class="ss-sidebar">'+
+      '<button class="brand ss-sidebar-brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span class="brand-copy"><b>StudySprint</b></span></button>'+
+      '<nav class="ss-side-nav" aria-label="StudySprint pages">'+desktopNav.map(navItem).join("")+'</nav>'+
+      '<div class="ss-plus-card"><div class="ss-plus-icon">♛</div><b>StudySprint Plus</b><span>Unlock your full learning potential.</span><button onclick="openPremium()">Go Plus <span>→</span></button></div>'+
+      '<div class="ss-side-footer"><button class="ss-theme" aria-label="Theme"><span>☀</span><i></i><span>☾</span></button></div>'+
+    '</aside>'+
+    '<div class="ss-stage">'+
+      '<header class="appbar">'+
+        '<button class="brand ss-mobile-brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span class="brand-copy"><b>StudySprint</b></span></button>'+
+        '<button class="ss-search" onclick="view(\'tutor\')" aria-label="Open Tutor search"><span>⌕</span><span>Search anything... (e.g. "Math problems")</span></button>'+
+        '<div class="topright"><span class="saved"><i></i> Saved</span><button class="ss-bell" aria-label="Notifications">♧<b>3</b></button><button class="ss-avatar" onclick="view(\'account\')" aria-label="Open account">S<span>⌄</span></button><button class="ghost edit-plan" onclick="openSetup()">Edit plan</button></div>'+
+      '</header>'+
+      '<main class="app-main view-'+state.view+'">'+c+'</main>'+
+      '<footer class="site-footer"><span>StudySprint · Decide → learn → prove → review → adapt.</span><nav aria-label="Legal"><a href="./terms.html">Terms</a><a href="./privacy.html">Privacy</a><a href="./pricing.html">Pricing</a><a href="./refund.html">Refunds</a><a href="./contact.html">Support</a></nav></footer>'+
+    '</div>'+
+  '</div>'+
+  '<nav class="mobile-nav" aria-label="StudySprint pages">'+mobileNav.map(([v,t,i])=>navItem([v,t,i])).join("")+'</nav>'+
   '<div class="toast '+(state.toast?"show":"")+'">'+esc(state.toast)+'</div>'+ (state.modal?setup():"");
 }
 function pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
@@ -102,7 +113,8 @@ function todayPage(){
   const packs=(state.data.studyPacks||[]).slice(-4).reverse();
   const packCard=packs.length?'<div class="today-pack-panel"><div class="section-title"><div><span class="eyebrow">STUDY MATERIAL</span><h2>Keep your packs active</h2></div><button class="text" onclick="view(\'tutor\')">Create another →</button></div>'+packs.map(p=>'<div class="today-pack-item"><div class="today-pack-icon">↗</div><div class="grow"><b>'+esc(p.name)+'</b><small>'+esc(p.subject)+' · '+esc(p.topic)+' · '+(p.lastResult?('last result '+(p.lastResult==="correct"?"correct":"needs work")+' · '):"")+ 'review '+date(p.reviewDate)+'</small></div><button class="btn small" onclick="practiceStudyPack(\''+p.id+'\')">Practice</button></div>').join('')+'</div>':'<div class="today-pack-panel today-pack-empty"><div><span class="eyebrow">STUDY MATERIAL</span><h2>Turn your material into a learning loop.</h2><p>Upload a PDF, image, TXT or Markdown file in Tutor to create a saved Study Pack, then practice it and let the evidence update your plan.</p></div><button class="btn secondary" onclick="view(\'tutor\')">Open Tutor →</button></div>';
   return '<section class="command">'+
-    head("TODAY","Your next move is already chosen.","StudySprint turns your deadlines, confidence and practice evidence into one focused action.",'<button class="btn secondary" onclick="openSetup()">Edit plan</button>')+
+    '<div class="ss-greeting"><div><span class="kicker">TODAY</span><h1>Good morning, <em>StudySprint</em>! 👋</h1><p>Keep going — your learning system is ready for the next useful move.</p></div><button class="btn secondary" onclick="openSetup()">Edit plan</button></div>'+
+    '<div class="ss-goal-banner"><div class="ss-goal-icon">◉</div><div><span>Today\'s Goal</span><b>'+esc(nextTask?("Master "+nextTask.topic):"Build your first study goal")+'</b><small>'+esc(nextTask?("You\'re on track for your plan."):("Set your subjects and exams to unlock your adaptive plan."))+'</small></div><button class="btn primary" onclick="'+(nextTask?("startTask(\'"+nextTask.id+"\',\'"+nextTask.date+"\')"):"openSetup()")+'">View Plan <span>→</span></button></div>'+
     '<div class="command-grid">'+
       '<div class="hero-action">'+
         '<div class="hero-top"><span class="eyebrow">RECOMMENDED NEXT</span><span class="live-dot">LIVE</span></div>'+
@@ -136,7 +148,8 @@ function todayPage(){
       '<div class="next-panel"><div class="section-title"><div><span class="eyebrow">UP NEXT</span><h2>Keep moving</h2></div></div>'+
       (next.map(x=>'<button class="next-item" onclick="startTask(\''+x.id+'\',\''+x.date+'\')"><span class="next-index">→</span><span><b>'+esc(x.topic)+'</b><small>'+esc(x.subject)+' · '+date(x.date)+' · '+x.minutes+'m</small></span></button>').join("")||'<div class="empty">Nothing waiting.</div>')+
       '</div>'+
-    '</div>'+packCard+
+    '</div>'+
+    '<div class="ss-quick-actions"><div class="ss-section-label">⚡ Quick Actions</div><button onclick="view(\'practice\')"><b>ϟ</b><span>Practice Questions</span></button><button onclick="view(\'tutor\')"><b>✦</b><span>Get AI Tutor</span></button><button onclick="view(\'review\')"><b>↻</b><span>Review Mistakes</span></button><button onclick="view(\'progress\')"><b>▥</b><span>View Progress</span></button></div>'+packCard+
   '</section>'+pageQuote("Turn weak topics into the next useful action.");
 
 }

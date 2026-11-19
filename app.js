@@ -76,7 +76,7 @@ function head(k,t,p,a=""){
 }
 function onboardingPage(){
   return '<section class="landing49">'+
-    '<header class="landing49-nav"><button class="landing49-brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="landing49-mark">S</span><span><b>StudySprint</b><small>ADAPTIVE LEARNING</small></span></button>'+
+    '<header class="landing49-nav"><button class="landing49-brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="landing49-mark"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span><b>StudySprint</b><small>ADAPTIVE LEARNING</small></span></button>'+
     '<nav class="landing49-links" aria-label="Landing navigation"><a href="#loop49">How it works</a><a href="#evidence49">Practice</a><a href="#engine49">Adaptive engine</a><a href="./pricing.html">Pricing</a><button class="landing49-start" onclick="openSetup()">Start free ↗</button></nav></header>'+
     '<main>'+
     '<section class="landing49-hero"><div class="landing49-hero-copy"><div class="landing49-kicker"><i></i> PERSONAL LEARNING SYSTEM</div><h1>Stop guessing.<br><em>Know what to do next.</em></h1><p>StudySprint turns your subjects, deadlines, confidence and practice evidence into one clear next action — then adapts when the evidence changes.</p><div class="landing49-actions"><button class="btn primary" onclick="openSetup()">Build my study system ↗</button><span>Start free · built around your real study time</span></div><div class="landing49-trust"><b>PLAN</b><b>LEARN</b><b>PRACTICE</b><b>ADAPT</b></div></div>'+

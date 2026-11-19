@@ -81,7 +81,7 @@ function taskReason(x){
   if(confidence===3)return "This topic is still developing. A short learn → recall → practice loop should strengthen it.";
   return "This keeps a stronger topic active so you do not lose it after learning it once.";
 }
-function pageQuote(text){return '<div class="page-guide"><i aria-hidden="true"></i><p>'+esc(text)+'</p></div>';}
+function pageQuote(){return "";}
 function todayPage(){
   const ready=state.data.subjects.length&&state.data.plan.length;
   if(!ready)return onboardingPage();

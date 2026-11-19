@@ -5,7 +5,8 @@ const app=fs.readFileSync("app.js","utf8");
 const index=fs.readFileSync("index.html","utf8");
 const sw=fs.readFileSync("sw.js","utf8");
 const core=fs.readFileSync("study-core.js","utf8");
-const v52=fs.readFileSync("visual-v52.css","utf8");\nconst v53=fs.readFileSync("visual-v53.css","utf8");
+const v52=fs.readFileSync("visual-v52.css","utf8");
+const v53=fs.readFileSync("visual-v53.css","utf8");
 
 assert.match(app,/function studyPack\(\)/);
 assert.match(app,/function practiceStudyPack\(packId\)/);

@@ -44,6 +44,9 @@ jobs:
           test -f config.js
           test -f enhancements.js
           test -f visual-v45.css
+          test -f visual-v49.css
+          test -f visual-v50.css
+          test -f assets/adaptive-learning-system.svg
           test -f manifest.webmanifest
           test -f sw.js
           test -f visual-v45.js

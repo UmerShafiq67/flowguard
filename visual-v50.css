@@ -1,0 +1,36 @@
+/* StudySprint V50 — product-wide color system: midnight navy + cobalt + cyan + violet */
+:root{
+ --ss50-bg:#edf3ff;--ss50-surface:#ffffff;--ss50-ink:#17213d;--ss50-muted:#65738d;--ss50-line:#dbe4f1;
+ --ss50-blue:#315ee8;--ss50-cyan:#16b8c5;--ss50-violet:#7457d9;--ss50-teal:#159b88;
+ --ss50-navy:#17254a;--ss50-soft:#f4f7ff;--ss50-cyan-soft:#effbfb;--ss50-violet-soft:#f5f1ff;
+}
+body{background:linear-gradient(180deg,#edf3ff 0%,#f7f9fd 42%,#eef9f8 100%)!important;color:var(--ss50-ink)!important}
+.appbar{background:rgba(23,37,74,.97)!important;border-bottom:1px solid rgba(255,255,255,.12)!important;box-shadow:0 12px 35px rgba(23,37,74,.16)!important}
+.brand{color:#fff!important}.brand .logo{background:linear-gradient(135deg,var(--ss50-blue),var(--ss50-cyan))!important;border-color:transparent!important}
+.brand-copy b{color:#fff!important}.brand-copy small{color:#aebbd5!important}
+.desktop-nav .nav{color:#aebbd0!important}.desktop-nav .nav:hover{background:rgba(255,255,255,.08)!important;color:#fff!important}
+.desktop-nav .nav.active{background:linear-gradient(135deg,var(--ss50-blue),var(--ss50-cyan))!important;color:#fff!important;box-shadow:0 7px 20px rgba(49,94,232,.24)}
+.utility-link,.ghost{color:#c4cee0!important}.utility-link:hover,.ghost:hover{color:#fff!important}
+.saved{color:#74d6b9!important}.saved i{background:#22b98f!important}
+.app-main{background:transparent!important}
+.head{border-bottom-color:var(--ss50-line)!important}.kicker,.eyebrow{color:#5d62c7!important}.head h1{color:var(--ss50-ink)!important}.head p{color:var(--ss50-muted)!important}
+.btn.primary{background:linear-gradient(135deg,var(--ss50-blue),var(--ss50-cyan))!important;color:#fff!important;box-shadow:0 10px 25px rgba(49,94,232,.18)!important}.btn.secondary{background:#fff!important;color:var(--ss50-ink)!important;border-color:var(--ss50-line)!important}.btn.small{background:#eef3ff!important;color:#315ee8!important}
+.card,.stats>div,.study-visual,.practicecard,.tutorbox,.mode,.editor,.welcomeaction,.sessionmain,.sessionactions,.focusstat,.review,.empty{background:rgba(255,255,255,.96)!important;border-color:var(--ss50-line)!important;box-shadow:0 18px 48px rgba(31,52,92,.07)!important}
+.card h2,.stats b,.subject h2,.sessionmain h2,.review h2{color:var(--ss50-ink)!important}.cardhead p,.stats small,.stats span,.grow small,.grow span,.head p{color:var(--ss50-muted)!important}
+.task{border-top-color:#e8edf5!important}.task:hover{background:#f6f8fd!important}.pill{background:#f0f3f9!important;color:#65738d!important}
+.nav.active{background:linear-gradient(135deg,var(--ss50-blue),var(--ss50-cyan))!important;color:#fff!important}
+.dark{background:linear-gradient(135deg,#17254a,#244b72)!important;color:#fff!important;border:1px solid rgba(49,94,232,.22)!important;box-shadow:0 20px 55px rgba(23,37,74,.18)!important}.dark .kicker{color:#9eb4ff!important}
+.callout{background:linear-gradient(135deg,#edf9f6,#eef7ff)!important;border-color:#cce8e4!important}.callout span{color:#5f7180!important}
+.subject{background:rgba(255,255,255,.96)!important;border-color:var(--ss50-line)!important}.topic{background:#f7f9fd!important;border-color:#e2e8f1!important}.c1,.c2{background:#eef3ff!important;color:#315ee8!important}.c3{background:#edfafa!important;color:#159b88!important}.c4,.c5{background:#f4f0ff!important;color:#7457d9!important}
+.bubble.ai{background:#f0f4fb!important;color:var(--ss50-ink)!important}.bubble.user{background:linear-gradient(135deg,#eaf0ff,#e9fbfb)!important;color:var(--ss50-ink)!important}.bubble.ai span{color:#71809a!important}
+.composer{border-top-color:var(--ss50-line)!important}.composer textarea,.modal input,.formrow input,.confrow select,.topicedit input,.topicedit select,.examedit input,.editorhead input{background:#fff!important;border-color:#d9e2ef!important;color:var(--ss50-ink)!important}.composer textarea:focus,.modal input:focus,.formrow input:focus,.confrow select:focus{outline:3px solid rgba(22,184,197,.13)!important;border-color:var(--ss50-cyan)!important}
+.upload{background:#eef3ff!important;color:#315ee8!important}.mode.selected{background:#eef3ff!important;border-color:#bfcff5!important;color:#315ee8!important}
+.feedback{background:linear-gradient(135deg,#eefaf7,#eff5ff)!important;border-color:#cde6e1!important}.mistake{background:#fff7ef!important;border-color:#f2dcc5!important}
+.welcomeicon{background:linear-gradient(135deg,#eef3ff,#edfafa)!important;color:#315ee8!important}.welcomeaction{transition:transform .2s ease,box-shadow .2s ease}.welcomeaction:hover{transform:translateY(-2px);box-shadow:0 20px 45px rgba(31,52,92,.10)!important}
+.mobile-nav{background:rgba(23,37,74,.97)!important;border-top-color:rgba(255,255,255,.12)!important}.mobile-nav .nav{color:#b9c5db!important}.mobile-nav .nav.active{color:#fff!important}
+.site-footer{border-top-color:#dbe4f1!important;color:#687792!important}.site-footer a{color:#52617b!important}
+.toast.show{background:#17254a!important;color:#fff!important;box-shadow:0 14px 35px rgba(23,37,74,.22)!important}
+.modal-backdrop{background:rgba(10,20,42,.58)!important}.modal{background:#fff!important;border-color:#dbe4f1!important;box-shadow:0 30px 90px rgba(15,30,60,.25)!important}.modalhead{border-bottom-color:#e7edf5!important}
+.study-visual{background:linear-gradient(145deg,#f1f5ff,#eefafa)!important}.visual-flow span{background:#fff!important;border-color:#dbe4ee!important}
+@media(max-width:700px){.appbar{background:rgba(23,37,74,.98)!important}.app-main{padding-top:36px!important}.head h1{font-size:38px!important}}
+@media(prefers-reduced-motion:reduce){.welcomeaction{transition:none}}

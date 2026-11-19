@@ -29,7 +29,9 @@ jobs:
           node --check maxi-plus.js
           cp worker.js /tmp/studysprint-worker.mjs
           node --check /tmp/studysprint-worker.mjs
-          node --check enhancements.js      - name: Run core tests
+          node --check enhancements.js
+          node --check visual-v44.js
+      - name: Run core tests
         run: npm test
       - name: Check required files
         run: |
@@ -40,7 +42,9 @@ jobs:
           test -f maxi-plus.js
           test -f worker.js
           test -f config.js
-          test -f enhancements.js          test -f visual-v34.css          test -f manifest.webmanifest
+          test -f enhancements.js
+          test -f visual-v44.css
+          test -f manifest.webmanifest
           test -f sw.js
           test -f visual-v44.js
 

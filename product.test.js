@@ -5,6 +5,7 @@ const app=fs.readFileSync("app.js","utf8");
 const index=fs.readFileSync("index.html","utf8");
 const sw=fs.readFileSync("sw.js","utf8");
 const core=fs.readFileSync("study-core.js","utf8");
+const v52=fs.readFileSync("visual-v52.css","utf8");
 
 assert.match(app,/function studyPack\(\)/);
 assert.match(app,/function practiceStudyPack\(packId\)/);
@@ -56,6 +57,13 @@ assert.match(app,/class="landing49"/);
 assert.match(app,/Know what to do next/);
 assert.doesNotMatch(app,/class="landing45"/);
 
-console.log("StudySprint visual integration tests: PASS");
+assert.match(v52,/--ss52-white:#fff/);
+assert.match(v52,/--ss52-blue:#2463eb/);
+assert.match(v52,/--ss52-cyan:#13b8c7/);
+assert.match(v52,/--ss52-violet:#7056d9/);
+assert.match(v52,/html,body,#app,.app-main\{background:#fff!important/);
+assert.match(v52,/\.appbar\{[\s\S]*background:rgba\(255,255,255/);
+assert.match(v52,/\.landing49\{[\s\S]*#fff!important/);
+assert.match(v52,/prefers-reduced-motion:reduce/);
 
-// V52 white signature visual verification
+console.log("StudySprint visual integration tests: PASS");

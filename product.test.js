@@ -15,28 +15,8 @@ assert.match(app,/sourcePackId/);
 assert.match(app,/lastResult/);
 assert.match(app,/source:"practice",sourcePackId:packId/);
 assert.match(core,/Array\.isArray\(evidence\.evidence\)/);
-assert.match(index,/visual-v35\.css\?v=36/);
-assert.match(index,/visual-v35\.js\?v=36/);
-assert.match(index,/visual-v36\.css\?v=36/);
-assert.match(index,/visual-v36\.js\?v=36/);
-assert.match(index,/visual-v37\.css\?v=37/);
-assert.match(index,/visual-v37\.js\?v=37/);
-assert.match(index,/visual-v39\.css\?v=39/);
-assert.match(index,/visual-v39\.js\?v=39/);
-assert.match(index,/visual-v40\.css\?v=40/);
-assert.match(index,/visual-v40\.js\?v=40/);
-assert.match(sw,/visual-v35\.css\?v=36/);
-assert.match(sw,/visual-v35\.js\?v=36/);
-assert.match(sw,/visual-v36\.css\?v=36/);
-assert.match(sw,/visual-v36\.js\?v=36/);
-assert.match(sw,/visual-v37\.css\?v=37/);
-assert.match(sw,/visual-v37\.js\?v=37/);
 
-assert.match(sw,/visual-v39\.css\?v=39/);
-assert.match(sw,/visual-v39\.js\?v=39/);
 
-assert.match(sw,/visual-v40\.css\?v=40/);
-assert.match(sw,/visual-v40\.js\?v=40/);
 
 console.log("StudySprint product integration tests: PASS");
 
@@ -49,24 +29,11 @@ assert.match(app,/pack.reviewDate=today\(\)/);
 assert.match(app,/const preserved=oldPlan\.filter/);
 
 
-assert.match(index,/visual-v41\.css\?v=41/);
-assert.match(index,/visual-v41\.js\?v=41/);
-assert.match(sw,/studysprint-shell-v63-v43/);
-assert.match(sw,/visual-v41\.css\?v=41/);
-assert.match(sw,/visual-v41\.js\?v=41/);
 
-assert.ok(index.includes("visual-v42.css?v=42"));
-assert.ok(index.includes("visual-v42.js?v=42"));
-assert.ok(index.includes("visual-v43.css?v=43"));
-assert.ok(index.includes("visual-v43.js?v=43"));
-assert.ok(sw.includes("visual-v42.css?v=42"));
-assert.ok(sw.includes("visual-v42.js?v=42"));
-assert.ok(sw.includes("visual-v43.css?v=43"));
-assert.ok(sw.includes("visual-v43.js?v=43"));
 assert.doesNotMatch(app,/“/);
 assert.doesNotMatch(app,/— James Clear/);
 assert.doesNotMatch(app,/— Helen Hayes/);
 
 
-assert.ok(index.includes("visual-v43.css?v=43"));
 assert.ok(index.includes("visual-v43.js?v=43"));
+assert.ok(index.includes("visual-v44.css?v=44"));\nassert.ok(index.includes("visual-v44.js?v=44"));\nassert.ok(sw.includes("studysprint-shell-v64-v44"));\nassert.ok(sw.includes("visual-v44.css?v=44"));\nassert.ok(sw.includes("visual-v44.js?v=44"));\nassert.doesNotMatch(index,/visual-v34\\.js/);\nassert.doesNotMatch(index,/visual-v41\\.js/);\nassert.doesNotMatch(index,/visual-v43\\.js/);\nassert.doesNotMatch(app,/“/);\n

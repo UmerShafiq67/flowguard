@@ -1,0 +1,55 @@
+/* StudySprint V43 — dark editorial product system
+   One rule: white type must never sit on a white surface. */
+:root{
+ --v43-bg:#061225; --v43-surface:#0b1a31; --v43-surface2:#10223d; --v43-line:#29415f;
+ --v43-white:#ffffff; --v43-text:#f7fbff; --v43-muted:#b9c9dc; --v43-soft:#8fa6c0;
+ --v43-blue:#5f7cff; --v43-cyan:#35d2dc; --v43-green:#6ee7b7;
+}
+html,body{background:var(--v43-bg)!important;color:var(--v43-text)!important}
+body{background-image:radial-gradient(circle at 8% 0%,rgba(95,124,255,.18),transparent 32rem),radial-gradient(circle at 92% 14%,rgba(53,210,220,.12),transparent 28rem)!important}
+.appbar{background:rgba(6,18,37,.92)!important;border-bottom:1px solid rgba(87,116,150,.5)!important;box-shadow:0 12px 40px rgba(0,0,0,.28)!important}
+.appbar:after{background:linear-gradient(90deg,transparent,var(--v43-blue),var(--v43-cyan),transparent)!important;opacity:.8!important}
+.brand,.brand b,.brand-copy b,.topright,.topright .utility-link,.topright .ghost,.saved{color:#fff!important}
+.brand-copy small,.saved{color:#9fb4cc!important}
+.desktop-nav .nav{color:#b9c9dc!important}
+.desktop-nav .nav:hover{background:#162b49!important;color:#fff!important}
+.desktop-nav .nav.active{background:linear-gradient(135deg,#3157ff,#1d93c5)!important;color:#fff!important}
+.mobile-nav{background:rgba(6,18,37,.97)!important;border-top:1px solid #29415f!important}
+.mobile-nav .nav{color:#9fb4cc!important}.mobile-nav .nav.active{color:#fff!important}
+.app-main{color:#fff!important}
+.app-main .head h1,.app-main .head p,.app-main .head .kicker,.app-main h1,.app-main h2,.app-main h3,.app-main h4,.app-main b,.app-main strong,.app-main label{color:#fff!important}
+.app-main .head p,.app-main .muted,.app-main .meta,.app-main small,.app-main .pagehint span{color:#b9c9dc!important}
+.app-main .head .kicker,.app-main .eyebrow,.app-main .kicker{color:#66dbe3!important}
+.app-main a{color:#8feaf2!important}
+.page-guide,.v34-guide-line{display:none!important}
+.app-main .card,.app-main .panel,.app-main .timeline-panel,.app-main .mistakes-panel,.app-main .review-pack,.app-main .section,.app-main .subject-card,.app-main .topic-card,.app-main .practice-card,.app-main .task,.app-main .plan-card,.app-main .stat-card,.app-main .empty,.app-main .pagehint{
+ background:linear-gradient(145deg,rgba(16,34,61,.98),rgba(9,25,45,.98))!important;color:#fff!important;border:1px solid #29415f!important;box-shadow:0 18px 50px rgba(0,0,0,.24)!important
+}
+.app-main .card p,.app-main .panel p,.app-main .review-pack p,.app-main li,.app-main .empty,.app-main .pagehint span{color:#c5d2e2!important}
+.command-strip{background:rgba(11,26,49,.94)!important;color:#fff!important;border:1px solid #29415f!important;box-shadow:0 18px 45px rgba(0,0,0,.24)!important}
+.command-strip span,.command-strip small{color:#9fb4cc!important}.command-strip b{color:#fff!important}
+.hero-action{background:linear-gradient(135deg,#102a54,#0b1a31 68%,#123c56)!important;color:#fff!important;border:1px solid #35577e!important}
+.hero-action h2,.hero-action p,.hero-action .hero-subject,.hero-action .hero-meta span{color:#fff!important}.hero-action p{color:#c9d6e6!important}
+.signal-panel{background:linear-gradient(145deg,#0d2340,#0a172b)!important;color:#fff!important;border:1px solid #29415f!important}.signal-panel p,.signal-row span{color:#b9c9dc!important}.signal-number,.signal-head span:last-child,.signal-row b{color:#fff!important}
+.today-visual-story,.today-pack-panel{background:linear-gradient(135deg,#0b1c34,#102c4a)!important;color:#fff!important;border:1px solid #29415f!important}.today-visual-copy h2,.today-visual-copy p,.today-pack-panel h2,.today-pack-panel p,.today-pack-item b{color:#fff!important}.today-visual-copy p,.today-pack-panel p,.today-pack-item small{color:#b9c9dc!important}
+.section-title h2{color:#fff!important}.section-title .eyebrow{color:#66dbe3!important}
+.app-main input,.app-main select,.app-main textarea{background:#08172b!important;color:#fff!important;border:1px solid #38536f!important;caret-color:#fff!important}.app-main input::placeholder,.app-main textarea::placeholder{color:#8299b3!important}
+.app-main input:focus,.app-main select:focus,.app-main textarea:focus{outline:2px solid rgba(53,210,220,.5)!important;border-color:#53cbd5!important}
+.app-main .btn.secondary,.app-main .btn.ghost,.app-main .ghost{background:#122945!important;color:#fff!important;border:1px solid #38536f!important}.app-main .btn.textbtn,.app-main .btn.text{color:#a9eff4!important}.app-main .btn.primary{background:linear-gradient(135deg,#4f6dff,#1caec2)!important;color:#fff!important;border:0!important}
+.app-main table,.app-main th,.app-main td{color:#fff!important;border-color:#29415f!important}.app-main th{background:#10233e!important}.app-main td{background:#0b1a31!important}
+.app-main .progress,.app-main .bar{background:#203653!important}.app-main .progress em,.app-main .bar em{background:linear-gradient(90deg,#4f6dff,#35d2dc)!important}
+.site-footer{background:#040d1c!important;color:#9fb4cc!important;border-top:1px solid #29415f!important}.site-footer span{color:#9fb4cc!important}.site-footer a{color:#8feaf2!important}
+/* Landing: dark, readable, and no white-on-white sections. */
+.v34-site{background:#061225!important;color:#fff!important}
+.v34-site .v34-nav{background:rgba(6,18,37,.92)!important;border-color:#29415f!important}.v34-site .v34-nav nav a{color:#b9c9dc!important}.v34-site .v34-nav-actions button:not(.v34-primary){background:#10233e!important;color:#fff!important;border-color:#38536f!important}
+.v34-site .v34-hero{background:radial-gradient(circle at 12% 8%,rgba(79,109,255,.28),transparent 32rem),linear-gradient(135deg,#07152a,#0b2440 55%,#0c3443)!important}
+.v34-site .v34-hero h1,.v34-site .v34-hero p,.v34-site .v34-problem h2,.v34-site .v34-system h2,.v34-site .v34-tools h2,.v34-site .v34-artifact h2,.v34-site .v34-proof h2,.v34-site .v34-faq h2,.v34-site .v34-final h2{color:#fff!important}
+.v34-site .v34-hero p,.v34-site .v34-problem-head p,.v34-site .v34-system-copy>p,.v34-site .v34-tools-head>p,.v34-site .v34-artifact-copy>p,.v34-site .v34-proof-copy>p,.v34-site .v34-engine-inner>div>p,.v34-site .v34-final p{color:#c5d2e2!important}
+.v34-site .v34-problem,.v34-site .v34-tools,.v34-site .v34-proof,.v34-site .v34-faq{background:#08172b!important}.v34-site .v34-problem-grid article,.v34-site .v34-tool{background:#10223d!important;color:#fff!important;border-color:#29415f!important}.v34-site .v34-problem-grid h3,.v34-site .v34-tool-body h3{color:#fff!important}.v34-site .v34-problem-grid p,.v34-site .v34-tool-body p{color:#b9c9dc!important}
+.v34-site .v34-system{background:linear-gradient(135deg,#0b1b34,#102d49)!important}.v34-site .v34-artifact{background:linear-gradient(135deg,#251d36,#102c43)!important}.v34-site .v34-engine{background:linear-gradient(135deg,#040d1c,#12345b)!important}.v34-site .v34-final{background:linear-gradient(120deg,#040d1c,#12345b 65%,#3157ff)!important;color:#fff!important}.v34-site .v34-footer{background:#040d1c!important}.v34-site .v34-footer p,.v34-site .v34-footer a{color:#9fb4cc!important}.v34-site .v34-footer .v34-brand b{color:#fff!important}
+.v34-site .v34-guide-line{display:none!important}
+.v41-page-visual{border-color:#29415f!important;box-shadow:0 28px 70px rgba(0,0,0,.34)!important}.v41-page-visual:after{background:linear-gradient(90deg,rgba(3,10,21,.84),rgba(3,10,21,.3),rgba(3,10,21,.12))!important}.v41-page-visual figcaption b,.v41-page-visual figcaption span{color:#fff!important}.v41-page-visual figcaption small{color:#66dbe3!important}
+.toast{background:#10233e!important;color:#fff!important;border-color:#38536f!important}
+@media(max-width:850px){.app-main{padding-left:16px!important;padding-right:16px!important}}
+@media(max-width:560px){.app-main .head h1{font-size:clamp(36px,10vw,50px)!important}.app-main .head p{font-size:15px!important}.app-main .card p,.app-main .panel p,.app-main li{font-size:14px!important}.app-main .muted,.app-main small{font-size:13px!important}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}

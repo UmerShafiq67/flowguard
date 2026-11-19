@@ -92,3 +92,16 @@ body{font-family:"DM Sans",sans-serif!important}
   .v41-page-visual img,.app-main .btn,.app-main .card,.app-main .review-pack{transition:none!important}
   .app-main .btn:hover,.app-main .card:hover,.app-main .review-pack:hover{transform:none!important}
 }
+
+.v41-page-visual.image-fallback{background:linear-gradient(135deg,#10264b,#3157ff 58%,#19b9c9)!important}
+.v41-page-visual.image-fallback img{opacity:0!important}
+.v41-page-visual.image-fallback:after{background:linear-gradient(135deg,rgba(8,22,47,.96),rgba(49,87,255,.78))!important}
+.app-main button,.app-main input,.app-main select,.app-main textarea{font-size:15px!important}
+.app-main input,.app-main select,.app-main textarea{min-height:46px!important}
+.app-main .muted,.app-main .meta,.app-main small{font-size:13px!important;line-height:1.5!important}
+.app-main .card p,.app-main .panel p,.app-main .review-pack p{line-height:1.55!important}
+@media(max-width:560px){
+ .app-main button{min-height:46px!important}
+ .app-main input,.app-main select,.app-main textarea{font-size:16px!important}
+ .app-main .muted,.app-main .meta,.app-main small{font-size:12.5px!important}
+}

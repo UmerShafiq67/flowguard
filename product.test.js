@@ -35,11 +35,11 @@ assert.doesNotMatch(app,/— James Clear/);
 assert.doesNotMatch(app,/— Helen Hayes/);
 
 
-assert.ok(index.includes("visual-v45.css?v=45"));
-assert.ok(index.includes("visual-v45.js?v=45"));
-assert.ok(sw.includes("studysprint-shell-v65-v45"));
-assert.ok(sw.includes("visual-v45.css?v=45"));
-assert.ok(sw.includes("visual-v45.js?v=45"));
+assert.ok(index.includes("visual-v46.css?v=46"));
+assert.ok(index.includes("visual-v45.js?v=46"));
+assert.ok(sw.includes("studysprint-shell-v66-v46"));
+assert.ok(sw.includes("visual-v46.css?v=46"));
+assert.ok(sw.includes("visual-v45.js?v=46"));
 assert.doesNotMatch(index,/visual-v34\\.js/);
 assert.doesNotMatch(index,/visual-v41\\.js/);
 assert.doesNotMatch(index,/visual-v43\\.js/);
@@ -50,8 +50,8 @@ assert.doesNotMatch(index,/visual-upgrade\\.js/);
 assert.doesNotMatch(index,/design-v2\\.css/);
 assert.doesNotMatch(index,/design-v3\\.css/);
 assert.doesNotMatch(index,/visual-upgrade\\.css/);
-assert.ok(index.includes("visual-v45.css?v=45"));
-assert.ok(index.includes("visual-v45.js?v=45"));
+assert.ok(index.includes("visual-v46.css?v=46"));
+assert.ok(index.includes("visual-v45.js?v=46"));
 assert.doesNotMatch(app,/“/);
 
 assert.match(app,/class="landing45"/);

@@ -55,10 +55,10 @@ assert.match(sw,/studysprint-shell-v62-v42/);
 assert.match(sw,/visual-v41\.css\?v=41/);
 assert.match(sw,/visual-v41\.js\?v=41/);
 
-assert.match(index,/visual-v42\\.css\\?v=42/);
-assert.match(index,/visual-v42\\.js\\?v=42/);
-assert.match(sw,/visual-v42\\.css\\?v=42/);
-assert.match(sw,/visual-v42\\.js\\?v=42/);
+assert.ok(index.includes("visual-v42.css?v=42"));
+assert.ok(index.includes("visual-v42.js?v=42"));
+assert.ok(sw.includes("visual-v42.css?v=42"));
+assert.ok(sw.includes("visual-v42.js?v=42"));
 assert.doesNotMatch(app,/“/);
 assert.doesNotMatch(app,/— James Clear/);
 assert.doesNotMatch(app,/— Helen Hayes/);

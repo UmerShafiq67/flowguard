@@ -16,8 +16,6 @@ assert.match(app,/lastResult/);
 assert.match(app,/source:"practice",sourcePackId:packId/);
 assert.match(core,/Array\.isArray\(evidence\.evidence\)/);
 
-
-
 console.log("StudySprint product integration tests: PASS");
 
 assert.match(app,/function accountPage\(\)/);
@@ -28,34 +26,32 @@ assert.match(app,/kind:"evidence-review"/);
 assert.match(app,/pack.reviewDate=today\(\)/);
 assert.match(app,/const preserved=oldPlan\.filter/);
 
-
-
 assert.doesNotMatch(app,/“/);
 assert.doesNotMatch(app,/— James Clear/);
 assert.doesNotMatch(app,/— Helen Hayes/);
 
-
 assert.ok(index.includes("visual-v49.css?v=49"));
 assert.ok(index.includes("visual-v50.css?v=50"));
+assert.ok(index.includes("visual-v51.css?v=51"));
+assert.ok(index.includes('theme-color" content="#ffffff"'));
 assert.ok(index.includes("visual-v45.js?v=49"));
-assert.ok(sw.includes("studysprint-shell-v70-v50"));
+assert.ok(sw.includes("studysprint-shell-v71-v51"));
+assert.ok(sw.includes("visual-v51.css?v=51"));
 assert.ok(sw.includes("visual-v49.css?v=49"));
 assert.ok(sw.includes("visual-v45.js?v=49"));
-assert.doesNotMatch(index,/visual-v34\\.js/);
-assert.doesNotMatch(index,/visual-v41\\.js/);
-assert.doesNotMatch(index,/visual-v43\\.js/);
-assert.doesNotMatch(index,/visual-v44\\.js/);
-assert.doesNotMatch(index,/design-v2\\.js/);
-assert.doesNotMatch(index,/design-v3\\.js/);
-assert.doesNotMatch(index,/visual-upgrade\\.js/);
-assert.doesNotMatch(index,/design-v2\\.css/);
-assert.doesNotMatch(index,/design-v3\\.css/);
-assert.doesNotMatch(index,/visual-upgrade\\.css/);
-assert.ok(index.includes("visual-v49.css?v=49"));
-assert.ok(index.includes("visual-v45.js?v=49"));
-assert.doesNotMatch(app,/“/);
-
+assert.doesNotMatch(index,/visual-v34\.js/);
+assert.doesNotMatch(index,/visual-v41\.js/);
+assert.doesNotMatch(index,/visual-v43\.js/);
+assert.doesNotMatch(index,/visual-v44\.js/);
+assert.doesNotMatch(index,/design-v2\.js/);
+assert.doesNotMatch(index,/design-v3\.js/);
+assert.doesNotMatch(index,/visual-upgrade\.js/);
+assert.doesNotMatch(index,/design-v2\.css/);
+assert.doesNotMatch(index,/design-v3\.css/);
+assert.doesNotMatch(index,/visual-upgrade\.css/);
 assert.ok(app.includes("adaptive-learning-system.svg"));
 assert.match(app,/class="landing49"/);
 assert.match(app,/Know what to do next/);
 assert.doesNotMatch(app,/class="landing45"/);
+
+console.log("StudySprint visual integration tests: PASS");

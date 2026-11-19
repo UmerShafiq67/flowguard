@@ -38,7 +38,7 @@ assert.doesNotMatch(app,/— Helen Hayes/);
 assert.ok(index.includes("visual-v49.css?v=49"));
 assert.ok(index.includes("visual-v50.css?v=50"));
 assert.ok(index.includes("visual-v45.js?v=49"));
-assert.ok(sw.includes("studysprint-shell-v69-v49"));
+assert.ok(sw.includes("studysprint-shell-v70-v50"));
 assert.ok(sw.includes("visual-v49.css?v=49"));
 assert.ok(sw.includes("visual-v45.js?v=49"));
 assert.doesNotMatch(index,/visual-v34\\.js/);

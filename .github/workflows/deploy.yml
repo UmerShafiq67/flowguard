@@ -46,10 +46,13 @@ jobs:
           test -f visual-v45.css
           test -f visual-v49.css
           test -f visual-v50.css
+          test -f visual-v51.css
           test -f assets/adaptive-learning-system.svg
           test -f manifest.webmanifest
           test -f sw.js
           test -f visual-v45.js
+          grep -q 'visual-v51.css?v=51' index.html
+          grep -q 'studysprint-shell-v71-v51' sw.js
 
   deploy:
     needs: validate

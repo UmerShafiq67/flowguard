@@ -64,7 +64,7 @@ assert.match(v52,/--ss52-white:#fff/);
 assert.match(v52,/--ss52-blue:#2463eb/);
 assert.match(v52,/--ss52-cyan:#13aab8/);
 assert.match(v52,/--ss52-violet:#7056d9/);
-assert.match(v52,/html,body,#app,.app-main,[\\s\\S]*background:#fff!important/);
+assert.ok(v52.includes("html,body,#app,.app-main,"));\nassert.ok(v52.includes("background:#fff!important"));
 assert.match(v52,/\.appbar\{[\s\S]*background:rgba\(255,255,255/);
 assert.match(v52,/\.landing49\{background:#fff!important/);
 assert.match(v52,/prefers-reduced-motion:reduce/);

@@ -500,3 +500,85 @@ html[data-theme="dark"] .ss-goal-banner{background:linear-gradient(100deg,#17213
 }
 @media(max-width:430px){.stats{grid-template-columns:1fr 1fr}.head h1{font-size:34px}.card{padding:18px}.hero-action h2{font-size:32px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.001ms!important;transition-duration:.001ms!important}}
+
+
+/* V62 — premium visual storytelling: landing hero */
+.landing49-hero-visual{
+  position:relative;
+  min-height:560px;
+  border-radius:32px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 78% 18%,rgba(113,130,255,.28),transparent 28%),
+    linear-gradient(145deg,#0c1420,#1a2938);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 32px 90px rgba(16,24,35,.24);
+  display:grid;
+  place-items:center;
+  isolation:isolate;
+}
+.landing49-hero-visual:before{
+  content:"";
+  position:absolute;
+  width:72%;
+  aspect-ratio:1;
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:50%;
+  box-shadow:0 0 0 45px rgba(255,255,255,.025),0 0 0 90px rgba(255,255,255,.018);
+}
+.landing49-hero-visual img{
+  width:96%;
+  max-width:760px;
+  position:relative;
+  z-index:2;
+  filter:drop-shadow(0 30px 45px rgba(0,0,0,.35));
+  transform:translateY(4px);
+}
+.landing49-visual-tag{
+  position:absolute;
+  left:22px;
+  bottom:22px;
+  z-index:3;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  column-gap:9px;
+  align-items:center;
+  padding:12px 14px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:14px;
+  background:rgba(10,16,24,.78);
+  backdrop-filter:blur(16px);
+  color:#fff;
+  box-shadow:0 14px 35px rgba(0,0,0,.25);
+}
+.landing49-visual-tag i{grid-row:1/3;width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 5px rgba(25,183,159,.12)}
+.landing49-visual-tag span{font-size:8px;letter-spacing:.14em;color:var(--mint);font-weight:900}
+.landing49-visual-tag b{font-size:10px;margin-top:3px}
+.landing49-evidence-art{
+  position:relative;
+  overflow:hidden;
+}
+.landing49-evidence-art:after{
+  content:"";
+  position:absolute;
+  right:-70px;
+  bottom:-90px;
+  width:230px;
+  height:230px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(61,87,255,.22),transparent 70%);
+}
+@media(max-width:1000px){
+  .landing49-hero{grid-template-columns:1fr;max-width:850px}
+  .landing49-hero-visual{min-height:500px}
+}
+@media(max-width:760px){
+  .landing49-hero-visual{min-height:390px;border-radius:24px}
+  .landing49-hero-visual img{width:110%}
+  .landing49-visual-tag{left:14px;right:14px;bottom:14px}
+}
+@media(max-width:430px){
+  .landing49-hero-visual{min-height:300px;border-radius:20px}
+  .landing49-visual-tag{padding:10px 11px}
+  .landing49-visual-tag b{font-size:9px}
+}

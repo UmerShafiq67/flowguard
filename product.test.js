@@ -5,7 +5,7 @@ const app=fs.readFileSync("app.js","utf8");
 const index=fs.readFileSync("index.html","utf8");
 const sw=fs.readFileSync("sw.js","utf8");
 const core=fs.readFileSync("study-core.js","utf8");
-const v57=fs.readFileSync("visual-v57.css","utf8");
+const v57=fs.readFileSync("visual-v58.css","utf8");
 
 assert.match(app,/function studyPack\(\)/);
 assert.match(app,/studysprint-mark\.svg/);
@@ -32,11 +32,11 @@ assert.doesNotMatch(app,/“/);
 assert.doesNotMatch(app,/— James Clear/);
 assert.doesNotMatch(app,/— Helen Hayes/);
 
-assert.ok(index.includes("visual-v57.css?v=57"));
+assert.ok(index.includes("visual-v58.css?v=58"));
 assert.doesNotMatch(index,/visual-v49\.css|visual-v50\.css|visual-v51\.css|visual-v52\.css|visual-v53\.css|visual-v54\.css|visual-v55\.css|visual-v56\.css/);
 assert.ok(index.includes('theme-color" content="#1976ee"'));
 assert.doesNotMatch(index,/visual-v45\.js/);
-assert.ok(sw.includes("studysprint-shell-v78-v57"));
+assert.ok(sw.includes("studysprint-shell-v79-v58"));
 assert.ok(sw.includes("visual-v57.css?v=57"));
 assert.doesNotMatch(sw,/visual-v49\.css|visual-v50\.css|visual-v51\.css|visual-v52\.css|visual-v53\.css|visual-v54\.css|visual-v55\.css|visual-v56\.css/);
 assert.doesNotMatch(sw,/visual-v45\.js/);
@@ -55,15 +55,17 @@ assert.match(app,/class="landing49"/);
 assert.match(app,/Know what to do next/);
 assert.doesNotMatch(app,/class="landing45"/);
 
-assert.match(v57,/\.ss-shell/);
-assert.match(v57,/\.today-visual-story/);
-assert.match(v57,/\.ss-quick-actions/);
-assert.match(v57,/\.mobile-nav/);
-assert.match(v57,/max-width:700px/);
-assert.match(v57,/prefers-reduced-motion:reduce/);
+assert.match(v58,/\.ss-shell/);
+assert.match(v58,/\.today-visual-story/);
+assert.match(v58,/\.ss-quick-actions/);
+assert.match(v58,/\.mobile-nav/);
+assert.match(v58,/\.hero-action:after/);
+assert.match(v58,/max-width:700px/);
+assert.match(v58,/prefers-reduced-motion:reduce/);
 assert.match(app,/toggleTheme/);
-assert.match(app,/applyTheme\(currentTheme\(\)\)/);
-assert.match(app,/return "light";/);
+assert.match(app,/applyTheme\(currentTheme\(\)/);
+assert.match(app,/function openTutorSearch\(\)/);
+assert.match(app,/function showNotifications\(\)/);
 assert.match(app,/ss-goal-banner/);
 assert.match(app,/ss-quick-actions/);
 

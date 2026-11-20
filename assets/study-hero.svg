@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" role="img" aria-labelledby="title desc">
+<title id="title">StudySprint study desk illustration</title>
+<desc id="desc">A premium editorial illustration of a student study desk with a laptop, books, notes and adaptive learning signals.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1a2440"/><stop offset="1" stop-color="#0e1420"/></linearGradient>
+  <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#5c73ff"/><stop offset="1" stop-color="#19b79f"/></linearGradient>
+  <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffdf8"/><stop offset="1" stop-color="#e9edf5"/></linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="22" stdDeviation="22" flood-color="#000" flood-opacity=".28"/></filter>
+</defs>
+<rect width="900" height="700" rx="42" fill="url(#bg)"/>
+<circle cx="730" cy="125" r="150" fill="#3d57ff" opacity=".16"/>
+<circle cx="170" cy="610" r="180" fill="#19b79f" opacity=".10"/>
+<path d="M0 545C190 505 310 555 470 520s280-8 430-50v230H0Z" fill="#111a2b"/>
+<!-- desk -->
+<path d="M95 560h710l-34 78H129z" fill="#c8a77c" opacity=".92" filter="url(#shadow)"/>
+<path d="M155 635h28l-25 65h-27zm560 0h28l25 65h-28z" fill="#b88f61"/>
+<!-- laptop -->
+<g filter="url(#shadow)">
+  <path d="M285 250h330q17 0 17 17v208H268V267q0-17 17-17Z" fill="#111820"/>
+  <rect x="290" y="270" width="320" height="180" rx="8" fill="url(#screen)"/>
+  <path d="M248 475h404l32 38q8 10-9 10H225q-17 0-9-10l32-38Z" fill="#202a35"/>
+</g>
+<!-- screen UI -->
+<rect x="315" y="292" width="130" height="11" rx="5" fill="#fff" opacity=".8"/>
+<rect x="315" y="316" width="210" height="7" rx="3" fill="#fff" opacity=".28"/>
+<rect x="315" y="338" width="145" height="7" rx="3" fill="#fff" opacity=".22"/>
+<rect x="315" y="375" width="112" height="45" rx="10" fill="#fff" opacity=".92"/>
+<rect x="439" y="375" width="145" height="45" rx="10" fill="#0e1724" opacity=".65"/>
+<circle cx="337" cy="397" r="9" fill="#19b79f"/>
+<path d="M353 397h50" stroke="#27313d" stroke-width="6" stroke-linecap="round"/>
+<path d="M456 398h90" stroke="#fff" stroke-opacity=".7" stroke-width="7" stroke-linecap="round"/>
+<!-- books -->
+<g filter="url(#shadow)">
+<rect x="135" y="465" width="170" height="28" rx="6" fill="#f06b57" transform="rotate(-5 135 465)"/>
+<rect x="148" y="435" width="165" height="30" rx="6" fill="#3d57ff" transform="rotate(3 148 435)"/>
+<rect x="155" y="405" width="150" height="30" rx="6" fill="#f4c76c" transform="rotate(-2 155 405)"/>
+</g>
+<!-- notes -->
+<g filter="url(#shadow)">
+<rect x="605" y="360" width="135" height="170" rx="12" fill="url(#paper)" transform="rotate(7 605 360)"/>
+<path d="M630 395h75M630 418h62M630 441h78M630 464h51" stroke="#7a8492" stroke-width="6" stroke-linecap="round" opacity=".6"/>
+<circle cx="631" cy="488" r="8" fill="#19b79f"/>
+<path d="M648 488h55" stroke="#7a8492" stroke-width="6" stroke-linecap="round"/>
+</g>
+<!-- adaptive signal -->
+<g filter="url(#shadow)">
+<rect x="72" y="105" width="210" height="110" rx="18" fill="#fff" fill-opacity=".94"/>
+<text x="96" y="137" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#3d57ff" letter-spacing="2">NEXT BEST ACTION</text>
+<text x="96" y="169" font-family="Arial,sans-serif" font-size="22" font-weight="700" fill="#17202a">Retrieval practice</text>
+<rect x="96" y="184" width="120" height="7" rx="3" fill="#dfe4ed"/>
+<rect x="96" y="184" width="78" height="7" rx="3" fill="#19b79f"/>
+</g>
+<!-- floating pencil -->
+<g transform="rotate(-28 720 250)" filter="url(#shadow)">
+<rect x="675" y="232" width="115" height="18" rx="9" fill="#f4c76c"/>
+<path d="M790 232l28 9-28 9z" fill="#e6c7a3"/>
+<rect x="675" y="232" width="22" height="18" rx="9" fill="#f06b57"/>
+</g>
+</svg>

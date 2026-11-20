@@ -47,11 +47,9 @@ jobs:
           test -f assets/adaptive-learning-system.svg
           test -f manifest.webmanifest
           test -f sw.js
-          grep -q 'visual-v51.css?v=51' index.html
-          grep -q 'visual-v52.css?v=52' index.html
-          grep -q 'visual-v56.css?v=56' index.html
-          grep -q 'studysprint-shell-v77-v56' sw.js
-          grep -q 'visual-v56.css?v=56' sw.js
+          grep -q 'visual-v57.css?v=57' index.html
+          grep -q 'studysprint-shell-v78-v57' sw.js
+          grep -q 'visual-v57.css?v=57' sw.js
 
   deploy:
     needs: validate

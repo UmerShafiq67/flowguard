@@ -287,8 +287,23 @@
   }
   window.studySprintSyncEntitlement=syncEntitlement;
 
+  let paddlePromise=null;
+  function loadPaddle(){
+    if(window.Paddle)return Promise.resolve(window.Paddle);
+    if(!BILL.provider||BILL.provider!=="paddle"||!BILL.clientToken||!BILL.plusPriceId)return Promise.resolve(null);
+    if(paddlePromise)return paddlePromise;
+    paddlePromise=new Promise((resolve,reject)=>{
+      const script=document.createElement("script");
+      script.src="https://cdn.paddle.com/paddle/v2/paddle.js";
+      script.async=true;
+      script.onload=()=>resolve(window.Paddle||null);
+      script.onerror=()=>{paddlePromise=null;reject(new Error("Checkout service could not load."))};
+      document.head.appendChild(script);
+    });
+    return paddlePromise;
+  }
   function billingConfigured(){
-    return BILL.provider==="paddle"&&BILL.clientToken&&BILL.plusPriceId&&window.Paddle;
+    return BILL.provider==="paddle"&&BILL.clientToken&&BILL.plusPriceId;
   }
   window.studySprintBillingStatus=function(){
     const el=document.getElementById("billingStatus");
@@ -298,13 +313,15 @@
       :"Checkout is safely disabled until the store's public client token and Plus price are connected. No payment can be taken from this build.";
   };
 
-  window.startPlusCheckout=function(){
+  window.startPlusCheckout=async function(){
     if(!billingConfigured()){
       openPremium();
       toast("Plus checkout is being prepared. Billing configuration is not connected yet.");
       return;
     }
     try{
+      await loadPaddle();
+      if(!window.Paddle)throw new Error("Checkout service could not load.");
       if(!window.__studySprintPaddleReady){
         if(BILL.environment==="sandbox"&&Paddle.Environment&&typeof Paddle.Environment.set==="function"){
           Paddle.Environment.set("sandbox");

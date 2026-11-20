@@ -16,7 +16,7 @@ assert.match(app,/packContext/);
 assert.match(app,/sourcePackId/);
 assert.match(app,/lastResult/);
 assert.match(app,/source:"practice",sourcePackId:packId/);
-assert.match(core,/Array\.isArray\(evidence\.evidence\)/);
+assert.match(core,/Array\.isArray\(evidence\.attempts\)/);
 
 console.log("StudySprint product integration tests: PASS");
 

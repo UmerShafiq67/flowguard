@@ -40,7 +40,7 @@ assert.ok(index.includes("visual-v75.css?v=75"));
 assert.ok(index.includes("marketing-v75.css?v=75"));
 assert.ok(index.includes("app.js?v=75"));
 assert.ok(index.includes("visual-v73.css?v=73"));
-assert.ok(index.includes("app.js?v=72"));
+
 assert.ok(index.includes('theme-color" content="#163a33"'));
 assert.doesNotMatch(index,/visual-v49\.css|visual-v50\.css|visual-v51\.css|visual-v52\.css|visual-v53\.css|visual-v54\.css|visual-v55\.css|visual-v56\.css/);
 assert.doesNotMatch(index,/visual-v45\.js|visual-v34\.js|visual-v41\.js|visual-v43\.js|visual-v44\.js/);
@@ -50,7 +50,7 @@ assert.ok(sw.includes("studysprint-shell-v99-v75"));
 assert.ok(sw.includes("marketing-v75.css?v=75"));
 assert.ok(sw.includes("app.js?v=75"));
 assert.ok(sw.includes("visual-v73.css?v=73"));
-assert.ok(sw.includes("app.js?v=72"));
+
 assert.ok(sw.includes("assets/study-hero.svg"));
 assert.ok(sw.includes("assets/today-progress.svg"));
 assert.ok(sw.includes("assets/plan-visual.svg"));

@@ -59,6 +59,8 @@ jobs:
           test -f assets/progress-visual.svg
           test -f assets/focus-visual.svg
           test -f manifest.webmanifest
+          test -f robots.txt
+          test -f sitemap.xml
           test -f sw.js
           grep -q "visual-v74.css?v=74" index.html
           grep -q "studysprint-shell-v97-v74" sw.js

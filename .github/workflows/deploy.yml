@@ -1,5 +1,5 @@
 name: Deploy StudySprint to GitHub Pages
-# V56 responsive dashboard verification
+# V57 whole-product responsive dashboard verification
 
 on:
   push:
@@ -43,13 +43,7 @@ jobs:
           test -f worker.js
           test -f config.js
           test -f enhancements.js
-          test -f visual-v49.css
-          test -f visual-v50.css
-          test -f visual-v51.css
-          test -f visual-v52.css
-          test -f visual-v53.css
-          test -f visual-v54.css
-          test -f visual-v55.css
+          test -f visual-v57.css
           test -f assets/adaptive-learning-system.svg
           test -f manifest.webmanifest
           test -f sw.js

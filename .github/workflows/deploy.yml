@@ -49,7 +49,6 @@ jobs:
           test -f sw.js
           grep -q 'visual-v60.css?v=60' index.html
           grep -q 'studysprint-shell-v81-v60' sw.js
-          grep -q 'visual-v59.css?v=59' sw.js
 
   deploy:
     needs: validate

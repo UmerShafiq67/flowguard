@@ -1,5 +1,5 @@
 name: Deploy StudySprint to GitHub Pages
-# V72 premium visual system + responsive product verification
+# V73 premium study studio + responsive product verification
 
 on:
   push:
@@ -45,6 +45,7 @@ jobs:
           test -f enhancements.js
           test -f visual-v61.css
           test -f visual-v72.css
+          test -f visual-v73.css
           test -f assets/adaptive-learning-system.svg
           test -f assets/study-hero.svg
           test -f assets/today-progress.svg
@@ -58,8 +59,8 @@ jobs:
           test -f assets/focus-visual.svg
           test -f manifest.webmanifest
           test -f sw.js
-          grep -q 'visual-v72.css?v=72' index.html
-          grep -q 'studysprint-shell-v95-v72' sw.js
+          grep -q "visual-v73.css?v=73" index.html
+          grep -q "studysprint-shell-v96-v73" sw.js
 
   deploy:
     needs: validate

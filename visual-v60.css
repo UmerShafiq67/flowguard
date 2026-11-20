@@ -452,3 +452,14 @@ html[data-theme="dark"] .landing49-theme i b{transform:translateX(15px)}
   .today-visual-copy{padding:23px}
   .today-visual-art{min-height:230px}
 }
+
+/* V60 mobile controls */
+.ss-mobile-theme{display:none;width:42px;height:42px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);align-items:center;justify-content:center;gap:4px;padding:0;font-size:9px}
+.ss-mobile-theme i{width:22px;height:13px;border-radius:99px;background:var(--ink);padding:2px;display:flex;align-items:center}
+.ss-mobile-theme i b{display:block;width:9px;height:9px;border-radius:50%;background:#fff;transition:.2s}
+html[data-theme="dark"] .ss-mobile-theme i b{transform:translateX(9px);background:var(--mint)}
+@media(max-width:760px){
+  .ss-mobile-theme{display:inline-flex}
+  .landing49-links{display:flex;align-items:center;gap:8px}
+  .landing49-links a,.landing49-start{display:none}
+}

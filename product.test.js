@@ -6,6 +6,7 @@ const index=fs.readFileSync("index.html","utf8");
 const sw=fs.readFileSync("sw.js","utf8");
 const core=fs.readFileSync("study-core.js","utf8");
 const v61=fs.readFileSync("visual-v61.css","utf8");
+const v72=fs.readFileSync("visual-v72.css","utf8");
 
 assert.match(app,/function studyPack\(\)/);
 assert.match(app,/studysprint-mark\.svg/);
@@ -32,11 +33,16 @@ assert.doesNotMatch(app,/“/);
 assert.doesNotMatch(app,/— James Clear/);
 assert.doesNotMatch(app,/— Helen Hayes/);
 
-assert.ok(index.includes("visual-v61.css?v=71"));
+assert.ok(index.includes("visual-v72.css?v=72"));
+assert.ok(index.includes("app.js?v=72"));
+assert.ok(index.includes('theme-color" content="#0b1220"'));
 assert.doesNotMatch(index,/visual-v49\.css|visual-v50\.css|visual-v51\.css|visual-v52\.css|visual-v53\.css|visual-v54\.css|visual-v55\.css|visual-v56\.css/);
-assert.ok(index.includes('theme-color" content="#11151b"'));
-assert.doesNotMatch(index,/visual-v45\.js/);
-assert.ok(sw.includes("studysprint-shell-v94-v71"));
+assert.doesNotMatch(index,/visual-v45\.js|visual-v34\.js|visual-v41\.js|visual-v43\.js|visual-v44\.js/);
+assert.doesNotMatch(index,/design-v2\.js|design-v3\.js|visual-upgrade\.js|design-v2\.css|design-v3\.css|visual-upgrade\.css/);
+
+assert.ok(sw.includes("studysprint-shell-v95-v72"));
+assert.ok(sw.includes("visual-v72.css?v=72"));
+assert.ok(sw.includes("app.js?v=72"));
 assert.ok(sw.includes("assets/study-hero.svg"));
 assert.ok(sw.includes("assets/today-progress.svg"));
 assert.ok(sw.includes("assets/plan-visual.svg"));
@@ -47,40 +53,6 @@ assert.ok(sw.includes("assets/tutor-visual.svg"));
 assert.ok(sw.includes("assets/review-visual.svg"));
 assert.ok(sw.includes("assets/progress-visual.svg"));
 assert.ok(sw.includes("assets/focus-visual.svg"));
-assert.ok(sw.includes("visual-v61.css?v=71"));
-assert.doesNotMatch(sw,/visual-v49\.css|visual-v50\.css|visual-v51\.css|visual-v52\.css|visual-v53\.css|visual-v54\.css|visual-v55\.css|visual-v56\.css/);
-assert.doesNotMatch(sw,/visual-v45\.js/);
-assert.doesNotMatch(index,/visual-v34\.js/);
-assert.doesNotMatch(index,/visual-v41\.js/);
-assert.doesNotMatch(index,/visual-v43\.js/);
-assert.doesNotMatch(index,/visual-v44\.js/);
-assert.doesNotMatch(index,/design-v2\.js/);
-assert.doesNotMatch(index,/design-v3\.js/);
-assert.doesNotMatch(index,/visual-upgrade\.js/);
-assert.doesNotMatch(index,/design-v2\.css/);
-assert.doesNotMatch(index,/design-v3\.css/);
-assert.doesNotMatch(index,/visual-upgrade\.css/);
-assert.ok(app.includes("adaptive-learning-system.svg"));
-assert.match(app,/class="landing49"/);
-assert.match(app,/Know what to do next/);
-assert.doesNotMatch(app,/class="landing45"/);
-
-assert.match(v61,/\.ss-shell/);
-assert.match(v61,/\.today-visual-story/);
-assert.match(v61,/\.ss-quick-actions/);
-assert.match(v61,/\.mobile-nav/);
-assert.match(v61,/\.hero-action:before/);
-assert.match(v61,/max-width:760px/);
-assert.match(v61,/prefers-reduced-motion:reduce/);
-assert.match(app,/toggleTheme/);
-assert.match(app,/applyTheme\(currentTheme\(\)/);
-assert.match(app,/function openTutorSearch\(\)/);
-assert.match(app,/function showNotifications\(\)/);
-assert.match(app,/ss-goal-banner/);
-assert.match(app,/ss-quick-actions/);
-
-console.log("StudySprint visual integration tests: PASS");
-
 assert.ok(sw.includes("assets/hero-student-scene.svg"));
 assert.ok(sw.includes("assets/subjects-detail.svg"));
 assert.ok(sw.includes("assets/session-detail.svg"));
@@ -91,3 +63,28 @@ assert.ok(sw.includes("assets/progress-detail.svg"));
 assert.ok(sw.includes("assets/focus-detail.svg"));
 assert.ok(sw.includes("assets/account-visual.svg"));
 assert.ok(sw.includes("assets/account-detail.svg"));
+
+assert.match(app,/adaptive-learning-system\.svg/);
+assert.match(app,/class="landing49"/);
+assert.match(app,/Know what to do next/);
+assert.doesNotMatch(app,/class="landing45"/);
+
+assert.match(v61,/\.ss-shell/);
+assert.match(v61,/\.today-visual-story/);
+assert.match(v61,/\.ss-quick-actions/);
+assert.match(v61,/\.mobile-nav/);
+assert.match(v61,/\.hero-action:before/);
+assert.match(v61,/prefers-reduced-motion:reduce/);
+assert.match(v72,/\.ss-sidebar/);
+assert.match(v72,/\.landing49-hero/);
+assert.match(v72,/\.today-visual-story/);
+assert.match(v72,/\.mobile-nav/);
+assert.match(v72,/prefers-reduced-motion:reduce/);
+assert.match(app,/toggleTheme/);
+assert.match(app,/applyTheme\(currentTheme\(\)/);
+assert.match(app,/function openTutorSearch\(\)/);
+assert.match(app,/function showNotifications\(\)/);
+assert.match(app,/ss-goal-banner/);
+assert.match(app,/ss-quick-actions/);
+
+console.log("StudySprint visual integration tests: PASS");

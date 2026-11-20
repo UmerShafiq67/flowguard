@@ -80,7 +80,8 @@ function shell(c){
   '</div>'+
   '<nav class="mobile-nav" aria-label="StudySprint pages">'+primary.map(([v,t])=>'<button class="nav '+(state.view===v?"active":"")+'" onclick="view(\''+v+'\')"><span class="nav-icon">'+({today:"⌂",plan:"◷",practice:"✎",tutor:"✦",review:"✓"}[v])+'</span><span>'+t+'</span></button>').join("")+'</nav>'+
   '<div class="toast '+(state.toast?"show":"")+'">'+esc(state.toast)+'</div>'+ (state.modal?setup():"");
-}\nfunction pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
+}
+function pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
 function pageVisual(k){
   const map={
     PLAN:["./assets/v69-plan.svg","A university-ready planning scene connecting exam pressure, time and priorities","Plan around what matters most."],

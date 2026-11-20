@@ -71,8 +71,23 @@ function shell(c){
   '<div class="toast '+(state.toast?"show":"")+'">'+esc(state.toast)+'</div>'+ (state.modal?setup():"");
 }
 function pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
+function pageVisual(k){
+  const map={
+    PLAN:["./assets/plan-visual.svg","A visual roadmap showing StudySprint study sessions and learning progress"],
+    SUBJECTS:["./assets/subjects-visual.svg","A visual learning map connecting subjects and topics"],
+    SESSION:["./assets/session-visual.svg","A focused study session workspace with learning actions"],
+    "NEXT SESSION":["./assets/session-visual.svg","A focused study session workspace with learning actions"],
+    PRACTICE:["./assets/practice-visual.svg","A practice question sheet with active recall choices"],
+    TUTOR:["./assets/tutor-visual.svg","An AI tutor conversation with study guidance"],
+    REVIEW:["./assets/review-visual.svg","A review queue showing weak topics and mistakes"],
+    PROGRESS:["./assets/progress-visual.svg","A learning evidence chart showing progress over time"],
+    FOCUS:["./assets/focus-visual.svg","A distraction-free study focus timer"]
+  };
+  const v=map[String(k).toUpperCase()];
+  return v?'<div class="page-head-visual"><img src="'+v[0]+'" alt="'+v[1]+'" loading="lazy"></div>':"";
+}
 function head(k,t,p,a=""){
-  return '<div class="head"><div><div class="kicker">'+esc(k)+'</div><h1>'+t+'</h1><p>'+p+'</p></div>'+(a||"")+'</div>';
+  return '<div class="head"><div class="head-copy"><div class="kicker">'+esc(k)+'</div><h1>'+t+'</h1><p>'+p+'</p></div><div class="head-side">'+pageVisual(k)+(a||"")+'</div></div>';
 }
 function onboardingPage(){
   return '<section class="landing49">'+

@@ -58,7 +58,7 @@ jobs:
           test -f manifest.webmanifest
           test -f sw.js
           grep -q 'visual-v61.css?v=67' index.html
-          grep -q 'studysprint-shell-v89-premium-v66' sw.js
+          grep -q 'studysprint-shell-v90-premium-v67' sw.js
 
   deploy:
     needs: validate

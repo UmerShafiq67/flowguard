@@ -196,3 +196,13 @@ html[data-theme="dark"] .practice-side{background:linear-gradient(145deg,#10231c
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
+
+/* Accessibility refinements */
+.landing49-product p{color:#4f625b}
+.landing49-product small{color:#4d625a}
+.landing49-product .landing49-metrics small{color:#51655d}
+.landing49-product .landing49-queue small{color:#5a6b65}
+html[data-theme="dark"] .landing49-product p,
+html[data-theme="dark"] .landing49-product small,
+html[data-theme="dark"] .landing49-product .landing49-metrics small,
+html[data-theme="dark"] .landing49-product .landing49-queue small{color:#718a80}

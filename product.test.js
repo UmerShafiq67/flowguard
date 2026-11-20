@@ -10,6 +10,7 @@ const v72=fs.readFileSync("visual-v72.css","utf8");
 const v73=fs.readFileSync("visual-v73.css","utf8");
 const v74=fs.readFileSync("visual-v74.css","utf8");
 const v75=fs.readFileSync("visual-v75.css","utf8");
+const marketing=fs.readFileSync("marketing-v75.css","utf8");
 
 assert.match(app,/function studyPack\(\)/);
 assert.match(app,/studysprint-mark\.svg/);
@@ -36,6 +37,8 @@ assert.doesNotMatch(app,/— Helen Hayes/);
 
 assert.ok(index.includes("visual-v74.css?v=74"));
 assert.ok(index.includes("visual-v75.css?v=75"));
+assert.ok(index.includes("marketing-v75.css?v=75"));
+assert.ok(index.includes("app.js?v=75"));
 assert.ok(index.includes("visual-v73.css?v=73"));
 assert.ok(index.includes("app.js?v=72"));
 assert.ok(index.includes('theme-color" content="#163a33"'));
@@ -43,7 +46,9 @@ assert.doesNotMatch(index,/visual-v49\.css|visual-v50\.css|visual-v51\.css|visua
 assert.doesNotMatch(index,/visual-v45\.js|visual-v34\.js|visual-v41\.js|visual-v43\.js|visual-v44\.js/);
 assert.doesNotMatch(index,/design-v2\.js|design-v3\.js|visual-upgrade\.js|design-v2\.css|design-v3\.css|visual-upgrade\.css/);
 
-assert.ok(sw.includes("studysprint-shell-v98-v75"));
+assert.ok(sw.includes("studysprint-shell-v99-v75"));
+assert.ok(sw.includes("marketing-v75.css?v=75"));
+assert.ok(sw.includes("app.js?v=75"));
 assert.ok(sw.includes("visual-v73.css?v=73"));
 assert.ok(sw.includes("app.js?v=72"));
 assert.ok(sw.includes("assets/study-hero.svg"));
@@ -93,3 +98,7 @@ assert.match(app,/ss-quick-actions/);
 
 console.log("StudySprint product integration tests: PASS");
 console.log("StudySprint visual integration tests: PASS");
+
+assert.match(v75,/page-visual-scrim/);
+assert.match(v75,/page-photo-chip/);
+assert.match(marketing,/ss-marketing-photo/);

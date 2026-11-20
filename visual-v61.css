@@ -653,3 +653,18 @@ html[data-theme="dark"] .appbar{background:#101923;border-color:#273443}html[dat
 @media(max-width:1050px){.appbar{grid-template-columns:160px minmax(250px,1fr) 190px;padding:0 22px;gap:14px}.saved{display:none}}
 @media(max-width:760px){.appbar{height:68px;display:flex;padding:0 14px;gap:9px}.appbar-context{display:none}.ss-mobile-brand{display:flex!important;flex:1;min-width:0}.ss-search{display:none}.topright{gap:6px}.ss-avatar{display:none}.ss-mobile-theme{display:inline-flex!important}.ss-bell{width:39px;height:39px}.head{grid-template-columns:1fr;gap:13px}.head h1{font-size:clamp(34px,9vw,48px)}.head-side{justify-content:flex-start}.page-visual-main{min-height:245px;border-radius:21px}.page-visual-main img{min-height:245px}.page-visual-overlay{left:14px;right:14px;bottom:14px;align-items:flex-start;flex-direction:column-reverse;gap:8px}.page-visual-overlay b{max-width:100%;font-size:11px;padding:10px 12px}}
 @media(max-width:430px){.appbar{height:64px}.ss-mobile-brand .logo{width:36px;height:36px}.page-visual-main{min-height:205px;border-radius:18px}.page-visual-main img{min-height:205px}.page-visual-overlay{left:11px;right:11px;bottom:11px}.page-visual-overlay b{font-size:10px}}
+
+
+/* V66 — premium branded header and original study storytelling */
+.appbar{grid-template-columns:220px minmax(300px,1fr) 190px;padding:0 28px;gap:22px}
+.appbar-brand{display:flex;align-items:center;gap:10px;min-width:0;border:0;background:transparent;padding:0;text-align:left;color:var(--ink);cursor:pointer}
+.appbar-mark{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:var(--ink);box-shadow:0 8px 20px rgba(18,25,35,.12);flex:0 0 auto}.appbar-mark img{width:26px;height:26px}
+.appbar-brand-copy{display:flex;flex-direction:column;gap:3px;min-width:0}.appbar-brand-copy b{font:800 15px/1 "Space Grotesk",sans-serif;letter-spacing:-.04em}.appbar-brand-copy small{font:800 7px/1 "DM Mono",monospace;letter-spacing:.15em;color:var(--blue);text-transform:uppercase}
+.appbar-brand:hover .appbar-mark{transform:translateY(-1px);box-shadow:0 11px 24px rgba(18,25,35,.18)}
+.page-visual-main{min-height:360px}.page-visual-main img{min-height:360px}
+.landing49-trust b{letter-spacing:.12em}
+html[data-theme="dark"] .appbar-mark{background:#f6f4ee}
+html[data-theme="dark"] .appbar-mark img{filter:invert(1)}
+@media(max-width:1050px){.appbar{grid-template-columns:200px minmax(240px,1fr) 160px;padding:0 20px}.appbar-brand-copy small{display:none}}
+@media(max-width:760px){.appbar{padding:0 12px}.appbar-brand-copy b{font-size:14px}.appbar-brand-copy small{display:block;font-size:6px}.appbar-mark{width:36px;height:36px;border-radius:11px}.page-visual-main{min-height:250px}.page-visual-main img{min-height:250px}}
+@media(max-width:430px){.appbar-brand-copy small{display:none}.page-visual-main{min-height:215px}.page-visual-main img{min-height:215px}}

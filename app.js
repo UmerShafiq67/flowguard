@@ -47,21 +47,21 @@ function toggleTheme(){
 }
 function nav(v,t,i){return `<button class="nav ${state.view===v?"active":""}" onclick="view('${v}')"><span>${i}</span>${t}</button>`}
 function shell(c){
-  const desktopNav=[["today","Home","⌂"],["plan","My Plan","☷"],["practice","Practice","ϟ"],["tutor","Tutor","✦"],["review","Review","↻"],["progress","Progress","▥"],["subjects","Subjects","▤"],["focus","Focus","◎"],["account","Account","♙"]];
+  const desktopNav=[["today","Home","⌂"],["plan","My Plan","≡"],["practice","Practice","◒"],["tutor","Tutor","✦"],["review","Review","↻"],["progress","Progress","↗"],["subjects","Subjects","◫"],["focus","Focus","◉"],["account","Account","S"]];
   const mobileNav=[["today","Home","⌂"],["plan","Plan","◷"],["practice","Practice","✎"],["tutor","Tutor","✦"],["review","Review","✓"]];
   const navItem=([v,t,i])=>'<button class="nav '+(state.view===v?"active":"")+'" onclick="view(\''+v+'\')"><span class="nav-icon">'+i+'</span><span>'+t+'</span></button>';
   return '<div class="ss-shell">'+
     '<aside class="ss-sidebar">'+
       '<button class="brand ss-sidebar-brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span class="brand-copy"><b>StudySprint</b></span></button>'+
       '<nav class="ss-side-nav" aria-label="StudySprint pages">'+desktopNav.map(navItem).join("")+'</nav>'+
-      '<div class="ss-plus-card"><div class="ss-plus-icon">♛</div><b>StudySprint Plus</b><span>Unlock your full learning potential.</span><button onclick="openPremium()">Go Plus <span>→</span></button></div>'+
-      '<div class="ss-side-footer"><button class="ss-theme" onclick="toggleTheme()" aria-label="Toggle light and dark mode"><span class="theme-sun">☀</span><i><b></b></i><span class="theme-moon">☾</span></button></div>'+
+      '<div class="ss-plus-card"><div class="ss-plus-icon">✦</div><b>StudySprint Plus</b><span>Unlock your full learning potential.</span><button onclick="openPremium()">Go Plus <span>→</span></button></div>'+
+      '<div class="ss-side-footer"><button class="ss-theme" onclick="toggleTheme()" aria-label="Toggle light and dark mode" title="Toggle light and dark mode"><span class="theme-sun">☀</span><i><b></b></i><span class="theme-moon">☾</span></button></div>'+
     '</aside>'+
     '<div class="ss-stage">'+
       '<header class="appbar">'+
         '<button class="brand ss-mobile-brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span class="brand-copy"><b>StudySprint</b></span></button>'+
         '<button class="ss-search" onclick="view(\'tutor\')" aria-label="Open Tutor search"><span>⌕</span><span>Search anything... (e.g. "Math problems")</span></button>'+
-        '<div class="topright"><span class="saved"><i></i> Saved</span><button class="ss-bell" onclick="showNotifications()" aria-label="Notifications">♧<b>3</b></button><button class="ss-avatar" onclick="view(\'account\')" aria-label="Open account">S<span>⌄</span></button></div>'+
+        '<div class="topright"><span class="saved"><i></i> Saved</span><button class="ss-bell" onclick="showNotifications()" aria-label="Notifications">◌<b>3</b></button><button class="ss-avatar" onclick="view(\'account\')" aria-label="Open account">S<span>⌄</span></button></div>'+
       '</header>'+
       '<main class="app-main view-'+state.view+'">'+c+'</main>'+
       '<footer class="site-footer"><span>StudySprint · Decide → learn → prove → review → adapt.</span><nav aria-label="Legal"><a href="./terms.html">Terms</a><a href="./privacy.html">Privacy</a><a href="./pricing.html">Pricing</a><a href="./refund.html">Refunds</a><a href="./contact.html">Support</a></nav></footer>'+

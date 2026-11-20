@@ -1,5 +1,5 @@
 name: Deploy StudySprint to GitHub Pages
-# V58 whole-product responsive dashboard verification
+# V59 whole-product responsive dashboard verification
 
 on:
   push:
@@ -43,13 +43,13 @@ jobs:
           test -f worker.js
           test -f config.js
           test -f enhancements.js
-          test -f visual-v58.css
+          test -f visual-v59.css
           test -f assets/adaptive-learning-system.svg
           test -f manifest.webmanifest
           test -f sw.js
-          grep -q 'visual-v58.css?v=58' index.html
-          grep -q 'studysprint-shell-v79-v58' sw.js
-          grep -q 'visual-v58.css?v=58' sw.js
+          grep -q 'visual-v59.css?v=59' index.html
+          grep -q 'studysprint-shell-v80-v59' sw.js
+          grep -q 'visual-v59.css?v=59' sw.js
 
   deploy:
     needs: validate

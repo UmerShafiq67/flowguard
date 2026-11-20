@@ -1,5 +1,5 @@
 name: Deploy StudySprint to GitHub Pages
-# V73 premium study studio + resilient Pages deployment
+# V74 learning OS visual layer + resilient Pages deployment
 
 on:
   push:
@@ -46,6 +46,7 @@ jobs:
           test -f visual-v61.css
           test -f visual-v72.css
           test -f visual-v73.css
+          test -f visual-v74.css
           test -f assets/adaptive-learning-system.svg
           test -f assets/study-hero.svg
           test -f assets/today-progress.svg
@@ -59,8 +60,8 @@ jobs:
           test -f assets/focus-visual.svg
           test -f manifest.webmanifest
           test -f sw.js
-          grep -q "visual-v73.css?v=73" index.html
-          grep -q "studysprint-shell-v96-v73" sw.js
+          grep -q "visual-v74.css?v=74" index.html
+          grep -q "studysprint-shell-v97-v74" sw.js
 
   deploy:
     needs: validate

@@ -45,10 +45,20 @@ jobs:
           test -f enhancements.js
           test -f visual-v61.css
           test -f assets/adaptive-learning-system.svg
+          test -f assets/study-hero.svg
+          test -f assets/today-progress.svg
+          test -f assets/plan-visual.svg
+          test -f assets/subjects-visual.svg
+          test -f assets/session-visual.svg
+          test -f assets/practice-visual.svg
+          test -f assets/tutor-visual.svg
+          test -f assets/review-visual.svg
+          test -f assets/progress-visual.svg
+          test -f assets/focus-visual.svg
           test -f manifest.webmanifest
           test -f sw.js
           grep -q 'visual-v61.css?v=61' index.html
-          grep -q 'studysprint-shell-v82-v61' sw.js
+          grep -q 'studysprint-shell-v86-page-visuals' sw.js
 
   deploy:
     needs: validate

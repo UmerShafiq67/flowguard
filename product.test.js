@@ -60,7 +60,7 @@ assert.match(v59,/\.today-visual-story/);
 assert.match(v59,/\.ss-quick-actions/);
 assert.match(v59,/\.mobile-nav/);
 assert.match(v59,/\.hero-action:before/);
-assert.match(v59,/max-width:700px/);
+assert.match(v59,/max-width:760px/);
 assert.match(v59,/prefers-reduced-motion:reduce/);
 assert.match(app,/toggleTheme/);
 assert.match(app,/applyTheme\(currentTheme\(\)/);

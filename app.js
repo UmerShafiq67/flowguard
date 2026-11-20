@@ -61,7 +61,7 @@ function shell(c){
       '<header class="appbar">'+
         '<button class="brand ss-mobile-brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span class="brand-copy"><b>StudySprint</b></span></button>'+
         '<button class="ss-search" onclick="view(\'tutor\')" aria-label="Open Tutor search"><span>⌕</span><span>Search anything... (e.g. "Math problems")</span></button>'+
-        '<div class="topright"><span class="saved"><i></i> Saved</span><button class="ss-bell" onclick="showNotifications()" aria-label="Notifications">◌<b>3</b></button><button class="ss-avatar" onclick="view(\'account\')" aria-label="Open account">S<span>⌄</span></button></div>'+
+        '<div class="topright"><span class="saved"><i></i> Saved</span><button class="ss-mobile-theme" onclick="toggleTheme()" aria-label="Toggle light and dark mode" title="Toggle light and dark mode"><span>☀</span><i><b></b></i><span>☾</span></button><button class="ss-bell" onclick="showNotifications()" aria-label="Notifications">◌<b>3</b></button><button class="ss-avatar" onclick="view(\'account\')" aria-label="Open account">S<span>⌄</span></button></div>'+
       '</header>'+
       '<main class="app-main view-'+state.view+'">'+c+'</main>'+
       '<footer class="site-footer"><span>StudySprint · Decide → learn → prove → review → adapt.</span><nav aria-label="Legal"><a href="./terms.html">Terms</a><a href="./privacy.html">Privacy</a><a href="./pricing.html">Pricing</a><a href="./refund.html">Refunds</a><a href="./contact.html">Support</a></nav></footer>'+

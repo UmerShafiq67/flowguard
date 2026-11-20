@@ -1029,3 +1029,73 @@ html[data-theme="dark"] .btn.primary{background:linear-gradient(135deg,#f5f7fa,#
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
+
+
+
+/* V71 — responsive visual architecture: intentional desktop + mobile compositions */
+.ss-shell{min-height:100vh}
+.ss-stage{min-width:0}
+.app-main{max-width:1540px;margin:0 auto;width:100%}
+.page-visual-band{overflow:hidden}
+.page-visual-main{position:relative;display:flex;align-items:stretch;justify-content:flex-end;background:linear-gradient(115deg,#0b1420 0%,#182638 52%,#263c5d 100%)}
+.page-visual-main img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+.page-visual-overlay{z-index:2}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px}
+.head-copy{min-width:0}
+.head-side{flex:0 0 auto}
+.command{max-width:1400px;margin:auto}
+.ss-greeting{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:24px}
+.ss-greeting h1{font-size:clamp(34px,3.6vw,52px);letter-spacing:-.065em}
+.ss-greeting p{max-width:640px}
+.ss-goal-banner{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;padding:15px 17px;margin-bottom:16px;border-radius:18px}
+.ss-goal-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:color-mix(in srgb,var(--blue) 12%,var(--paper));color:var(--blue);font-size:18px}
+.hero-action{overflow:hidden}
+.signal-panel{padding:24px}
+.today-visual-story{display:grid;grid-template-columns:1fr 1.15fr;min-height:380px;border-radius:24px;overflow:hidden;background:#0d1722;color:#fff;margin:16px 0}
+.today-visual-copy{padding:42px;display:flex;flex-direction:column;justify-content:center}
+.today-visual-copy h2{font-size:clamp(32px,3.3vw,48px);letter-spacing:-.06em;line-height:.98;margin:12px 0}
+.today-visual-copy h2 em{color:#8ea0ff;font-style:normal}
+.today-visual-copy p{color:#b7c2ce;max-width:500px}
+.today-visual-steps{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
+.today-visual-steps span{padding:9px 12px;border:1px solid #ffffff18;border-radius:10px;color:#dce4ed;font-size:11px}
+.today-visual-steps b{color:#8296ff;margin-right:5px}
+.today-visual-art{position:relative;min-height:340px;background:radial-gradient(circle at 50% 40%,#3858aa55,transparent 55%),#101c29}
+.today-visual-art img{width:100%;height:100%;object-fit:cover;opacity:.9}
+.today-visual-badge{position:absolute;right:18px;bottom:18px;padding:11px 13px;background:#0a121dcc;border:1px solid #ffffff20;border-radius:13px;backdrop-filter:blur(12px)}
+.today-visual-badge i{display:inline-block;width:6px;height:6px;background:#48d6ba;border-radius:50%;margin-right:6px}
+.today-visual-badge span{font:800 7px "DM Mono";letter-spacing:.13em;color:#aeb9c5}
+.today-visual-badge b{display:block;font-size:10px;margin-top:5px}
+@media(min-width:1400px){
+  .ss-sidebar{width:246px}
+  .app-main{padding-left:58px;padding-right:58px}
+  .page-visual-main{min-height:360px}
+}
+@media(max-width:900px){
+  .head{display:block}
+  .head-side{margin-top:14px}
+  .ss-greeting{display:block}
+  .ss-greeting .btn{margin-top:12px}
+  .today-visual-story{grid-template-columns:1fr;min-height:0}
+  .today-visual-copy{padding:30px 24px 24px}
+  .today-visual-art{min-height:260px}
+}
+@media(max-width:620px){
+  .ss-goal-banner{grid-template-columns:auto 1fr}
+  .ss-goal-banner .btn{grid-column:1/-1;width:100%}
+  .page-visual-main{aspect-ratio:1.28;min-height:210px}
+  .page-visual-main img{min-height:210px;object-position:center}
+  .today-visual-copy{padding:26px 20px 20px}
+  .today-visual-art{min-height:220px}
+  .today-visual-badge{left:12px;right:12px;bottom:12px}
+}
+@media(max-width:430px){
+  .appbar-brand>span:last-child{display:none}
+  .appbar{grid-template-columns:auto 1fr auto}
+  .topright{justify-content:flex-end}
+  .mobile-page-label{margin-bottom:2px}
+  .head h1{line-height:.98}
+  .page-visual-main{aspect-ratio:1.15}
+  .page-visual-overlay{padding:8px 10px}
+  .page-visual-overlay b{font-size:9px;line-height:1.25}
+  .today-visual-copy h2{font-size:30px}
+}

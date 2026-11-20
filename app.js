@@ -184,7 +184,8 @@ function todayPage(){
         '<div class="signal-number">'+(signal.topics.length?signal.accuracy+"%":"—")+'</div>'+
         '<p>'+ (signal.attempts?signal.correct+" correct from "+signal.attempts+" practice attempts.":"Practice creates the evidence StudySprint uses to adapt your plan.")+'</p>'+
         '<div class="signal-row"><span>Weak topics</span><b>'+signal.topics.filter(t=>Number(t.confidence||3)<=2).length+'</b></div>'+
-        '<div class="signal-row"><span>Reviews due</span><b>'+state.data.plan.filter(x=>x.kind==="review"&&!x.done&&x.date<=today()).length+'</b></div>'+
+        '<div class="signal-row"><span>Reviews due</span><b>'+signal.dueReviews+'</b></div>'+
+        '<div class="signal-row"><span>Mistakes saved</span><b>'+signal.mistakes+'</b></div>'+
         '<div class="signal-row"><span>Today left</span><b>'+remaining+'m</b></div>'+
       '</aside>'+
     '</div>'+

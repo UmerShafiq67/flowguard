@@ -36,7 +36,7 @@ assert.ok(index.includes("visual-v61.css?v=67"));
 assert.doesNotMatch(index,/visual-v49\.css|visual-v50\.css|visual-v51\.css|visual-v52\.css|visual-v53\.css|visual-v54\.css|visual-v55\.css|visual-v56\.css/);
 assert.ok(index.includes('theme-color" content="#11151b"'));
 assert.doesNotMatch(index,/visual-v45\.js/);
-assert.ok(sw.includes("studysprint-shell-v89-premium-v66"));
+assert.ok(sw.includes("studysprint-shell-v90-premium-v67"));
 assert.ok(sw.includes("assets/study-hero.svg"));
 assert.ok(sw.includes("assets/today-progress.svg"));
 assert.ok(sw.includes("assets/plan-visual.svg"));

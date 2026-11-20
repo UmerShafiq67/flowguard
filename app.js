@@ -84,20 +84,20 @@ function shell(c){
 function pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
 function pageVisual(k){
   const map={
-    PLAN:["./assets/v69-plan.svg","A university-ready planning scene connecting exam pressure, time and priorities","Plan around what matters most."],
-    SUBJECTS:["./assets/v69-subjects.svg","A visual subject map showing topics, confidence and learning signals","See what is strong, developing and weak."],
-    SESSION:["./assets/v69-session.svg","A focused study session with a clear learning goal and evidence","One session. One goal. One piece of evidence."],
-    "NEXT SESSION":["./assets/v69-session.svg","A focused study session with a clear learning goal and evidence","One session. One goal. One piece of evidence."],
-    PRACTICE:["./assets/v69-practice.svg","An active recall practice scene built around answering before feedback","Answer first. Let the result become evidence."],
-    TUTOR:["./assets/v69-tutor.svg","A focused AI tutor scene showing guided explanation and understanding","Ask, explain, check — then try it yourself."],
-    REVIEW:["./assets/v69-review.svg","A smart review scene prioritising mistakes and topics due today","Review what needs another retrieval."],
-    PROGRESS:["./assets/v69-progress.svg","A learning evidence scene tracking retrieval, accuracy and confidence","Progress is evidence, not just time spent."],
-    FOCUS:["./assets/v69-focus.svg","A distraction-free deep-focus study scene","Protect the minutes that move learning forward."],
-    ACCOUNT:["./assets/v69-account.svg","A complete StudySprint study-system scene for preferences and learning data","Keep your system organised and yours."]
+    PLAN:["https://images.pexels.com/photos/17668838/pexels-photo-17668838.jpeg?auto=compress&cs=tinysrgb&w=1800","./assets/v69-plan.svg","A student planning deadlines on a desk with a laptop, calendar and study materials","Plan around what matters most."],
+    SUBJECTS:["https://images.pexels.com/photos/8199257/pexels-photo-8199257.jpeg?auto=compress&cs=tinysrgb&w=1800","./assets/v69-subjects.svg","A focused student studying in a library surrounded by books and learning materials","See what is strong, developing and weak."],
+    SESSION:["https://images.pexels.com/photos/6267061/pexels-photo-6267061.jpeg?auto=compress&cs=tinysrgb&w=1800","./assets/v69-session.svg","A student working at a desk with a laptop and notebook, ready for a focused session","One session. One goal. One piece of evidence."],
+    "NEXT SESSION":["https://images.pexels.com/photos/6267061/pexels-photo-6267061.jpeg?auto=compress&cs=tinysrgb&w=1800","./assets/v69-session.svg","A student working at a desk with a laptop and notebook, ready for a focused session","One session. One goal. One piece of evidence."],
+    PRACTICE:["https://images.pexels.com/photos/6929275/pexels-photo-6929275.jpeg?auto=compress&cs=tinysrgb&w=1800","./assets/v69-practice.svg","Close-up active study with handwritten notes, books and retrieval work","Answer first. Let the result become evidence."],
+    TUTOR:["https://images.pexels.com/photos/9159068/pexels-photo-9159068.jpeg?auto=compress&cs=tinysrgb&w=1800","./assets/v69-tutor.svg","A student receiving focused academic guidance in a university library","Ask, explain, check — then try it yourself."],
+    REVIEW:["https://images.pexels.com/photos/6549856/pexels-photo-6549856.jpeg?auto=compress&cs=tinysrgb&w=1800","./assets/v69-review.svg","A top-down study workspace with books, notes and a laptop for review","Review what needs another retrieval."],
+    PROGRESS:["https://images.pexels.com/photos/9572709/pexels-photo-9572709.jpeg?auto=compress&cs=tinysrgb&w=1800","./assets/v69-progress.svg","A deep study scene surrounded by books and learning materials","Progress is evidence, not just time spent."],
+    FOCUS:["https://images.pexels.com/photos/8199770/pexels-photo-8199770.jpeg?auto=compress&cs=tinysrgb&w=1800","./assets/v69-focus.svg","Two students working together in a bright library study space","Protect the minutes that move learning forward."],
+    ACCOUNT:["https://images.pexels.com/photos/5306450/pexels-photo-5306450.jpeg?auto=compress&cs=tinysrgb&w=1800","./assets/v69-account.svg","Students collaborating around a laptop with notebooks and books","Keep your system organised and yours."]
   };
   const v=map[String(k).toUpperCase()];
   if(!v)return "";
-  return '<div class="page-visual-band"><div class="page-visual-main"><img src="'+v[0]+'" alt="'+v[1]+'" loading="lazy" width="1200" height="700"><div class="page-visual-overlay"><span class="page-visual-label">STUDYSPRINT · '+esc(String(k).toUpperCase())+'</span><b>'+esc(v[2])+'</b></div></div></div>';
+  return '<div class="page-visual-band"><div class="page-visual-main"><img src="'+v[0]+'" alt="'+v[2]+'" loading="lazy" width="1800" height="1100" onerror="this.onerror=null;this.src=\''+v[1]+'\'"><div class="page-visual-scrim"></div><div class="page-visual-overlay"><span class="page-visual-label">STUDYSPRINT · '+esc(String(k).toUpperCase())+'</span><b>'+esc(v[3])+'</b></div><span class="page-photo-chip">STUDY IN REAL LIFE</span></div></div>';
 }
 function head(k,t,p,a=""){
   return '<div class="head"><div class="head-copy"><div class="kicker">'+esc(k)+'</div><h1>'+t+'</h1><p>'+p+'</p></div><div class="head-side">'+(a||"")+'</div></div>'+pageVisual(k);

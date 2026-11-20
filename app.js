@@ -58,11 +58,7 @@ function shell(c){
       '<div class="ss-side-footer"><button class="ss-theme" onclick="toggleTheme()" aria-label="Toggle light and dark mode" title="Toggle light and dark mode"><span class="theme-sun">☀</span><i><b></b></i><span class="theme-moon">☾</span></button></div>'+
     '</aside>'+
     '<div class="ss-stage">'+
-      '<header class="appbar">'+
-        '<button class="brand ss-mobile-brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span class="brand-copy"><b>StudySprint</b></span></button>'+
-        '<button class="ss-search" onclick="view(\'tutor\')" aria-label="Open Tutor search"><span>⌕</span><span>Search anything... (e.g. "Math problems")</span></button>'+
-        '<div class="topright"><span class="saved"><i></i> Saved</span><button class="ss-mobile-theme" onclick="toggleTheme()" aria-label="Toggle light and dark mode" title="Toggle light and dark mode"><span>☀</span><i><b></b></i><span>☾</span></button><button class="ss-bell" onclick="showNotifications()" aria-label="Notifications">◌<b>3</b></button><button class="ss-avatar" onclick="view(\'account\')" aria-label="Open account">S<span>⌄</span></button></div>'+
-      '</header>'+
+      '<header class="appbar"><div class="appbar-context"><span>STUDYSPRINT</span><b>${esc(state.view==="today"?"Today":state.view==="plan"?"My Plan":state.view==="practice"?"Practice":state.view==="tutor"?"Tutor":state.view==="review"?"Review":state.view==="progress"?"Progress":state.view==="subjects"?"Subjects":state.view==="focus"?"Focus":"Account")}</b></div><button class="ss-search" onclick="view('tutor')" aria-label="Open Tutor search"><span>⌕</span><span>Search your subjects, topics or questions…</span><kbd>⌘ K</kbd></button><div class="topright"><span class="saved"><i></i> Saved</span><button class="ss-mobile-theme" onclick="toggleTheme()" aria-label="Toggle light and dark mode" title="Toggle light and dark mode"><span>☀</span><i><b></b></i><span>☾</span></button><button class="ss-bell" onclick="showNotifications()" aria-label="Notifications">◌<b>3</b></button><button class="ss-avatar" onclick="view('account')" aria-label="Open account"><span class="ss-avatar-letter">S</span><span>⌄</span></button></div></header>'+
       '<main class="app-main view-'+state.view+'">'+c+'</main>'+
       '<footer class="site-footer"><span>StudySprint · Decide → learn → prove → review → adapt.</span><nav aria-label="Legal"><a href="./terms.html">Terms</a><a href="./privacy.html">Privacy</a><a href="./pricing.html">Pricing</a><a href="./refund.html">Refunds</a><a href="./contact.html">Support</a></nav></footer>'+
     '</div>'+
@@ -73,20 +69,20 @@ function shell(c){
 function pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
 function pageVisual(k){
   const map={
-    PLAN:["./assets/plan-visual.svg","./assets/plan-detail.svg","A premium visual roadmap showing study sessions and learning progress"],
-    SUBJECTS:["./assets/subjects-visual.svg","./assets/subjects-detail.svg","A premium visual learning map connecting subjects and topics"],
-    SESSION:["./assets/session-visual.svg","./assets/session-detail.svg","A premium focused study workspace with learning actions"],
-    "NEXT SESSION":["./assets/session-visual.svg","./assets/session-detail.svg","A premium focused study workspace with learning actions"],
-    PRACTICE:["./assets/practice-visual.svg","./assets/practice-detail.svg","A premium active-recall practice scene"],
-    TUTOR:["./assets/tutor-visual.svg","./assets/tutor-detail.svg","A premium AI tutor conversation scene"],
-    REVIEW:["./assets/review-visual.svg","./assets/review-detail.svg","A premium review queue showing weak topics and mistakes"],
-    PROGRESS:["./assets/progress-visual.svg","./assets/progress-detail.svg","A premium learning evidence chart"],
-    FOCUS:["./assets/focus-visual.svg","./assets/focus-detail.svg","A premium distraction-free study timer"],
-    ACCOUNT:["./assets/account-visual.svg","./assets/account-detail.svg","A premium StudySprint account and learning-data scene"]
+    PLAN:["./assets/plan-visual.svg","A clear visual roadmap connecting sessions, priorities and exam pressure","Plan your week around what matters most."],
+    SUBJECTS:["./assets/subjects-visual.svg","A visual map of subjects, topics and confidence","See where your knowledge is strong and where to focus."],
+    SESSION:["./assets/session-visual.svg","A focused study workspace for one learning session","One session, one goal, one piece of evidence."],
+    "NEXT SESSION":["./assets/session-visual.svg","A focused study workspace for one learning session","One session, one goal, one piece of evidence."],
+    PRACTICE:["./assets/practice-visual.svg","An active-recall practice screen with answer choices","Practice first. Let your answers become evidence."],
+    TUTOR:["./assets/tutor-visual.svg","A focused StudySprint Tutor conversation","Ask for an explanation, then check what you can recall."],
+    REVIEW:["./assets/review-visual.svg","A review queue highlighting weak topics and mistakes","Return to the topics that actually need another pass."],
+    PROGRESS:["./assets/progress-visual.svg","A learning evidence chart showing accuracy and momentum","Progress is evidence, not just time spent."],
+    FOCUS:["./assets/focus-visual.svg","A distraction-free focus timer and study session","Protect the minutes that turn a plan into progress."],
+    ACCOUNT:["./assets/account-visual.svg","A StudySprint account view with learning data and preferences","Keep your study system, preferences and evidence in one place."]
   };
   const v=map[String(k).toUpperCase()];
   if(!v)return "";
-  return '<div class="page-visual-band"><div class="page-visual-main"><img src="'+v[0]+'" alt="'+v[2]+'" loading="lazy"><span class="page-visual-label">STUDYSPRINT VISUAL</span></div><div class="page-visual-detail"><img src="'+v[1]+'" alt="" loading="lazy" aria-hidden="true"><div><b>Learn with evidence.</b><span>Your next action stays connected to what you actually know.</span></div></div></div>';
+  return '<div class="page-visual-band"><div class="page-visual-main"><img src="'+v[0]+'" alt="'+v[1]+'" loading="lazy"><div class="page-visual-overlay"><span class="page-visual-label">STUDYSPRINT · '+esc(String(k).toUpperCase())+'</span><b>'+esc(v[2])+'</b></div></div></div>';
 }
 function head(k,t,p,a=""){
   return '<div class="head"><div class="head-copy"><div class="kicker">'+esc(k)+'</div><h1>'+t+'</h1><p>'+p+'</p></div><div class="head-side">'+(a||"")+'</div></div>'+pageVisual(k);

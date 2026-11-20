@@ -32,7 +32,7 @@ assert.doesNotMatch(app,/“/);
 assert.doesNotMatch(app,/— James Clear/);
 assert.doesNotMatch(app,/— Helen Hayes/);
 
-assert.ok(index.includes("visual-v61.css?v=68"));
+assert.ok(index.includes("visual-v61.css?v=69"));
 assert.doesNotMatch(index,/visual-v49\.css|visual-v50\.css|visual-v51\.css|visual-v52\.css|visual-v53\.css|visual-v54\.css|visual-v55\.css|visual-v56\.css/);
 assert.ok(index.includes('theme-color" content="#11151b"'));
 assert.doesNotMatch(index,/visual-v45\.js/);

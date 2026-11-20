@@ -726,3 +726,71 @@ html[data-theme="dark"] .ss-mobile-theme i b{transform:translateX(12px);backgrou
   .page-visual-overlay b{font-size:11px}
   .page-visual-label{font-size:7px}
 }
+
+/* V68 — mobile-first polish, single-control header, stronger footer */
+html,body{overflow-x:hidden}
+.site-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 30px 28px;border-top:1px solid var(--line);color:var(--muted);font-size:9px;letter-spacing:.04em}
+.site-footer nav{display:flex;gap:14px;flex-wrap:wrap;justify-content:flex-end}
+.site-footer a{color:var(--muted);text-decoration:none;font-weight:800}
+.site-footer a:hover{color:var(--blue)}
+.app-main{min-width:0}
+.page-visual-band{box-shadow:0 18px 48px rgba(10,18,28,.13)}
+.page-visual-main img{filter:saturate(1.08) contrast(1.02)}
+@media(max-width:760px){
+  .appbar{height:66px;grid-template-columns:1fr auto;padding:0 12px;gap:8px}
+  .appbar-context-dot{width:8px;height:8px;box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 12%,transparent)}
+  .appbar-context b{font-size:14px}
+  .ss-mobile-theme{height:38px;width:58px;justify-content:center;padding:0 5px}
+  .ss-bell,.ss-avatar{width:38px;height:38px;border-radius:11px}
+  .topright{gap:5px}
+  .page-visual-band{margin:0 -1px 18px;border-radius:18px}
+  .page-visual-main{min-height:210px;aspect-ratio:1.55}
+  .page-visual-main img{min-height:210px}
+  .page-visual-overlay{left:10px;right:10px;bottom:10px;max-width:none;padding:9px 11px;border-radius:12px}
+  .page-visual-overlay b{font-size:10px}
+  .head{margin-bottom:16px}
+  .head h1{font-size:35px;line-height:1.02}
+  .head p{font-size:12px;line-height:1.55}
+  .site-footer{display:block;padding:20px 15px 28px;text-align:center}
+  .site-footer>span{display:block;line-height:1.55;margin-bottom:12px}
+  .site-footer nav{justify-content:center;gap:10px 15px}
+  .site-footer a{font-size:9px}
+  .mobile-nav{box-shadow:0 -8px 24px rgba(12,20,30,.08)}
+  .mobile-nav .nav{min-width:0;padding:6px 2px 4px;font-size:8px}
+  .mobile-nav .nav-icon{font-size:16px}
+  .card,.panel,.today-panel,.hero-action{border-radius:18px}
+  .btn{min-height:44px}
+  .landing49-nav{padding:12px 15px}
+  .landing49-brand{gap:8px}
+  .landing49-mark{width:34px;height:34px}
+  .landing49-links{gap:7px}
+  .landing49-theme{width:58px;height:38px;padding:0 5px}
+  .landing49-hero{padding:40px 15px 34px;gap:25px}
+  .landing49-hero-copy h1{font-size:clamp(40px,13vw,60px);line-height:.98}
+  .landing49-hero-copy p{font-size:13px;line-height:1.6}
+  .landing49-actions{align-items:stretch;flex-direction:column}
+  .landing49-actions .btn{width:100%}
+  .landing49-trust{grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}
+  .landing49-trust b{padding:10px 8px;font-size:7px}
+  .landing49-hero-visual{min-height:310px;border-radius:20px}
+  .landing49-hero-visual img{width:108%}
+  .landing49-product{margin-top:0;border-radius:20px}
+  .landing49-proof>div{padding:18px}
+  .landing49-section,.landing49-evidence,.landing49-engine,.landing49-cta{padding:48px 15px}
+  .landing49-footer{padding:22px 15px 95px;display:block;text-align:center}
+  .landing49-footer nav{justify-content:center;margin-top:12px;gap:10px 15px}
+}
+@media(max-width:430px){
+  .appbar-context small{display:none}
+  .ss-mobile-theme{display:inline-flex!important}
+  .ss-mobile-theme span{font-size:10px}
+  .ss-mobile-theme i{width:25px;height:15px}
+  .ss-mobile-theme i b{width:11px;height:11px}
+  .ss-bell{display:none}
+  .page-visual-main{min-height:195px}
+  .page-visual-main img{min-height:195px}
+  .page-visual-overlay b{font-size:9px}
+  .page-visual-label{font-size:6px}
+  .landing49-links a{display:none}
+  .landing49-hero-visual{min-height:285px}
+}

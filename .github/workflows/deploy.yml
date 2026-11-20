@@ -43,12 +43,12 @@ jobs:
           test -f worker.js
           test -f config.js
           test -f enhancements.js
-          test -f visual-v59.css
+          test -f visual-v60.css
           test -f assets/adaptive-learning-system.svg
           test -f manifest.webmanifest
           test -f sw.js
-          grep -q 'visual-v59.css?v=59' index.html
-          grep -q 'studysprint-shell-v80-v59' sw.js
+          grep -q 'visual-v60.css?v=60' index.html
+          grep -q 'studysprint-shell-v81-v60' sw.js
           grep -q 'visual-v59.css?v=59' sw.js
 
   deploy:

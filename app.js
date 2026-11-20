@@ -47,26 +47,40 @@ function toggleTheme(){
 }
 function nav(v,t,i){return `<button class="nav ${state.view===v?"active":""}" onclick="view('${v}')"><span>${i}</span>${t}</button>`}
 function shell(c){
-  const desktopNav=[["today","Home","⌂"],["plan","My Plan","≡"],["practice","Practice","◒"],["tutor","Tutor","✦"],["review","Review","↻"],["progress","Progress","↗"],["subjects","Subjects","◫"],["focus","Focus","◉"],["account","Account","S"]];
-  const mobileNav=[["today","Home","⌂"],["plan","Plan","◷"],["practice","Practice","✎"],["tutor","Tutor","✦"],["review","Review","✓"]];
-  const navItem=([v,t,i])=>'<button class="nav '+(state.view===v?"active":"")+'" onclick="view(\''+v+'\')"><span class="nav-icon">'+i+'</span><span>'+t+'</span></button>';
+  const primary=[["today","Today"],["plan","Plan"],["practice","Practice"],["tutor","Tutor"],["review","Review"]];
+  const currentLabel=({today:"Today",plan:"My Plan",practice:"Practice",tutor:"AI Tutor",review:"Review",progress:"Progress",subjects:"Subjects",focus:"Focus",account:"Account"})[state.view]||"Today";
+  const navItem=([v,t])=>'<button class="'+(state.view===v?"active":"")+'" onclick="view(\\''+v+'\\')">'+t+'</button>';
   return '<div class="ss-shell">'+
     '<aside class="ss-sidebar">'+
-      '<button class="brand ss-sidebar-brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="logo"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span class="brand-copy"><b>StudySprint</b></span></button>'+
-      '<nav class="ss-side-nav" aria-label="StudySprint pages">'+desktopNav.map(navItem).join("")+'</nav>'+
+      '<button class="brand ss-sidebar-brand" onclick="view(\\'today\\')" aria-label="StudySprint home"><span class="logo"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span class="brand-copy"><b>StudySprint</b></span></button>'+
+      '<nav class="ss-side-nav" aria-label="StudySprint pages">'+
+        primary.map(([v,t])=>'<button class="nav '+(state.view===v?"active":"")+'" onclick="view(\\''+v+'\\')"><span class="nav-icon">'+({today:"⌂",plan:"◷",practice:"✎",tutor:"✦",review:"✓"}[v])+'</span><span>'+t+'</span></button>').join("")+
+        '<button class="nav '+(state.view==="progress"?"active":"")+'" onclick="view(\\'progress\\')"><span class="nav-icon">↗</span><span>Progress</span></button>'+
+        '<button class="nav '+(state.view==="subjects"?"active":"")+'" onclick="view(\\'subjects\\')"><span class="nav-icon">◫</span><span>Subjects</span></button>'+
+        '<button class="nav '+(state.view==="focus"?"active":"")+'" onclick="view(\\'focus\\')"><span class="nav-icon">◉</span><span>Focus</span></button>'+
+        '<button class="nav '+(state.view==="account"?"active":"")+'" onclick="view(\\'account\\')"><span class="nav-icon">S</span><span>Account</span></button>'+
+      '</nav>'+
       '<div class="ss-plus-card"><div class="ss-plus-icon">✦</div><b>StudySprint Plus</b><span>Unlock your full learning potential.</span><button onclick="openPremium()">Go Plus <span>→</span></button></div>'+
       '<div class="ss-side-footer"><button class="ss-theme" onclick="toggleTheme()" aria-label="Toggle light and dark mode" title="Toggle light and dark mode"><span class="theme-sun">☀</span><i><b></b></i><span class="theme-moon">☾</span></button></div>'+
     '</aside>'+
     '<div class="ss-stage">'+
-      '<header class="appbar"><button class="appbar-brand" onclick="view(\'today\')" aria-label="StudySprint home"><span class="appbar-brand-mark"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span><b>StudySprint</b><small>ADAPTIVE LEARNING</small></span></button><nav class="appbar-nav" aria-label="Primary navigation">'+[["today","Today"],["plan","Plan"],["practice","Practice"],["tutor","Tutor"],["review","Review"]].map(function(x){return '<button class="'+(state.view===x[0]?"active":"")+'" onclick="view(\\\''+x[0]+'\\\')">'+x[1]+'</button>'}).join("")+'</nav><div class="topright"><button class="appbar-action appbar-search" onclick="view(\'tutor\')" aria-label="Open Tutor">⌕ <span>Ask Tutor</span></button><button class="appbar-action appbar-theme" onclick="toggleTheme()" aria-label="Toggle light and dark mode">☼ <i></i> ☾</button><button class="appbar-action appbar-account" onclick="view(\'account\')" aria-label="Open account"><span>S</span></button></div></header>'+
+      '<header class="appbar">'+
+        '<button class="appbar-brand" onclick="view(\\'today\\')" aria-label="StudySprint home"><span class="appbar-brand-mark"><img src="./assets/studysprint-mark.svg" alt="" aria-hidden="true"></span><span><b>StudySprint</b><small>ADAPTIVE LEARNING</small></span></button>'+
+        '<nav class="appbar-nav" aria-label="Primary study tools">'+primary.map(navItem).join("")+'</nav>'+
+        '<div class="topright">'+
+          '<button class="appbar-action appbar-search" onclick="view(\\'tutor\\')" aria-label="Open Tutor"><span>⌕</span><span>Search</span></button>'+
+          '<button class="appbar-action appbar-theme" onclick="toggleTheme()" aria-label="Toggle light and dark mode"><span>☀</span><i></i><span>☾</span></button>'+
+          '<button class="appbar-action appbar-account" onclick="view(\\'account\\')" aria-label="Open account"><span>S</span></button>'+
+        '</div>'+
+      '</header>'+
+      '<div class="mobile-page-label"><span>STUDYSPRINT</span><b>'+esc(currentLabel)+'</b></div>'+
       '<main class="app-main view-'+state.view+'">'+c+'</main>'+
-      '<footer class="site-footer"><span>StudySprint · Decide → learn → prove → review → adapt.</span><nav aria-label="Legal"><a href="./terms.html">Terms</a><a href="./privacy.html">Privacy</a><a href="./pricing.html">Pricing</a><a href="./refund.html">Refunds</a><a href="./contact.html">Support</a></nav></footer>'+
+      '<footer class="site-footer"><span>StudySprint · Plan → Learn → Practice → Evidence → Review → Adapt.</span><nav aria-label="Legal"><a href="./terms.html">Terms</a><a href="./privacy.html">Privacy</a><a href="./pricing.html">Pricing</a><a href="./refund.html">Refunds</a><a href="./contact.html">Support</a></nav></footer>'+
     '</div>'+
   '</div>'+
-  '<nav class="mobile-nav" aria-label="StudySprint pages">'+mobileNav.map(([v,t,i])=>navItem([v,t,i])).join("")+'</nav>'+
+  '<nav class="mobile-nav" aria-label="StudySprint pages">'+primary.map(([v,t])=>'<button class="nav '+(state.view===v?"active":"")+'" onclick="view(\\''+v+'\\')"><span class="nav-icon">'+({today:"⌂",plan:"◷",practice:"✎",tutor:"✦",review:"✓"}[v])+'</span><span>'+t+'</span></button>').join("")+'</nav>'+
   '<div class="toast '+(state.toast?"show":"")+'">'+esc(state.toast)+'</div>'+ (state.modal?setup():"");
-}
-function pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
+}\nfunction pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
 function pageVisual(k){
   const map={
     PLAN:["./assets/v69-plan.svg","A university-ready planning scene connecting exam pressure, time and priorities","Plan around what matters most."],

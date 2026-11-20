@@ -122,7 +122,11 @@ function learningSignal(){
   const accuracy=attempts?Math.round(correct/attempts*100):0;
   const weak=topics.filter(t=>Number(t.confidence||3)<=2).sort((a,b)=>Number(a.confidence||3)-Number(b.confidence||3))[0];
   const strong=topics.filter(t=>Number(t.confidence||3)>=4).length;
-  return {topics,attempts,correct,accuracy,weak,strong};
+  const mistakes=Array.isArray(state.data.mistakes)?state.data.mistakes.length:0;
+  const dueReviews=state.data.plan.filter(x=>!x.done&&x.date<=today()&&["review","evidence-review","mistake-review","study-pack-review"].includes(x.kind)).length;
+  const recent=Array.isArray(state.data.practice?.evidence)?state.data.practice.evidence.slice(-10):[];
+  const recentAccuracy=recent.length?Math.round(recent.filter(e=>e.correct).length/recent.length*100):null;
+  return {topics,attempts,correct,accuracy,weak,strong,mistakes,dueReviews,recentAccuracy};
 }
 function taskReason(x){
   const topic=state.data.subjects.flatMap(s=>s.topics||[]).find(t=>t&&t.name===x.topic);
@@ -130,7 +134,11 @@ function taskReason(x){
   const evidence=(state.data.practice?.evidence||[]).filter(e=>e&&e.topic===x.topic);
   const recent=evidence.slice(-5);
   const recentAccuracy=recent.length?Math.round(recent.filter(e=>e.correct).length/recent.length*100):null;
+  const topicMistakes=(state.data.mistakes||[]).filter(m=>m&&m.topic===x.topic).length;
   const days=Math.max(1,StudySprintCore.daysUntil(x.examDate));
+  const isDue=!x.done&&x.date<=today()&&["review","evidence-review","mistake-review","study-pack-review"].includes(x.kind);
+  if(topicMistakes>=2&&recentAccuracy!==null&&recentAccuracy<70)return "You have multiple saved mistakes here and recent retrieval is still shaky, so StudySprint is prioritising another focused attempt.";
+  if(isDue)return "This review is due now, so StudySprint is protecting the retrieval window instead of letting the topic drift.";
   if(recentAccuracy!==null&&recentAccuracy<60)return "Recent practice is below 60% here, so StudySprint is bringing this topic forward for another retrieval attempt.";
   if(recentAccuracy!==null&&recentAccuracy>=80&&confidence>=4&&days>3)return "Recent practice is strong, so this is a lighter retention check rather than a rescue session.";
   if(confidence<=2)return "This topic is marked weak, so StudySprint is bringing it forward for extra practice.";

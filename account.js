@@ -1,8 +1,30 @@
 (()=>{
   const cfg=window.STUDYSPRINT_AUTH||{};
-  let client=null, syncTimer=null, syncing=false, lastSyncedAt=0;
+  let client=null, syncTimer=null, syncing=false, lastSyncedAt=0, supabasePromise=null, authListenerReady=false;
 
-  function configured(){return cfg.provider==="supabase"&&cfg.url&&cfg.anonKey&&window.supabase?.createClient}
+  function configured(){return cfg.provider==="supabase"&&cfg.url&&cfg.anonKey}
+  function loadSupabase(){
+    if(window.supabase?.createClient)return Promise.resolve(window.supabase);
+    if(!configured())return Promise.resolve(null);
+    if(supabasePromise)return supabasePromise;
+    supabasePromise=new Promise((resolve,reject)=>{
+      const script=document.createElement("script");
+      script.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      script.async=true;
+      script.onload=()=>resolve(window.supabase||null);
+      script.onerror=()=>{supabasePromise=null;reject(new Error("Account service could not load."))};
+      document.head.appendChild(script);
+    });
+    return supabasePromise;
+  }
+  function setupAuthListener(){
+    if(authListenerReady||!getClient())return;
+    authListenerReady=true;
+    const c=getClient();
+    c.auth.onAuthStateChange((event,session)=>{
+      if(session)setTimeout(()=>pullAndMerge().then(()=>{if(state.view==="account")renderAccountBox()}).catch(e=>console.warn("Account sync failed",e)),0);
+    });
+  }
   function getClient(){
     if(!configured())return null;
     if(!client)client=window.supabase.createClient(cfg.url,cfg.anonKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
@@ -73,6 +95,10 @@
 
   async function renderAccountBox(){
     const box=document.getElementById("account-box");if(!box)return;
+    if(configured()&&!window.supabase?.createClient){
+      box.innerHTML='<div class="account-loading">Loading secure account service…</div>';
+      try{await loadSupabase();setupAuthListener();return renderAccountBox()}catch(error){box.innerHTML='<div class="account-error show" role="alert">Account service could not load. Your local study data is still safe on this device.</div>';return}
+    }
     const c=getClient();if(!c)return;
     const {data}=await c.auth.getSession(),s=data?.session;
     if(s){
@@ -177,14 +203,7 @@
     originalView(v);
   };
 
-  if(configured()){
-    const callbackError=authUrlError();
-    if(callbackError) setTimeout(()=>{if(state.view==="account")accountError(callbackError)},250);
-    const c=getClient();
-    c.auth.onAuthStateChange((event,session)=>{
-      if(session)setTimeout(()=>pullAndMerge().then(()=>{if(state.view==="account")renderAccountBox()}).catch(e=>console.warn("Account sync failed",e)),0);
-    });
-  }
+  if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js").catch(()=>{});
   if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js").catch(()=>{});
   setTimeout(()=>{if(window.studySprintBillingStatus)window.studySprintBillingStatus()},60);
 })();

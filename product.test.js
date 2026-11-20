@@ -7,6 +7,7 @@ const sw=fs.readFileSync("sw.js","utf8");
 const core=fs.readFileSync("study-core.js","utf8");
 const v61=fs.readFileSync("visual-v61.css","utf8");
 const v72=fs.readFileSync("visual-v72.css","utf8");
+const v73=fs.readFileSync("visual-v73.css","utf8");
 
 assert.match(app,/function studyPack\(\)/);
 assert.match(app,/studysprint-mark\.svg/);
@@ -33,14 +34,16 @@ assert.doesNotMatch(app,/“/);
 assert.doesNotMatch(app,/— James Clear/);
 assert.doesNotMatch(app,/— Helen Hayes/);
 
+assert.ok(index.includes("visual-v73.css?v=73"));
 assert.ok(index.includes("visual-v72.css?v=72"));
 assert.ok(index.includes("app.js?v=72"));
-assert.ok(index.includes('theme-color" content="#0b1220"'));
+assert.ok(index.includes('theme-color" content="#173b34"'));
 assert.doesNotMatch(index,/visual-v49\.css|visual-v50\.css|visual-v51\.css|visual-v52\.css|visual-v53\.css|visual-v54\.css|visual-v55\.css|visual-v56\.css/);
 assert.doesNotMatch(index,/visual-v45\.js|visual-v34\.js|visual-v41\.js|visual-v43\.js|visual-v44\.js/);
 assert.doesNotMatch(index,/design-v2\.js|design-v3\.js|visual-upgrade\.js|design-v2\.css|design-v3\.css|visual-upgrade\.css/);
 
-assert.ok(sw.includes("studysprint-shell-v95-v72"));
+assert.ok(sw.includes("studysprint-shell-v96-v73"));
+assert.ok(sw.includes("visual-v73.css?v=73"));
 assert.ok(sw.includes("visual-v72.css?v=72"));
 assert.ok(sw.includes("app.js?v=72"));
 assert.ok(sw.includes("assets/study-hero.svg"));
@@ -80,6 +83,11 @@ assert.match(v72,/\.landing49-hero/);
 assert.match(v72,/\.today-visual-story/);
 assert.match(v72,/\.mobile-nav/);
 assert.match(v72,/prefers-reduced-motion:reduce/);
+assert.match(v73,/\.ss-sidebar/);
+assert.match(v73,/\.landing49-hero/);
+assert.match(v73,/\.today-visual-story/);
+assert.match(v73,/\.mobile-nav/);
+assert.match(v73,/prefers-reduced-motion:reduce/);
 assert.match(app,/toggleTheme/);
 assert.match(app,/applyTheme\(currentTheme\(\)/);
 assert.match(app,/function openTutorSearch\(\)/);

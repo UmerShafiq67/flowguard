@@ -39,7 +39,7 @@ function currentTheme(){
     const saved=localStorage.getItem(THEME_KEY);
     if(saved==="dark"||saved==="light")return saved;
   }catch{}
-  return window.matchMedia?.("(prefers-color-scheme: dark)").matches?"dark":"light";
+  return "light";
 }
 function toggleTheme(){
   applyTheme(currentTheme()==="dark"?"light":"dark");

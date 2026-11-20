@@ -73,21 +73,23 @@ function shell(c){
 function pageHint(title,text,action=""){return '<div class="pagehint"><b>'+esc(title)+'</b><span>'+esc(text)+'</span>'+(action||'')+'</div>'}
 function pageVisual(k){
   const map={
-    PLAN:["./assets/plan-visual.svg","A visual roadmap showing StudySprint study sessions and learning progress"],
-    SUBJECTS:["./assets/subjects-visual.svg","A visual learning map connecting subjects and topics"],
-    SESSION:["./assets/session-visual.svg","A focused study session workspace with learning actions"],
-    "NEXT SESSION":["./assets/session-visual.svg","A focused study session workspace with learning actions"],
-    PRACTICE:["./assets/practice-visual.svg","A practice question sheet with active recall choices"],
-    TUTOR:["./assets/tutor-visual.svg","An AI tutor conversation with study guidance"],
-    REVIEW:["./assets/review-visual.svg","A review queue showing weak topics and mistakes"],
-    PROGRESS:["./assets/progress-visual.svg","A learning evidence chart showing progress over time"],
-    FOCUS:["./assets/focus-visual.svg","A distraction-free study focus timer"]
+    PLAN:["./assets/plan-visual.svg","./assets/plan-detail.svg","A premium visual roadmap showing study sessions and learning progress"],
+    SUBJECTS:["./assets/subjects-visual.svg","./assets/subjects-detail.svg","A premium visual learning map connecting subjects and topics"],
+    SESSION:["./assets/session-visual.svg","./assets/session-detail.svg","A premium focused study workspace with learning actions"],
+    "NEXT SESSION":["./assets/session-visual.svg","./assets/session-detail.svg","A premium focused study workspace with learning actions"],
+    PRACTICE:["./assets/practice-visual.svg","./assets/practice-detail.svg","A premium active-recall practice scene"],
+    TUTOR:["./assets/tutor-visual.svg","./assets/tutor-detail.svg","A premium AI tutor conversation scene"],
+    REVIEW:["./assets/review-visual.svg","./assets/review-detail.svg","A premium review queue showing weak topics and mistakes"],
+    PROGRESS:["./assets/progress-visual.svg","./assets/progress-detail.svg","A premium learning evidence chart"],
+    FOCUS:["./assets/focus-visual.svg","./assets/focus-detail.svg","A premium distraction-free study timer"],
+    ACCOUNT:["./assets/account-visual.svg","./assets/account-detail.svg","A premium StudySprint account and learning-data scene"]
   };
   const v=map[String(k).toUpperCase()];
-  return v?'<div class="page-head-visual"><img src="'+v[0]+'" alt="'+v[1]+'" loading="lazy"></div>':"";
+  if(!v)return "";
+  return '<div class="page-visual-band"><div class="page-visual-main"><img src="'+v[0]+'" alt="'+v[2]+'" loading="lazy"><span class="page-visual-label">STUDYSPRINT VISUAL</span></div><div class="page-visual-detail"><img src="'+v[1]+'" alt="" loading="lazy" aria-hidden="true"><div><b>Learn with evidence.</b><span>Your next action stays connected to what you actually know.</span></div></div></div>';
 }
 function head(k,t,p,a=""){
-  return '<div class="head"><div class="head-copy"><div class="kicker">'+esc(k)+'</div><h1>'+t+'</h1><p>'+p+'</p></div><div class="head-side">'+pageVisual(k)+(a||"")+'</div></div>';
+  return '<div class="head"><div class="head-copy"><div class="kicker">'+esc(k)+'</div><h1>'+t+'</h1><p>'+p+'</p></div><div class="head-side">'+(a||"")+'</div></div>'+pageVisual(k);
 }
 function onboardingPage(){
   return '<section class="landing49">'+

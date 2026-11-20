@@ -817,3 +817,215 @@ html[data-theme="dark"] .appbar-theme i:after{left:14px;background:#20c7a5}
 }
 @media(max-width:520px){.mobile-page-label{padding:9px 13px 0}.mobile-page-label b{font-size:11px}}
 html[data-theme="dark"] .mobile-page-label b{color:#f4f7fb}
+
+
+
+/* V70 — final product pass: premium study OS, stronger hierarchy, real tool navigation */
+:root{
+  --blue:#3d5cff;
+  --blue-deep:#2436b8;
+  --mint:#16b99e;
+  --violet:#7657e8;
+  --coral:#ef6b58;
+  --gold:#d79c32;
+  --ink:#121923;
+  --paper:#fffdfa;
+  --paper-2:#f5f4ef;
+  --bg:#f1efe8;
+}
+html[data-theme="dark"]{
+  --bg:#080c12;--paper:#111821;--paper-2:#171f29;--ink:#f5f7fa;
+  --blue:#8094ff;--blue-deep:#6679ea;--mint:#59d7c3;--violet:#a28aff;--coral:#ff9b88;--gold:#f1c264;
+}
+.ss-shell{grid-template-columns:246px minmax(0,1fr)}
+.ss-sidebar{
+  background:linear-gradient(180deg,#101720 0%,#0d131b 100%);
+  border-right:1px solid #26313d;padding:20px 13px 14px;color:#fff
+}
+.ss-sidebar-brand{color:#fff;padding:5px 8px 24px}
+.ss-sidebar-brand .logo{background:#fff;border-radius:12px;box-shadow:0 10px 28px #0004}
+.ss-sidebar-brand .logo img{filter:none}
+.brand-copy b{font-size:19px;letter-spacing:-.055em}
+.ss-side-nav{gap:5px}
+.ss-side-nav .nav{
+  min-height:43px;color:#aeb9c6;border-radius:12px;font-size:12px;letter-spacing:-.01em
+}
+.ss-side-nav .nav:hover{background:#18222d;color:#fff;transform:none}
+.ss-side-nav .nav.active{
+  background:linear-gradient(135deg,#3d5cff,#526eff);
+  color:#fff;box-shadow:0 12px 30px #3d5cff35
+}
+.ss-plus-card{
+  background:linear-gradient(145deg,#1b2734,#101820);
+  border:1px solid #2b3948;padding:17px
+}
+.ss-plus-card button{color:#101720;background:#fff}
+.ss-side-footer{border-color:#273340}
+.ss-theme{background:#151e27;border-color:#2b3947;color:#aeb9c6}
+.ss-theme i{background:#05080c}
+
+.appbar{
+  height:78px;display:grid;grid-template-columns:auto minmax(260px,1fr) auto;
+  gap:18px;padding:0 28px;background:color-mix(in srgb,var(--paper) 92%,transparent);
+  border-bottom:1px solid var(--line);box-shadow:0 8px 30px #1119230a
+}
+.appbar-brand{gap:10px}
+.appbar-brand-mark{width:38px;height:38px;border-radius:12px;background:var(--ink);display:grid;place-items:center;box-shadow:0 8px 22px #11192318}
+.appbar-brand-mark img{width:28px;height:28px}
+.appbar-brand>span:last-child{display:flex;flex-direction:column;gap:3px}
+.appbar-brand b{font:800 15px/1 "Space Grotesk",sans-serif;letter-spacing:-.045em}
+.appbar-brand small{font:800 7px/1 "DM Mono",monospace;letter-spacing:.16em;color:var(--blue)}
+.appbar-nav{display:flex;align-items:center;justify-content:center;gap:3px}
+.appbar-nav button{
+  border:0;background:transparent;color:var(--muted);padding:9px 11px;border-radius:10px;
+  font:750 11px/1 "DM Sans",sans-serif;transition:.18s ease;white-space:nowrap
+}
+.appbar-nav button:hover{background:var(--paper-2);color:var(--ink)}
+.appbar-nav button.active{background:var(--ink);color:#fff;box-shadow:0 7px 18px #11192318}
+.topright{gap:7px}
+.appbar-action{
+  border:1px solid var(--line);background:var(--paper);color:var(--ink);
+  height:40px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center
+}
+.appbar-search{padding:0 11px;gap:7px;font-size:10px;font-weight:800}
+.appbar-search span:first-child{font-size:17px;color:var(--blue)}
+.appbar-theme{width:74px;gap:6px;color:var(--muted);font-size:11px}
+.appbar-theme i{width:28px;height:16px;background:var(--ink);border-radius:99px;padding:2px;display:flex}
+.appbar-theme i:after{content:"";display:block;width:12px;height:12px;border-radius:50%;background:#fff;transition:.2s}
+html[data-theme="dark"] .appbar-theme i:after{transform:translateX(12px);background:var(--mint)}
+.appbar-account{width:40px;background:var(--ink);color:#fff;border-color:var(--ink);font-weight:900}
+.mobile-page-label{display:none}
+
+.app-main{padding:34px clamp(16px,3.5vw,48px) 54px}
+.head{margin-bottom:18px}
+.head .kicker{font:900 9px/1 "DM Mono",monospace;letter-spacing:.18em;color:var(--blue)}
+.head h1{font-size:clamp(39px,4.6vw,62px);letter-spacing:-.075em}
+.head p{font-size:13px;max-width:720px}
+.page-visual-band{
+  margin:0 0 24px;border-radius:24px;box-shadow:0 22px 55px #11192318;
+  background:#0c1420;border:1px solid #263342
+}
+.page-visual-main{aspect-ratio:2.05;min-height:285px;border:0;border-radius:24px}
+.page-visual-main:after{background:linear-gradient(90deg,#08101a18,#08101a00 48%,#08101a30)}
+.page-visual-main img{min-height:285px;filter:saturate(1.08) contrast(1.03)}
+.page-visual-overlay{
+  left:20px;bottom:18px;max-width:460px;padding:12px 14px;border-radius:14px;
+  background:#08101acc;border:1px solid #ffffff1c;box-shadow:0 14px 35px #0003
+}
+.page-visual-label{font:900 8px/1 "DM Mono",monospace;color:#aab7c7;letter-spacing:.15em}
+.page-visual-overlay b{font:700 12px/1.45 "DM Sans",sans-serif;margin-top:6px}
+
+.card,.stats>div{
+  border-radius:18px;box-shadow:0 14px 40px #1119230a
+}
+.card{padding:20px}
+.btn{border-radius:11px}
+.btn.primary{background:linear-gradient(135deg,var(--ink),#25303c);box-shadow:0 10px 24px #1119231a}
+html[data-theme="dark"] .btn.primary{background:linear-gradient(135deg,#f5f7fa,#d9e0e8);color:#101720;border-color:#f5f7fa}
+
+.command-grid{gap:14px}
+.hero-action{
+  min-height:330px;border-radius:22px;
+  background:radial-gradient(circle at 80% 10%,#3d5cff55,transparent 34%),linear-gradient(145deg,#111923,#182433);
+}
+.hero-action:after{
+  content:"";position:absolute;right:20px;bottom:18px;width:170px;height:112px;
+  border:1px solid #ffffff1c;border-radius:18px;transform:rotate(-4deg);
+  box-shadow:inset 0 0 0 8px #ffffff05,0 18px 35px #0003
+}
+.signal-panel{border-radius:22px}
+.signal-number{color:var(--blue)}
+.command-strip>div{border-radius:16px}
+
+.view-plan .card:first-of-type{border-top:3px solid var(--blue)}
+.view-practice .card:first-of-type{border-top:3px solid var(--mint)}
+.view-tutor .card:first-of-type{border-top:3px solid var(--violet)}
+.view-review .card:first-of-type{border-top:3px solid var(--coral)}
+.view-progress .card:first-of-type{border-top:3px solid var(--blue)}
+.view-subjects .card:first-of-type{border-top:3px solid var(--gold)}
+.view-focus .card:first-of-type{border-top:3px solid var(--mint)}
+.view-account .card:first-of-type{border-top:3px solid var(--violet)}
+
+.practice-subject-grid{gap:12px}
+.practice-subject{border-radius:17px}
+.practice-subject-icon{background:color-mix(in srgb,var(--blue) 10%,var(--paper));color:var(--blue)}
+.tutorgrid,.sessiongrid,.focusgrid,.reviewgrid,.practicegrid{gap:14px}
+.tutorbox{border-radius:20px}
+.bubble{border-radius:14px}
+.bubble.ai{background:var(--paper-2);border:1px solid var(--line)}
+.bubble.user{background:color-mix(in srgb,var(--blue) 10%,var(--paper));border:1px solid color-mix(in srgb,var(--blue) 20%,var(--line))}
+.clock{font-size:72px;color:var(--ink)}
+.choice{border-radius:10px;background:var(--paper)}
+.choice.active{background:color-mix(in srgb,var(--blue) 10%,var(--paper));border-color:var(--blue);color:var(--blue)}
+.focusstat{background:var(--paper-2);border:1px solid var(--line);border-radius:14px}
+.review{gap:12px}
+.review>div{border-radius:17px}
+.site-footer{padding:20px 30px 28px;border-top:1px solid var(--line);background:color-mix(in srgb,var(--paper) 40%,transparent)}
+.site-footer nav a{font-weight:800}
+
+.mobile-nav{
+  display:none;position:fixed;left:10px;right:10px;bottom:10px;z-index:80;
+  height:64px;padding:5px 4px;border:1px solid var(--line);border-radius:18px;
+  background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(20px);
+  box-shadow:0 18px 50px #11192325
+}
+.mobile-nav .nav{flex:1;border:0;background:transparent;color:var(--muted);border-radius:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:8px;font-weight:800}
+.mobile-nav .nav.active{background:var(--ink);color:#fff}
+.mobile-nav .nav-icon{font-size:15px}
+
+@media(max-width:980px){
+  .appbar{grid-template-columns:auto 1fr auto;gap:10px;padding:0 18px}
+  .appbar-nav{display:none}
+  .appbar-brand small{display:none}
+}
+@media(max-width:900px){
+  .ss-shell{display:block}
+  .ss-sidebar{display:none!important}
+  .app-main{padding-top:26px;padding-bottom:86px}
+  .mobile-page-label{display:flex;align-items:center;gap:8px;padding:11px 18px 0;color:var(--muted)}
+  .mobile-page-label span{font:900 7px/1 "DM Mono",monospace;letter-spacing:.16em}
+  .mobile-page-label b{font:800 12px/1 "Space Grotesk",sans-serif;color:var(--ink)}
+  .mobile-nav{display:flex}
+}
+@media(max-width:620px){
+  .appbar{height:64px;padding:0 12px}
+  .appbar-brand-mark{width:34px;height:34px;border-radius:10px}
+  .appbar-brand-mark img{width:24px;height:24px}
+  .appbar-brand b{font-size:14px}
+  .appbar-search{width:40px;padding:0;font-size:0}
+  .appbar-search span:first-child{font-size:18px}
+  .appbar-theme{width:40px;font-size:0;padding:0}
+  .appbar-theme i{width:22px}
+  .appbar-theme i:after{width:10px;height:10px}
+  html[data-theme="dark"] .appbar-theme i:after{transform:translateX(10px)}
+  .app-main{padding:22px 13px 88px}
+  .mobile-page-label{padding:9px 13px 0}
+  .head h1{font-size:37px}
+  .head p{font-size:12px}
+  .page-visual-band{border-radius:18px;margin-bottom:17px}
+  .page-visual-main{aspect-ratio:1.42;min-height:205px;border-radius:18px}
+  .page-visual-main img{min-height:205px}
+  .page-visual-overlay{left:10px;right:10px;bottom:10px;max-width:none;padding:9px 11px}
+  .page-visual-overlay b{font-size:10px}
+  .stats{grid-template-columns:1fr 1fr}
+  .cols,.command-grid,.tutorgrid,.sessiongrid,.focusgrid,.reviewgrid,.practicegrid{grid-template-columns:1fr}
+  .command-strip{grid-template-columns:1fr}
+  .hero-action{min-height:300px}
+  .site-footer{display:block;text-align:center;padding:18px 13px 95px}
+  .site-footer>span{display:block;line-height:1.6;margin-bottom:10px}
+  .site-footer nav{justify-content:center}
+}
+@media(max-width:430px){
+  .stats{grid-template-columns:1fr 1fr}
+  .card{padding:16px}
+  .hero-action{padding:21px}
+  .hero-action h2{font-size:28px}
+  .signal-number{font-size:58px}
+  .mobile-nav{left:7px;right:7px;bottom:7px;height:61px}
+  .mobile-nav .nav{font-size:7px}
+}
+
+/* accessibility + motion */
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}

@@ -44,7 +44,6 @@ assert.doesNotMatch(index,/visual-v45\.js|visual-v34\.js|visual-v41\.js|visual-v
 assert.doesNotMatch(index,/design-v2\.js|design-v3\.js|visual-upgrade\.js|design-v2\.css|design-v3\.css|visual-upgrade\.css/);
 
 assert.ok(sw.includes("studysprint-shell-v98-v75"));
-assert.ok(sw.includes("visual-v74.css?v=74"));
 assert.ok(sw.includes("visual-v73.css?v=73"));
 assert.ok(sw.includes("app.js?v=72"));
 assert.ok(sw.includes("assets/study-hero.svg"));

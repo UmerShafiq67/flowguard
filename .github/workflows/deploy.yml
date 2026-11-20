@@ -57,8 +57,8 @@ jobs:
           test -f assets/focus-visual.svg
           test -f manifest.webmanifest
           test -f sw.js
-          grep -q 'visual-v61.css?v=61' index.html
-          grep -q 'studysprint-shell-v86-page-visuals' sw.js
+          grep -q 'visual-v61.css?v=64' index.html
+          grep -q 'studysprint-shell-v87-premium-v64' sw.js
 
   deploy:
     needs: validate

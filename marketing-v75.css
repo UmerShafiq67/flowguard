@@ -1,0 +1,31 @@
+/* StudySprint V75 marketing photography */
+.legal-page{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(circle at 92% 0%,rgba(131,211,170,.18),transparent 24%),
+    radial-gradient(circle at 4% 30%,rgba(243,163,94,.12),transparent 22%),
+    #f4f6f2;
+  color:#173b34;
+}
+.legal-page:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.25),transparent 28%)}
+.ss-marketing-photo{
+  position:relative;display:grid;grid-template-columns:1.25fr .75fr;gap:0;
+  min-height:300px;margin:30px 0 36px;border-radius:28px;overflow:hidden;
+  background:#12382f;box-shadow:0 28px 80px rgba(20,56,48,.14);
+}
+.ss-marketing-photo img{width:100%;height:100%;min-height:300px;object-fit:cover;display:block}
+.ss-marketing-photo-copy{
+  position:absolute;left:22px;bottom:22px;max-width:430px;padding:16px 18px;
+  border:1px solid rgba(255,255,255,.14);border-radius:17px;background:rgba(8,31,25,.84);
+  backdrop-filter:blur(16px);color:#fff;
+}
+.ss-marketing-photo-copy span{display:block;font:700 9px "DM Mono",monospace;letter-spacing:.13em;color:#a7e2c0;margin-bottom:7px}
+.ss-marketing-photo-copy b{display:block;font:700 22px "Space Grotesk",sans-serif;letter-spacing:-.03em}
+.ss-marketing-photo:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(18,56,47,.05),rgba(18,56,47,.02) 55%,rgba(18,56,47,.38))}
+.ss-marketing-photo>*{position:relative;z-index:1}
+.ss-marketing-photo img{z-index:0}
+@media(max-width:700px){
+  .ss-marketing-photo{grid-template-columns:1fr;min-height:300px}
+  .ss-marketing-photo img{min-height:300px}
+  .ss-marketing-photo-copy{left:14px;right:14px;bottom:14px}
+}

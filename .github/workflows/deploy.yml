@@ -47,6 +47,7 @@ jobs:
           test -f visual-v72.css
           test -f visual-v73.css
           test -f visual-v75.css
+          marketing-v75.css
           test -f assets/adaptive-learning-system.svg
           test -f assets/study-hero.svg
           test -f assets/today-progress.svg
